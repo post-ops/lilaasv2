@@ -2,16 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/i18n/routing";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
-
-const CinematicHero = dynamic(
-  () => import("@/components/three/CinematicHero").then((m) => m.CinematicHero),
-  { ssr: false, loading: () => null }
-);
 
 export function Hero() {
   const t = useTranslations("home");
@@ -127,11 +121,6 @@ export function Hero() {
               "radial-gradient(ellipse at center, rgba(5,7,13,0.55) 0%, rgba(5,7,13,0.82) 55%, rgb(5,7,13) 100%)",
           }}
         />
-      </div>
-
-      {/* 3D dot ring overlay */}
-      <div className="absolute inset-0 z-[2]">
-        <CinematicHero scrollProgress={scrollProgress} />
       </div>
 
       <div
