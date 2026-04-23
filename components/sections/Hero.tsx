@@ -145,19 +145,6 @@ export function Hero() {
         </div>
 
         <div data-hero-brand className="flex flex-col items-center mb-10 opacity-0">
-          <svg
-            viewBox="0 0 40 40"
-            width="56"
-            height="56"
-            fill="none"
-            aria-hidden
-            className="mb-5"
-          >
-            <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1" className="text-fog/70" />
-            <circle cx="20" cy="20" r="9" stroke="currentColor" strokeWidth="1" className="text-fog/70" />
-            <circle cx="20" cy="20" r="3.5" fill="#FF6B35" />
-            <path d="M20 2 V10 M20 30 V38 M2 20 H10 M30 20 H38" stroke="currentColor" strokeWidth="0.8" className="text-fog/40" />
-          </svg>
           <p className="font-display font-semibold text-fog text-[clamp(3.5rem,9vw,8rem)] leading-none tracking-tightest">
             LILAAS
           </p>

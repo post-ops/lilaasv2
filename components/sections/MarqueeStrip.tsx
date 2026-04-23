@@ -64,7 +64,7 @@ export function MarqueeStrip() {
         {lineA.map((w, i) => (
           <span
             key={i}
-            className="inline-flex items-center gap-6 font-display font-semibold text-[clamp(2.25rem,6vw,5.5rem)] leading-none tracking-tightest text-fog pr-8"
+            className="inline-flex items-center gap-5 font-display font-semibold text-[clamp(1.5rem,4vw,3.5rem)] leading-none tracking-tightest text-fog pr-6"
           >
             {w}
             <span
@@ -83,7 +83,7 @@ export function MarqueeStrip() {
         {lineB.map((w, i) => (
           <span
             key={i}
-            className="inline-flex items-center gap-6 font-display italic text-[clamp(1.75rem,4.5vw,4rem)] leading-none tracking-tightest text-fog/[0.06] pr-8"
+            className="inline-flex items-center gap-5 font-display italic text-[clamp(1.125rem,3vw,2.5rem)] leading-none tracking-tightest text-fog/[0.06] pr-6"
           >
             {w}
           </span>
