@@ -73,8 +73,18 @@ function DotRing({
   );
 }
 
+const CENTER_CIRCLES: [number, number, number, number][] = [
+  // [x, y, z, size]
+  [0, 0, 0, 0.16],
+  [0.55, 0.3, 0.2, 0.09],
+  [-0.45, 0.48, -0.1, 0.07],
+  [0.35, -0.5, 0.15, 0.08],
+  [-0.55, -0.25, -0.2, 0.06],
+  [0.05, 0.7, -0.3, 0.05],
+  [-0.15, -0.75, 0.25, 0.055],
+];
+
 function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number> }) {
-  const torus = useRef<THREE.Mesh>(null);
   const group = useRef<THREE.Group>(null);
 
   useFrame((state) => {
@@ -84,44 +94,29 @@ function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number
       group.current.rotation.y = t * 0.12 + p * 0.9;
       group.current.rotation.x = Math.sin(t * 0.08) * 0.08 + p * 0.25;
     }
-    if (torus.current) {
-      torus.current.rotation.x = t * 0.14;
-      torus.current.rotation.y = t * 0.09;
-    }
   });
 
   return (
     <group ref={group}>
-      <Float speed={0.7} rotationIntensity={0.1} floatIntensity={0.35}>
-        <mesh ref={torus}>
-          <torusKnotGeometry args={[1.6, 0.44, 220, 32, 2, 3]} />
-          <meshPhysicalMaterial
-            color="#eef1f7"
-            metalness={1}
-            roughness={0.12}
-            clearcoat={1}
-            clearcoatRoughness={0.08}
-            envMapIntensity={1.6}
-          />
-        </mesh>
+      <Float speed={0.7} rotationIntensity={0.3} floatIntensity={0.35}>
+        <group>
+          {CENTER_CIRCLES.map(([x, y, z, size], i) => (
+            <mesh key={i} position={[x, y, z]}>
+              <sphereGeometry args={[size, 16, 16]} />
+              <meshStandardMaterial
+                color="#FF6B35"
+                emissive="#FF6B35"
+                emissiveIntensity={1.8}
+                toneMapped={false}
+              />
+            </mesh>
+          ))}
+        </group>
       </Float>
 
       {DOT_RINGS.map((ring, i) => (
         <DotRing key={i} ring={ring} progressRef={progressRef} />
       ))}
-
-      <Float speed={1.4} rotationIntensity={0.4} floatIntensity={0.2}>
-        <mesh position={[2.4, 1.2, 0.6]}>
-          <icosahedronGeometry args={[0.2, 0]} />
-          <meshStandardMaterial
-            color="#FF6B35"
-            emissive="#FF6B35"
-            emissiveIntensity={1.2}
-            metalness={0.2}
-            roughness={0.3}
-          />
-        </mesh>
-      </Float>
     </group>
   );
 }
