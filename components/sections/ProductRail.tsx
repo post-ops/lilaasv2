@@ -47,13 +47,13 @@ export function ProductRail() {
       <div className="container-x">
         <div className="flex items-end justify-between mb-12">
           <div>
-            <p className="eyebrow mb-4">The lineup</p>
+            <p className="section-index mb-5">06 · The lineup</p>
             <h2 className="font-display text-display-md text-fog max-w-2xl text-balance">
               One family, from workboat to flagship.
             </h2>
           </div>
           <p className="eyebrow hidden md:block">
-            {PRODUCTS.length} models · DNV GL approved
+            {PRODUCTS.length} models · DNV GL approved · drag →
           </p>
         </div>
       </div>

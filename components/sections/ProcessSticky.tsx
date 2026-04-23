@@ -72,7 +72,7 @@ export function ProcessSticky() {
     <section ref={sectionRef} className="relative py-24 lg:py-32">
       <div className="container-x">
         <div className="max-w-2xl mb-16">
-          <p className="eyebrow mb-5">Under one roof</p>
+          <p className="section-index mb-5">03 · Full-stack production</p>
           <h2 className="font-display text-display-md text-fog text-balance">
             Mechanics, electronics and software — designed, built and tested in Horten.
           </h2>

@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { SplitReveal } from "@/components/ui/SplitReveal";
 import { ArrowUpRight, Anchor, Shield, Activity, Rocket } from "lucide-react";
-import { useGsap, prefersReducedMotion } from "@/lib/gsap";
+import { useReveal } from "@/components/ui/useReveal";
 
 const INDUSTRIES = [
   { slug: "maritime", icon: Anchor, tone: "signal", image: "/images/industries/maritime.webp" },
@@ -18,39 +17,15 @@ const INDUSTRIES = [
 export function IndustriesGrid() {
   const t = useTranslations("home");
   const ind = useTranslations("industries");
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    if (prefersReducedMotion()) return;
-
-    const { gsap, ScrollTrigger } = useGsap();
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        "[data-industry-card]",
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: "expo.out",
-          stagger: 0.12,
-          scrollTrigger: { trigger: el, start: "top 70%", once: true },
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const sectionRef = useReveal<HTMLElement>();
 
   return (
     <section ref={sectionRef} className="relative py-32 lg:py-44">
       <div className="container-x">
         <div className="grid lg:grid-cols-[1fr_1.15fr] gap-16 lg:gap-24 mb-20">
           <div>
-            <p className="eyebrow mb-5">{t("industriesEyebrow")}</p>
+            <p className="section-index mb-6">05 · Where we deliver</p>
+            <p className="eyebrow mb-5 text-mist/70">{t("industriesEyebrow")}</p>
             <SplitReveal
               text={t("industriesTitle")}
               as="h2"
@@ -68,7 +43,7 @@ export function IndustriesGrid() {
             <Link
               key={slug}
               href={`/industries/${slug}`}
-              data-industry-card
+              data-reveal="out"
               data-magnetic
               className="group relative block overflow-hidden rounded-2xl border border-white/8 bg-deep/60 aspect-[5/4]"
             >

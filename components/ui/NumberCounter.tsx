@@ -22,31 +22,31 @@ export function NumberCounter({
   suffix = "",
   prefix = "",
   className,
-  duration = 1800,
+  duration = 1600,
   format = (n: number) => n.toLocaleString("en-US"),
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [display, setDisplay] = useState<string>(() => format(0));
+  // SSR renders the final value so the number is visible without JS. On mount
+  // we decide whether to flip back to 0 and animate (element below the fold)
+  // or leave the value as-is (already on screen).
+  const [display, setDisplay] = useState<string>(() => format(value));
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (prefersReducedMotion()) return;
 
-    if (prefersReducedMotion()) {
-      setDisplay(format(value));
-      return;
-    }
+    const rect = el.getBoundingClientRect();
+    const alreadyVisible =
+      rect.top < window.innerHeight && rect.bottom > 0;
 
-    let started = false;
     let raf = 0;
+    let observer: IntersectionObserver | null = null;
 
-    function run() {
-      if (started) return;
-      started = true;
+    function animateUp() {
       const t0 = performance.now();
       const step = (now: number) => {
         const t = Math.min(1, (now - t0) / duration);
-        // expo.out easing
         const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
         setDisplay(format(Math.round(eased * value)));
         if (t < 1) raf = requestAnimationFrame(step);
@@ -54,29 +54,31 @@ export function NumberCounter({
       raf = requestAnimationFrame(step);
     }
 
-    const rect = el.getBoundingClientRect();
-    const alreadyVisible =
-      rect.top < window.innerHeight * 0.95 && rect.bottom > 0;
     if (alreadyVisible) {
-      run();
+      // Element is already on screen at mount. Animate from 0 up to value for
+      // a bit of flourish, but kick it off immediately so the static "0"
+      // frame never gets rendered.
+      setDisplay(format(0));
+      raf = requestAnimationFrame(animateUp);
       return () => cancelAnimationFrame(raf);
     }
 
-    const observer = new IntersectionObserver(
+    setDisplay(format(0));
+    observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            run();
-            observer.disconnect();
+            animateUp();
+            observer?.disconnect();
           }
         }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0, rootMargin: "0px 0px -8% 0px" }
     );
     observer.observe(el);
 
     return () => {
-      observer.disconnect();
+      observer?.disconnect();
       cancelAnimationFrame(raf);
     };
   }, [value, duration, format]);

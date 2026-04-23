@@ -3,27 +3,49 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
+import { useReveal } from "@/components/ui/useReveal";
 
 export function CinematicReveal() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useReveal<HTMLElement>();
+  const coverRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
+
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Robust cover wipe using IntersectionObserver — runs once when section
+    // enters the viewport. Falls back to "no cover" if JS fails (we don't
+    // want a permanent black rectangle covering the image).
+    const cover = coverRef.current;
+    if (cover) {
+      if (reduce) {
+        cover.style.transform = "translateX(101%)";
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                cover.style.transition =
+                  "transform 1.6s cubic-bezier(0.87, 0, 0.13, 1)";
+                cover.style.transform = "translateX(101%)";
+                io.disconnect();
+              }
+            }
+          },
+          { threshold: 0.15 }
+        );
+        io.observe(el);
+      }
+    }
+
     if (prefersReducedMotion()) return;
 
     const { gsap } = useGsap();
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        "[data-cinematic-cover]",
-        { xPercent: 0 },
-        {
-          xPercent: 101,
-          ease: "expo.inOut",
-          duration: 1.6,
-          scrollTrigger: { trigger: el, start: "top 70%", once: true },
-        }
-      );
       gsap.fromTo(
         "[data-cinematic-image]",
         { scale: 1.15 },
@@ -34,15 +56,6 @@ export function CinematicReveal() {
           scrollTrigger: { trigger: el, start: "top 70%", once: true },
         }
       );
-      gsap.from("[data-cinematic-caption]", {
-        y: 28,
-        opacity: 0,
-        ease: "expo.out",
-        duration: 1,
-        stagger: 0.1,
-        delay: 0.8,
-        scrollTrigger: { trigger: el, start: "top 70%", once: true },
-      });
 
       gsap.to("[data-cinematic-image]", {
         yPercent: -10,
@@ -54,9 +67,10 @@ export function CinematicReveal() {
           scrub: 0.6,
         },
       });
-    }, sectionRef);
+    }, el);
+
     return () => ctx.revert();
-  }, []);
+  }, [sectionRef]);
 
   return (
     <section
@@ -75,25 +89,24 @@ export function CinematicReveal() {
       </div>
 
       <div
-        data-cinematic-cover
+        ref={coverRef}
         aria-hidden
         className="absolute inset-0 bg-ink z-20 will-change-transform origin-left"
       />
 
       <div className="relative z-30 h-full container-x flex flex-col justify-end pb-20 lg:pb-28">
-        <div className="flex items-center gap-3 mb-6" data-cinematic-caption>
-          <span className="w-10 h-px bg-signal" />
-          <span className="eyebrow">The shop floor · Horten</span>
-        </div>
+        <p data-reveal="out" className="section-index mb-6">
+          04 · Inside the Horten workshop
+        </p>
         <h2
-          data-cinematic-caption
+          data-reveal="out"
           className="font-display font-medium text-[clamp(2.5rem,7vw,6rem)] leading-[0.95] tracking-tightest text-fog max-w-5xl text-balance"
         >
           Mechanics, electronics and software —{" "}
           <span className="text-signal">all in one building.</span>
         </h2>
         <p
-          data-cinematic-caption
+          data-reveal="out"
           className="mt-8 max-w-2xl text-mist text-lg leading-relaxed"
         >
           Fifteen CNC machines. Unmanned lights-out production. PCBs designed,

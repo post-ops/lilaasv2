@@ -3,34 +3,19 @@
 import { useEffect, useRef } from "react";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 import { NumberCounter } from "@/components/ui/NumberCounter";
+import { useReveal } from "@/components/ui/useReveal";
 
 export function StatementBanner() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useReveal<HTMLElement>();
+  const parallaxRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    const el = sectionRef.current;
+    const el = parallaxRef.current ?? sectionRef.current;
     if (!el) return;
     if (prefersReducedMotion()) return;
 
     const { gsap } = useGsap();
     const ctx = gsap.context(() => {
-      gsap.from("[data-statement-line]", {
-        yPercent: 100,
-        opacity: 0,
-        duration: 1.2,
-        ease: "expo.out",
-        stagger: 0.12,
-        scrollTrigger: { trigger: el, start: "top 75%", once: true },
-      });
-      gsap.from("[data-statement-meta]", {
-        y: 30,
-        opacity: 0,
-        duration: 1,
-        ease: "expo.out",
-        stagger: 0.1,
-        delay: 0.3,
-        scrollTrigger: { trigger: el, start: "top 75%", once: true },
-      });
       gsap.to("[data-statement-figure]", {
         yPercent: -20,
         ease: "none",
@@ -41,14 +26,17 @@ export function StatementBanner() {
           scrub: 0.6,
         },
       });
-    }, sectionRef);
+    }, el);
 
     return () => ctx.revert();
-  }, []);
+  }, [sectionRef]);
 
   return (
     <section
-      ref={sectionRef}
+      ref={(node) => {
+        sectionRef.current = node;
+        parallaxRef.current = node;
+      }}
       className="relative min-h-[90svh] flex items-center py-32 overflow-hidden border-y border-white/5"
     >
       <div
@@ -71,9 +59,8 @@ export function StatementBanner() {
       <div className="container-x relative w-full">
         <div className="grid lg:grid-cols-[1fr_auto] gap-16 items-end">
           <div className="max-w-5xl">
-            <p data-statement-meta className="eyebrow mb-10 inline-flex items-center gap-3">
-              <span className="w-10 h-px bg-signal" />
-              Lilaas — since 1961
+            <p data-reveal="out" className="section-index mb-10">
+              01 · Since 1961
             </p>
             <h2 className="font-display font-medium text-[clamp(3rem,10vw,10rem)] leading-[0.88] tracking-tightest text-fog text-balance">
               <Line>Sixty-four</Line>
@@ -82,7 +69,10 @@ export function StatementBanner() {
             </h2>
           </div>
 
-          <dl data-statement-meta className="grid grid-cols-2 lg:grid-cols-1 gap-8 lg:gap-10 lg:text-right font-mono text-xs uppercase tracking-widest text-mist">
+          <dl
+            data-reveal="out"
+            className="grid grid-cols-2 lg:grid-cols-1 gap-8 lg:gap-10 lg:text-right font-mono text-xs uppercase tracking-widest text-mist"
+          >
             <div>
               <dt className="text-mist/60 mb-2">Founded</dt>
               <dd className="font-display text-3xl text-fog tracking-tight normal-case tabular-nums">
@@ -116,10 +106,8 @@ function Line({ children, accent }: { children: React.ReactNode; accent?: boolea
   return (
     <span className="block overflow-hidden">
       <span
-        data-statement-line
-        className={
-          "block will-change-transform " + (accent ? "text-signal" : "")
-        }
+        data-reveal="out"
+        className={"block will-change-transform " + (accent ? "text-signal" : "")}
       >
         {children}
       </span>
