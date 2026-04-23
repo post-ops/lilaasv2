@@ -117,7 +117,7 @@ export function Hero() {
 
       <div
         data-hero-copy
-        className="relative z-30 container-x flex flex-col justify-end h-full pb-[16vh] pt-32 will-change-transform"
+        className="relative z-30 container-x flex flex-col items-center text-center justify-end h-full pb-[16vh] pt-32 will-change-transform"
       >
         <div
           data-hero-eyebrow
@@ -127,7 +127,7 @@ export function Hero() {
           <span className="eyebrow">{tExtra("live")} · {time}</span>
         </div>
 
-        <div className="max-w-5xl">
+        <div className="max-w-5xl mx-auto">
           <h1 className="font-display font-medium text-display-xl text-fog leading-[0.92] text-balance">
             <HeroLine>{t("heroH1a")}</HeroLine>{" "}
             <HeroAccent>{t("heroH1b")}</HeroAccent>
@@ -140,12 +140,12 @@ export function Hero() {
 
           <p
             data-hero-sub
-            className="mt-10 max-w-2xl text-lg text-mist leading-relaxed text-pretty opacity-0"
+            className="mt-10 max-w-2xl mx-auto text-lg text-mist leading-relaxed text-pretty opacity-0"
           >
             {t("heroSub")}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link href="/control-levers" data-hero-cta className="opacity-0 inline-block">
               <Button variant="primary" size="lg" arrow>
                 {t("ctaExplore")}
