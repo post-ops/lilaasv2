@@ -31,18 +31,14 @@ export function StatsStrip() {
 
     const { gsap } = useGsap();
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        "[data-stat]",
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: "expo.out",
-          stagger: 0.1,
-          scrollTrigger: { trigger: el, start: "top 70%", once: true },
-        }
-      );
+      gsap.from("[data-stat]", {
+        y: 40,
+        opacity: 0,
+        duration: 0.9,
+        ease: "expo.out",
+        stagger: 0.1,
+        scrollTrigger: { trigger: el, start: "top 80%", once: true },
+      });
     }, sectionRef);
 
     return () => ctx.revert();
