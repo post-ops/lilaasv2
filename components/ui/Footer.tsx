@@ -10,44 +10,35 @@ export function Footer() {
     <footer className="relative mt-32 border-t border-white/5 bg-deep/40">
       <div className="container-x py-20 grid gap-14 lg:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="max-w-sm">
-          <div className="flex items-center gap-2.5 group">
-            <svg
-              viewBox="0 0 40 40"
-              width="32"
-              height="32"
-              fill="none"
-              aria-hidden
-              className="transition-transform duration-700 ease-out-expo group-hover:rotate-45"
-            >
+          <div className="flex items-center gap-2.5">
+            <svg viewBox="0 0 40 40" width="32" height="32" fill="none" aria-hidden>
               <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1.2" className="text-fog opacity-70" />
               <circle cx="20" cy="20" r="9" stroke="currentColor" strokeWidth="1.2" className="text-fog opacity-70" />
               <circle cx="20" cy="20" r="3" fill="#FF6B35" />
             </svg>
-            <span className="font-display text-lg font-semibold tracking-tight text-fog group-hover:text-signal transition-colors duration-500">
-              LILAAS
-            </span>
+            <span className="font-display text-lg font-semibold tracking-tight text-fog">LILAAS</span>
           </div>
           <p className="mt-6 text-sm text-mist leading-relaxed">{t("tagline")}</p>
-          <p className="mt-4 text-xs text-mist/70 tagline-drift">{t("built")}</p>
+          <p className="mt-4 text-xs text-mist/70">{t("built")}</p>
         </div>
 
         <div>
           <p className="eyebrow mb-4">Products</p>
           <ul className="space-y-3 text-sm text-mist">
-            <li><Link href="/control-levers" className="link-underline hover:text-fog">{nav("controlLevers")}</Link></li>
-            <li><Link href="/precision-mechanics" className="link-underline hover:text-fog">{nav("precision")}</Link></li>
-            <li><Link href="/support" className="link-underline hover:text-fog">{nav("support")}</Link></li>
+            <li><Link href="/control-levers" className="hover:text-fog">{nav("controlLevers")}</Link></li>
+            <li><Link href="/precision-mechanics" className="hover:text-fog">{nav("precision")}</Link></li>
+            <li><Link href="/support" className="hover:text-fog">{nav("support")}</Link></li>
           </ul>
         </div>
 
         <div>
           <p className="eyebrow mb-4">Company</p>
           <ul className="space-y-3 text-sm text-mist">
-            <li><Link href="/about" className="link-underline hover:text-fog">{nav("about")}</Link></li>
-            <li><Link href="/case-studies" className="link-underline hover:text-fog">{nav("caseStudies")}</Link></li>
-            <li><Link href="/news" className="link-underline hover:text-fog">{nav("news")}</Link></li>
-            <li><Link href="/careers" className="link-underline hover:text-fog">{nav("careers")}</Link></li>
-            <li><Link href="/contact" className="link-underline hover:text-fog">{nav("contact")}</Link></li>
+            <li><Link href="/about" className="hover:text-fog">{nav("about")}</Link></li>
+            <li><Link href="/case-studies" className="hover:text-fog">{nav("caseStudies")}</Link></li>
+            <li><Link href="/news" className="hover:text-fog">{nav("news")}</Link></li>
+            <li><Link href="/careers" className="hover:text-fog">{nav("careers")}</Link></li>
+            <li><Link href="/contact" className="hover:text-fog">{nav("contact")}</Link></li>
           </ul>
         </div>
 
@@ -55,8 +46,8 @@ export function Footer() {
           <p className="eyebrow mb-4">Contact</p>
           <ul className="space-y-3 text-sm text-mist">
             <li>Kongeveien 75<br />3188 Horten, Norway</li>
-            <li><a href="tel:+4741633000" className="link-underline hover:text-fog">+47 416 33 000</a></li>
-            <li><a href="mailto:lilaas@lilaas.no" className="link-underline hover:text-fog">lilaas@lilaas.no</a></li>
+            <li><a href="tel:+4741633000" className="hover:text-fog">+47 416 33 000</a></li>
+            <li><a href="mailto:lilaas@lilaas.no" className="hover:text-fog">lilaas@lilaas.no</a></li>
           </ul>
         </div>
       </div>
@@ -65,9 +56,9 @@ export function Footer() {
         <div className="container-x py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-mist/70">
           <p>{t("copyright", { year })} · {t("rights")}</p>
           <div className="flex gap-6">
-            <Link href="/legal/terms" className="link-underline hover:text-fog">{t("terms")}</Link>
-            <Link href="/legal/transparency" className="link-underline hover:text-fog">{t("transparency")}</Link>
-            <Link href="/legal/privacy" className="link-underline hover:text-fog">{t("privacy")}</Link>
+            <Link href="/legal/terms" className="hover:text-fog">{t("terms")}</Link>
+            <Link href="/legal/transparency" className="hover:text-fog">{t("transparency")}</Link>
+            <Link href="/legal/privacy" className="hover:text-fog">{t("privacy")}</Link>
           </div>
         </div>
       </div>

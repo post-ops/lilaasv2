@@ -1,31 +1,34 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Suspense, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Environment, Float } from "@react-three/drei";
+import { EffectComposer, Bloom, Vignette, Noise } from "@react-three/postprocessing";
+import { BlendFunction, KernelSize } from "postprocessing";
+import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 const DOT_RINGS = [
   {
     count: 40,
-    radius: 2.4,
+    radius: 3.1,
     tilt: [0, 0, 0] as const,
-    size: 0.02,
+    size: 0.022,
     scrollSpin: 4.2,
     idleSpin: 0.18,
   },
   {
     count: 32,
-    radius: 3.0,
+    radius: 3.8,
     tilt: [Math.PI / 2.3, 0, 0] as const,
-    size: 0.016,
+    size: 0.018,
     scrollSpin: -3.0,
     idleSpin: -0.12,
   },
   {
     count: 26,
-    radius: 3.6,
+    radius: 4.5,
     tilt: [0, Math.PI / 4, Math.PI / 3] as const,
-    size: 0.012,
+    size: 0.014,
     scrollSpin: 2.4,
     idleSpin: 0.08,
   },
@@ -53,7 +56,12 @@ function DotRing({
     dots.push(
       <mesh key={i} position={[Math.cos(a) * ring.radius, Math.sin(a) * ring.radius, 0]}>
         <sphereGeometry args={[ring.size, 10, 10]} />
-        <meshBasicMaterial color="#FF6B35" toneMapped={false} />
+        <meshStandardMaterial
+          color="#FF6B35"
+          emissive="#FF6B35"
+          emissiveIntensity={1.8}
+          toneMapped={false}
+        />
       </mesh>
     );
   }
@@ -65,25 +73,187 @@ function DotRing({
   );
 }
 
-function Stage({ progressRef }: { progressRef: React.MutableRefObject<number> }) {
-  const group = useRef<THREE.Group>(null);
+const CENTER_CIRCLES: [number, number, number, number][] = [
+  [0, 0, 0, 0.28],
+  [1.0, 0.55, 0.3, 0.14],
+  [-0.85, 0.9, -0.15, 0.11],
+  [0.65, -0.95, 0.25, 0.12],
+  [-1.05, -0.5, -0.35, 0.09],
+  [0.1, 1.3, -0.4, 0.08],
+  [-0.3, -1.4, 0.35, 0.085],
+];
+
+// Which pairs form the constellation's connecting lines.
+const CONSTELLATION_PAIRS: [number, number][] = [
+  [0, 1],
+  [0, 2],
+  [0, 3],
+  [0, 4],
+  [1, 5],
+  [2, 5],
+  [3, 6],
+  [4, 6],
+  [5, 2],
+];
+
+function ConstellationLines() {
+  const geom = useMemo(() => {
+    const points: THREE.Vector3[] = [];
+    for (const [a, b] of CONSTELLATION_PAIRS) {
+      const [ax, ay, az] = CENTER_CIRCLES[a];
+      const [bx, by, bz] = CENTER_CIRCLES[b];
+      points.push(new THREE.Vector3(ax, ay, az));
+      points.push(new THREE.Vector3(bx, by, bz));
+    }
+    const g = new THREE.BufferGeometry().setFromPoints(points);
+    return g;
+  }, []);
+
+  const mat = useRef<THREE.LineBasicMaterial>(null);
+
+  useFrame((s) => {
+    if (!mat.current) return;
+    mat.current.opacity = 0.35 + Math.sin(s.clock.elapsedTime * 0.9) * 0.12;
+  });
+
+  return (
+    <lineSegments geometry={geom}>
+      <lineBasicMaterial
+        ref={mat}
+        color="#FF6B35"
+        transparent
+        opacity={0.35}
+        toneMapped={false}
+      />
+    </lineSegments>
+  );
+}
+
+function SonarPings() {
+  const a = useRef<THREE.Mesh>(null);
+  const b = useRef<THREE.Mesh>(null);
+  const c = useRef<THREE.Mesh>(null);
+
   useFrame((state) => {
-    if (!group.current) return;
     const t = state.clock.elapsedTime;
-    const p = progressRef.current;
-    group.current.rotation.y = t * 0.1 + p * 0.7;
-    group.current.rotation.x = Math.sin(t * 0.08) * 0.06 + p * 0.2;
+    const cycle = 3.2;
+    const refs = [a, b, c];
+    refs.forEach((r, i) => {
+      if (!r.current) return;
+      const phase = ((t + i * (cycle / 3)) % cycle) / cycle; // 0..1
+      const scale = 0.3 + phase * 5.6;
+      r.current.scale.setScalar(scale);
+      const mat = r.current.material as THREE.MeshBasicMaterial;
+      mat.opacity = Math.max(0, 0.55 - phase * 0.55);
+    });
   });
 
   return (
     <>
-      <color attach="background" args={["#00000000"]} />
-      <ambientLight intensity={0.2} />
-      <group ref={group}>
-        {DOT_RINGS.map((ring, i) => (
-          <DotRing key={i} ring={ring} progressRef={progressRef} />
-        ))}
-      </group>
+      {[a, b, c].map((r, i) => (
+        <mesh key={i} ref={r}>
+          <ringGeometry args={[0.98, 1.0, 96]} />
+          <meshBasicMaterial
+            color="#FF6B35"
+            transparent
+            opacity={0}
+            side={THREE.DoubleSide}
+            toneMapped={false}
+          />
+        </mesh>
+      ))}
+    </>
+  );
+}
+
+function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number> }) {
+  const group = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    const p = progressRef.current;
+    if (group.current) {
+      group.current.rotation.y = t * 0.12 + p * 0.9;
+      group.current.rotation.x = Math.sin(t * 0.08) * 0.08 + p * 0.25;
+    }
+  });
+
+  return (
+    <group ref={group}>
+      <SonarPings />
+
+      <Float speed={0.7} rotationIntensity={0.3} floatIntensity={0.35}>
+        <group>
+          <ConstellationLines />
+          {CENTER_CIRCLES.map(([x, y, z, size], i) => (
+            <mesh key={i} position={[x, y, z]}>
+              <sphereGeometry args={[size, 16, 16]} />
+              <meshStandardMaterial
+                color="#FF6B35"
+                emissive="#FF6B35"
+                emissiveIntensity={1.8}
+                toneMapped={false}
+              />
+            </mesh>
+          ))}
+        </group>
+      </Float>
+
+      {DOT_RINGS.map((ring, i) => (
+        <DotRing key={i} ring={ring} progressRef={progressRef} />
+      ))}
+    </group>
+  );
+}
+
+function Stage({
+  progressRef,
+  mouseRef,
+}: {
+  progressRef: React.MutableRefObject<number>;
+  mouseRef: React.MutableRefObject<{ x: number; y: number }>;
+}) {
+  const camera = useThree((s) => s.camera);
+
+  useFrame(() => {
+    const mx = mouseRef.current.x;
+    const my = mouseRef.current.y;
+    const p = progressRef.current;
+    const targetX = mx * 0.6;
+    const targetY = 0.2 + my * 0.4 - p * 0.4;
+    const targetZ = 6.8 - p * 1.5;
+    camera.position.x += (targetX - camera.position.x) * 0.05;
+    camera.position.y += (targetY - camera.position.y) * 0.05;
+    camera.position.z += (targetZ - camera.position.z) * 0.05;
+    camera.lookAt(0, 0, 0);
+  });
+
+  return (
+    <>
+      <color attach="background" args={["#05070D"]} />
+      <fog attach="fog" args={["#05070D", 9, 22]} />
+
+      <ambientLight intensity={0.15} />
+      <directionalLight position={[-5, 6, 4]} intensity={3.2} color="#fff2d4" />
+      <pointLight position={[6, 2, -2]} intensity={2.5} color="#FF6B35" distance={14} />
+      <pointLight position={[-5, -3, 5]} intensity={1.6} color="#2BD4B4" distance={12} />
+      <spotLight position={[0, 8, 4]} angle={0.5} penumbra={0.8} intensity={1.8} color="#ffffff" />
+
+      <Environment preset="city" environmentIntensity={0.7} />
+
+      <Sculpture progressRef={progressRef} />
+
+      <EffectComposer multisampling={2}>
+        <Bloom
+          intensity={1.05}
+          luminanceThreshold={0.55}
+          luminanceSmoothing={0.22}
+          mipmapBlur
+          kernelSize={KernelSize.LARGE}
+        />
+        <Noise opacity={0.018} blendFunction={BlendFunction.OVERLAY} premultiply />
+        <Vignette eskil={false} offset={0.22} darkness={0.9} />
+      </EffectComposer>
     </>
   );
 }
@@ -93,15 +263,24 @@ export function CinematicHero({
 }: {
   scrollProgress: React.MutableRefObject<number>;
 }) {
+  const mouseRef = useRef({ x: 0, y: 0 });
+
   return (
     <Canvas
+      shadows={false}
       dpr={[1, 1.5]}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 0, 7], fov: 40 }}
+      gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+      camera={{ position: [0, 0.3, 6.8], fov: 34, near: 0.1, far: 40 }}
       className="!absolute inset-0 !h-full !w-full"
+      onPointerMove={(e) => {
+        const rect = (e.target as HTMLElement).getBoundingClientRect?.();
+        if (!rect) return;
+        mouseRef.current.x = (e.clientX - rect.left) / rect.width - 0.5;
+        mouseRef.current.y = -((e.clientY - rect.top) / rect.height - 0.5);
+      }}
     >
       <Suspense fallback={null}>
-        <Stage progressRef={scrollProgress} />
+        <Stage progressRef={scrollProgress} mouseRef={mouseRef} />
       </Suspense>
     </Canvas>
   );

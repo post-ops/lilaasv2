@@ -296,96 +296,9 @@
   pointer-events: none;
 }
 
-.pulse-ring-bare {
-  animation: pulseRing 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-  pointer-events: none;
-}
-
 .card-tilt {
   transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
   transform-style: preserve-3d;
-}
-
-@keyframes heroKenBurns {
-  0%, 100% { transform: scale(1.02) translateY(0); }
-  50% { transform: scale(1.08) translateY(-1.5%); }
-}
-.hero-kenburns {
-  animation: heroKenBurns 22s ease-in-out infinite;
-  will-change: transform;
-}
-
-@keyframes cardSweep {
-  0% { transform: translateX(-120%) skewX(-16deg); opacity: 0; }
-  30% { opacity: 0.9; }
-  100% { transform: translateX(160%) skewX(-16deg); opacity: 0; }
-}
-.card-sweep::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 107, 53, 0.14) 45%,
-    rgba(255, 208, 181, 0.32) 50%,
-    rgba(255, 107, 53, 0.14) 55%,
-    transparent 100%
-  );
-  filter: blur(8px);
-  animation: cardSweep 1.1s cubic-bezier(0.87, 0, 0.13, 1) both;
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
-
-@keyframes taglineDrift {
-  0% { color: rgba(201, 209, 222, 0.55); }
-  50% { color: rgba(255, 107, 53, 0.65); }
-  100% { color: rgba(201, 209, 222, 0.55); }
-}
-.tagline-drift {
-  animation: taglineDrift 14s ease-in-out infinite;
-}
-
-@keyframes ctaMeshA {
-  0%, 100% { transform: translate(-10%, -10%) scale(1); }
-  50% { transform: translate(20%, 10%) scale(1.3); }
-}
-@keyframes ctaMeshB {
-  0%, 100% { transform: translate(20%, 20%) scale(1.1); }
-  50% { transform: translate(-20%, -10%) scale(1.4); }
-}
-.cta-mesh-a {
-  animation: ctaMeshA 14s ease-in-out infinite;
-  will-change: transform;
-}
-.cta-mesh-b {
-  animation: ctaMeshB 18s ease-in-out infinite;
-  will-change: transform;
-}
-
-@keyframes linkUnderline {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-.link-underline {
-  position: relative;
-  display: inline-block;
-}
-.link-underline::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -2px;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.link-underline:hover::after {
-  transform: scaleX(1);
 }
 
 @media (prefers-reduced-motion: reduce) {
