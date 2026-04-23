@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -10,8 +11,8 @@ import { SplitReveal } from "@/components/ui/SplitReveal";
 import { NumberCounter } from "@/components/ui/NumberCounter";
 import { Cog, Wrench, Cpu, Microscope, Factory, TestTube, ArrowUpRight } from "lucide-react";
 
-const CNCBackdrop = dynamic(
-  () => import("@/components/three/CNCBackdrop").then((m) => m.CNCBackdrop),
+const AmbientScene = dynamic(
+  () => import("@/components/three/AmbientScene").then((m) => m.AmbientScene),
   { ssr: false, loading: () => null }
 );
 
@@ -24,14 +25,16 @@ const CAPABILITIES = [
   { icon: TestTube, title: "Type-test fixtures", body: "Vibration, humidity, EMI rigs for defence and marine approvals." },
 ];
 
+const CNC_IMAGE =
+  "https://images.unsplash.com/photo-1565024146180-3dbc9d2fd1f2?auto=format&fit=crop&w=1800&q=80";
+
 export function PrecisionView() {
   const t = useTranslations("precision");
-  const cases = useTranslations("cases");
 
   return (
     <>
       <section className="relative pt-40 lg:pt-52 pb-24 overflow-hidden">
-        <CNCBackdrop />
+        <AmbientScene intensity="section" accent="#2BD4B4" />
         <div className="container-x relative">
           <p className="eyebrow mb-6">{t("eyebrow")}</p>
           <SplitReveal
@@ -60,6 +63,24 @@ export function PrecisionView() {
               <div className="font-display text-4xl lg:text-5xl text-fog">
                 &lt;1 – 200 <span className="text-mist text-2xl">mm</span>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative py-16 overflow-hidden">
+        <div className="container-x">
+          <div className="relative aspect-[16/8] rounded-2xl overflow-hidden border border-white/8">
+            <Image
+              src={CNC_IMAGE}
+              alt="CNC production floor"
+              fill
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
+            <div className="absolute bottom-8 left-8">
+              <Badge tone="chart">Horten, Norway</Badge>
             </div>
           </div>
         </div>
@@ -118,7 +139,11 @@ export function PrecisionView() {
               <p className="text-mist leading-relaxed mb-8 max-w-lg">
                 The Large Hadron Collider required components machined to tolerances most facilities can't reliably hit. We were on the shortlist — and we delivered.
               </p>
-              <Link href="/case-studies/cern" className="inline-flex items-center gap-2 text-signal hover:text-white transition-colors font-mono text-sm uppercase tracking-widest" data-magnetic>
+              <Link
+                href="/case-studies/cern"
+                className="inline-flex items-center gap-2 text-signal hover:text-white transition-colors font-mono text-sm uppercase tracking-widest"
+                data-magnetic
+              >
                 Read the CERN story
                 <ArrowUpRight size={16} />
               </Link>

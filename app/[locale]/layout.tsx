@@ -3,10 +3,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
-import { Cursor } from "@/components/providers/Cursor";
 import { Nav } from "@/components/ui/Nav";
 import { Footer } from "@/components/ui/Footer";
-import { PageTransition } from "@/components/ui/PageTransition";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -31,8 +29,6 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SmoothScroll>
-        <Cursor />
-        <PageTransition />
         <Nav />
         <main id="content">{children}</main>
         <Footer />

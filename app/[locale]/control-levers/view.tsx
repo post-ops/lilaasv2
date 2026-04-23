@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Card } from "@/components/ui/Card";
@@ -7,13 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { SplitReveal } from "@/components/ui/SplitReveal";
 import type { Product } from "@/lib/products";
-import dynamic from "next/dynamic";
 import { ArrowUpRight } from "lucide-react";
-
-const SmallJoystick = dynamic(
-  () => import("@/components/three/SmallJoystick").then((m) => m.SmallJoystick),
-  { ssr: false, loading: () => <div style={{ height: 340 }} /> }
-);
 
 export function ControlLeversView({ products }: { products: Product[] }) {
   const t = useTranslations("controlLevers");
@@ -41,11 +36,23 @@ export function ControlLeversView({ products }: { products: Product[] }) {
       <section className="relative py-16 lg:py-24">
         <div className="container-x">
           <div className="grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-14 items-center">
-            <div className="relative rounded-2xl border border-white/8 bg-deep/40 overflow-hidden">
-              <div aria-hidden className="absolute inset-0 opacity-40 pointer-events-none" style={{
-                background: "radial-gradient(ellipse at 30% 20%, rgba(255,107,53,0.2), transparent 60%)",
-              }} />
-              <SmallJoystick accent={flagship.accent} height={460} rotation={-0.25} />
+            <div className="relative aspect-square lg:aspect-[4/5] rounded-2xl border border-white/8 bg-deep/40 overflow-hidden">
+              <div
+                aria-hidden
+                className="absolute inset-0 opacity-60 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 30% 20%, rgba(255,107,53,0.22), transparent 60%)",
+                }}
+              />
+              <Image
+                src={flagship.image}
+                alt={`${flagship.model} control lever`}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain object-center p-10 lg:p-16"
+              />
               <div className="absolute top-5 left-5">
                 <Badge tone="signal">Flagship · {flagship.model}</Badge>
               </div>
@@ -87,21 +94,34 @@ export function ControlLeversView({ products }: { products: Product[] }) {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {rest.map((p) => (
               <Link key={p.slug} href={`/control-levers/${p.slug}`} className="group block">
-                <Card className="h-full flex flex-col p-8">
-                  <div className="flex items-start justify-between mb-8">
-                    <Badge tone={p.family === "L" ? "signal" : p.family === "LE" ? "chart" : "copper"}>
-                      Series {p.family}
-                    </Badge>
+                <Card className="h-full flex flex-col p-0 overflow-hidden">
+                  <div className="relative aspect-square bg-ink/40">
+                    <Image
+                      src={p.image}
+                      alt={`${p.model} control lever`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-contain object-center p-8 transition-transform duration-700 ease-out-expo group-hover:scale-105"
+                    />
+                    <div className="absolute top-5 left-5">
+                      <Badge
+                        tone={p.family === "L" ? "signal" : p.family === "LE" ? "chart" : "copper"}
+                      >
+                        Series {p.family}
+                      </Badge>
+                    </div>
                     <ArrowUpRight
                       size={18}
-                      className="text-mist group-hover:text-signal group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500"
+                      className="absolute top-5 right-5 text-mist group-hover:text-signal group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500"
                     />
                   </div>
-                  <p className="font-display text-5xl text-fog tracking-tight mb-5">{p.model}</p>
-                  <p className="text-sm text-fog/80 mb-4 min-h-[2.5rem]">{p.tagline}</p>
-                  <p className="mt-auto font-mono text-[10px] uppercase tracking-widest text-mist">
-                    {p.highlight}
-                  </p>
+                  <div className="p-7 border-t border-white/5">
+                    <p className="font-display text-4xl text-fog tracking-tight mb-3">{p.model}</p>
+                    <p className="text-sm text-fog/80 mb-3 min-h-[2.5rem]">{p.tagline}</p>
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-mist">
+                      {p.highlight}
+                    </p>
+                  </div>
                 </Card>
               </Link>
             ))}

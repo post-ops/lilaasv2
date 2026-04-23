@@ -1,22 +1,64 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { SplitReveal } from "@/components/ui/SplitReveal";
 import { ArrowUpRight } from "lucide-react";
+import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
 export function CaseStudyTeaser() {
   const t = useTranslations("home");
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    if (prefersReducedMotion()) return;
+
+    const { gsap } = useGsap();
+
+    const ctx = gsap.context(() => {
+      gsap.to("[data-case-bg]", {
+        yPercent: -18,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.6,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="relative py-32 lg:py-44 border-y border-white/5 overflow-hidden">
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.12] pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 20% 30%, rgba(255,107,53,0.4), transparent 55%), radial-gradient(ellipse at 85% 75%, rgba(43,212,180,0.25), transparent 55%)",
-        }}
-      />
+    <section
+      ref={sectionRef}
+      className="relative py-32 lg:py-44 border-y border-white/5 overflow-hidden"
+    >
+      <div data-case-bg className="absolute inset-0 -inset-y-20 will-change-transform">
+        <Image
+          src="/images/lilaas/l01.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-center opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/70 to-ink" />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 20% 30%, rgba(255,107,53,0.32), transparent 55%), radial-gradient(ellipse at 85% 75%, rgba(43,212,180,0.18), transparent 55%)",
+          }}
+        />
+      </div>
+
       <div className="container-x relative">
         <div className="grid lg:grid-cols-[1.3fr_1fr] gap-16 items-end">
           <div>
@@ -47,7 +89,10 @@ export function CaseStudyTeaser() {
               data-magnetic
             >
               <span className="font-mono text-sm uppercase tracking-widest">{t("caseCta")}</span>
-              <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-400" />
+              <ArrowUpRight
+                size={18}
+                className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-400"
+              />
             </Link>
           </div>
         </div>

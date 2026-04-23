@@ -1,19 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
-import dynamic from "next/dynamic";
 import { Link } from "@/i18n/routing";
 import type { Product } from "@/lib/products";
 import { SpecTable } from "@/components/ui/SpecTable";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { SplitReveal } from "@/components/ui/SplitReveal";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
-
-const SmallJoystick = dynamic(
-  () => import("@/components/three/SmallJoystick").then((m) => m.SmallJoystick),
-  { ssr: false, loading: () => <div style={{ height: 520 }} /> }
-);
+import { ArrowLeft } from "lucide-react";
 
 export function ProductDetail({ product }: { product: Product }) {
   const t = useTranslations("controlLevers");
@@ -31,7 +26,7 @@ export function ProductDetail({ product }: { product: Product }) {
           </Link>
 
           <div className="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-start">
-            <div className="relative rounded-2xl border border-white/8 bg-deep/40 overflow-hidden">
+            <div className="relative aspect-square rounded-2xl border border-white/8 bg-deep/40 overflow-hidden">
               <div
                 aria-hidden
                 className="absolute inset-0 opacity-50 pointer-events-none"
@@ -39,7 +34,14 @@ export function ProductDetail({ product }: { product: Product }) {
                   background: `radial-gradient(ellipse at 30% 30%, ${product.accent}33, transparent 60%)`,
                 }}
               />
-              <SmallJoystick accent={product.accent} height={560} rotation={-0.3} />
+              <Image
+                src={product.image}
+                alt={`${product.model} control lever`}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 55vw"
+                className="object-contain object-center p-10 lg:p-16"
+              />
               <div className="absolute top-5 left-5 flex gap-2">
                 <Badge tone={product.family === "L" ? "signal" : product.family === "LE" ? "chart" : "copper"}>
                   Series {product.family}
@@ -77,6 +79,22 @@ export function ProductDetail({ product }: { product: Product }) {
           </div>
         </div>
       </section>
+
+      {product.detailImage && (
+        <section className="py-20">
+          <div className="container-x">
+            <div className="relative aspect-[16/8] rounded-2xl overflow-hidden border border-white/8 bg-deep/40">
+              <Image
+                src={product.detailImage}
+                alt={`${product.model} detail view`}
+                fill
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="py-20 lg:py-28">
         <div className="container-x grid lg:grid-cols-[1fr_1.3fr] gap-16">

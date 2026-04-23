@@ -1,17 +1,61 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { Badge } from "@/components/ui/Badge";
 import { SplitReveal } from "@/components/ui/SplitReveal";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft } from "lucide-react";
+import { useGsap, prefersReducedMotion } from "@/lib/gsap";
+
+const CERN_HERO =
+  "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=2000&q=80";
 
 export function CernStory() {
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+    if (prefersReducedMotion()) return;
+
+    const { gsap } = useGsap();
+    const ctx = gsap.context(() => {
+      gsap.to("[data-cern-bg]", {
+        yPercent: -15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.5,
+        },
+      });
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <>
-      <section className="pt-40 lg:pt-52 pb-16">
-        <div className="container-x">
-          <Link href="/case-studies" className="inline-flex items-center gap-2 text-mist hover:text-fog font-mono text-xs uppercase tracking-widest mb-10">
+      <section ref={heroRef} className="relative h-[85svh] min-h-[560px] overflow-hidden">
+        <div data-cern-bg className="absolute inset-0 -inset-y-10 will-change-transform">
+          <Image
+            src={CERN_HERO}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/50 to-ink" />
+        </div>
+        <div className="relative z-10 container-x pt-32 lg:pt-44 pb-16">
+          <Link
+            href="/case-studies"
+            className="inline-flex items-center gap-2 text-mist hover:text-fog font-mono text-xs uppercase tracking-widest mb-10"
+          >
             <ArrowLeft size={14} /> All case studies
           </Link>
           <div className="flex gap-2 mb-8">

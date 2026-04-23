@@ -6,6 +6,8 @@ export type Product = {
   description: string;
   highlight: string;
   accent: string;
+  image: string;
+  detailImage?: string;
   applications: string[];
   specs: { label: string; value: string }[];
 };
@@ -20,6 +22,8 @@ export const PRODUCTS: Product[] = [
       "The L01 brings an integrated TFT LCD directly into the lever body — readouts sit in the operator's line of sight, not tucked into a side panel. Synchronised electric motors across bridge stations ensure the captain can hand off or resume control without surprise. Type-approved for maritime installation.",
     highlight: "Integrated TFT display · Synchronised across bridges · DNV GL type-approved",
     accent: "#FF6B35",
+    image: "/images/lilaas/l01.webp",
+    detailImage: "/images/lilaas/l01-detail.webp",
     applications: ["Supply vessels", "Cruise ships", "Ferries", "Tankers", "Yachts", "Naval auxiliaries"],
     specs: [
       { label: "Display", value: "Integrated TFT LCD" },
@@ -34,32 +38,15 @@ export const PRODUCTS: Product[] = [
     ],
   },
   {
-    slug: "lf200",
-    model: "LF200",
-    family: "LF",
-    tagline: "Heavy-class propulsion lever for deep-sea operations.",
-    description: "Built for the largest vessels where tactile feel and absolute reliability matter more than anything else. Machined aluminium body, replaceable grip, long-life pots.",
-    highlight: "Marine-grade · Long-stroke · Configurable detents",
-    accent: "#FF6B35",
-    applications: ["Tankers", "Bulk carriers", "Offshore supply"],
-    specs: [
-      { label: "Travel", value: "±60°" },
-      { label: "Detent options", value: "0 / 1 / 3 / variable" },
-      { label: "Grip", value: "Replaceable elastomer" },
-      { label: "Protection rating", value: "IP65" },
-      { label: "Supply voltage", value: "24 VDC" },
-      { label: "Interface", value: "Analogue + CAN" },
-      { label: "Certification", value: "DNV GL type-approved" },
-    ],
-  },
-  {
     slug: "lf180",
     model: "LF180",
     family: "LF",
     tagline: "Azimuth and thruster control for dynamic positioning.",
-    description: "A purpose-built lever for azimuth thrusters and dynamic positioning. Compact, responsive, highly repeatable.",
+    description:
+      "A purpose-built lever for azimuth thrusters and dynamic positioning. Compact, responsive, highly repeatable — the lever of choice across DP-class supply vessels and tugs.",
     highlight: "Azimuth · Thruster · DP class",
     accent: "#FF6B35",
+    image: "/images/lilaas/lf180.webp",
     applications: ["Offshore support", "DP-class vessels", "Tugs"],
     specs: [
       { label: "Travel", value: "±45°" },
@@ -74,10 +61,13 @@ export const PRODUCTS: Product[] = [
     slug: "lf120",
     model: "LF120",
     family: "LF",
-    tagline: "Mid-class lever for ferries, yachts, commercial vessels.",
-    description: "The workhorse. Proven across thousands of installations — supply vessels, ferries, cruise tenders.",
+    tagline: "Mid-class lever for ferries, yachts and commercial vessels.",
+    description:
+      "The workhorse. Proven across thousands of installations — supply vessels, ferries, cruise tenders. Pistol, T-handle or knob grip options.",
     highlight: "Proven · Flexible · Easy to integrate",
     accent: "#C97E4F",
+    image: "/images/lilaas/lf120.webp",
+    detailImage: "/images/lilaas/lf120-detail.webp",
     applications: ["Ferries", "Commercial yachts", "Fishing vessels"],
     specs: [
       { label: "Travel", value: "±45°" },
@@ -92,28 +82,15 @@ export const PRODUCTS: Product[] = [
     model: "LF90",
     family: "LF",
     tagline: "Compact lever for tight bridges and workboats.",
-    description: "All the feel of the LF line in a smaller footprint. Ideal where bridge space is at a premium.",
+    description:
+      "All the feel of the LF line in a smaller footprint. Ideal where bridge space is at a premium — pilot boats, small ferries, workboats.",
     highlight: "Compact footprint · Standard interfaces",
     accent: "#C97E4F",
+    image: "/images/lilaas/lf90.webp",
+    detailImage: "/images/lilaas/lf90-detail.webp",
     applications: ["Workboats", "Pilot boats", "Small ferries"],
     specs: [
       { label: "Travel", value: "±45°" },
-      { label: "Supply voltage", value: "24 VDC" },
-      { label: "Interface", value: "Analogue / CAN" },
-      { label: "Protection rating", value: "IP65" },
-    ],
-  },
-  {
-    slug: "lf50",
-    model: "LF50",
-    family: "LF",
-    tagline: "Multi-function joystick for thrust & steering.",
-    description: "A true multi-function joystick that combines thrust, steering and control in a single device. Featured on NauticExpo.",
-    highlight: "Multi-function · Bridge ergonomics",
-    accent: "#2BD4B4",
-    applications: ["Yachts", "Pilot boats", "Small workboats"],
-    specs: [
-      { label: "Axes", value: "3-axis (X/Y + rotation)" },
       { label: "Supply voltage", value: "24 VDC" },
       { label: "Interface", value: "Analogue / CAN" },
       { label: "Protection rating", value: "IP65" },
@@ -124,9 +101,12 @@ export const PRODUCTS: Product[] = [
     model: "LE90",
     family: "LE",
     tagline: "Electric lever engineered for system integrators.",
-    description: "Designed for OEMs building their own control systems on top of our motion hardware. Full CAN/Modbus interface, configurable detents and travel.",
+    description:
+      "Designed for OEMs building their own control systems on top of our motion hardware. Full CAN/Modbus interface, configurable detents and travel.",
     highlight: "OEM-friendly · Fully electric · Configurable",
     accent: "#2BD4B4",
+    image: "/images/lilaas/le90.webp",
+    detailImage: "/images/lilaas/le90-detail.webp",
     applications: ["Integrators", "OEM bridge suppliers"],
     specs: [
       { label: "Travel", value: "Configurable" },

@@ -1,25 +1,22 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/i18n/routing";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
-import { cn } from "@/lib/cn";
 
-const HeroScene = dynamic(() => import("@/components/three/HeroScene").then((m) => m.HeroScene), {
-  ssr: false,
-  loading: () => null,
-});
+const AmbientScene = dynamic(
+  () => import("@/components/three/AmbientScene").then((m) => m.AmbientScene),
+  { ssr: false, loading: () => null }
+);
 
 export function Hero() {
   const t = useTranslations("home");
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const sceneWrapRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef(0);
-  const copyRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -28,18 +25,7 @@ export function Hero() {
 
     const { gsap, ScrollTrigger } = useGsap();
 
-    const trigger = ScrollTrigger.create({
-      trigger: el,
-      start: "top top",
-      end: "+=180%",
-      pin: sceneWrapRef.current,
-      scrub: 0.6,
-      onUpdate: (self) => {
-        progressRef.current = self.progress;
-      },
-    });
-
-    const copyCtx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       gsap.fromTo(
         "[data-hero-line]",
         { yPercent: 110, opacity: 0 },
@@ -48,94 +34,118 @@ export function Hero() {
           opacity: 1,
           ease: "expo.out",
           duration: 1.1,
-          stagger: 0.08,
-          delay: 0.2,
+          stagger: 0.06,
+          delay: 0.15,
         }
       );
       gsap.fromTo(
         "[data-hero-sub]",
         { y: 22, opacity: 0 },
-        { y: 0, opacity: 1, ease: "expo.out", duration: 1, delay: 0.65 }
+        { y: 0, opacity: 1, ease: "expo.out", duration: 1, delay: 0.55 }
       );
       gsap.fromTo(
         "[data-hero-cta]",
         { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, ease: "expo.out", duration: 0.9, delay: 0.9, stagger: 0.1 }
+        { y: 0, opacity: 1, ease: "expo.out", duration: 0.9, delay: 0.8, stagger: 0.1 }
       );
       gsap.fromTo(
         "[data-hero-eyebrow]",
-        { opacity: 0, letterSpacing: "0.05em" },
-        { opacity: 1, letterSpacing: "0.2em", ease: "expo.out", duration: 1.2, delay: 0 }
+        { opacity: 0 },
+        { opacity: 1, ease: "expo.out", duration: 1, delay: 0 }
       );
+
+      gsap.to("[data-hero-image]", {
+        scale: 1.08,
+        yPercent: -6,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.4,
+        },
+      });
+
+      gsap.to("[data-hero-copy]", {
+        yPercent: -30,
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.5,
+        },
+      });
     }, sectionRef);
 
-    return () => {
-      trigger.kill();
-      copyCtx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="relative"
-      style={{ minHeight: "180vh" }}
+      className="relative h-[100svh] min-h-[640px] overflow-hidden"
       aria-label="Lilaas introduction"
     >
-      <div
-        ref={sceneWrapRef}
-        className="relative h-screen w-full overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-transparent to-ink z-10 pointer-events-none" />
+      <div ref={imageRef} data-hero-image className="absolute inset-0 will-change-transform">
+        <Image
+          src="/images/lilaas/hero-main.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/55 to-ink" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-transparent to-transparent" />
+      </div>
 
-        <div className="absolute inset-0 z-0">
-          <HeroScene scrollProgress={progressRef} />
+      <AmbientScene intensity="hero" accent="#FF6B35" />
+
+      <div className="grain z-20" />
+
+      <div data-hero-copy className="relative z-30 container-x flex flex-col justify-end h-full pb-[14vh] pt-36">
+        <div className="flex items-center gap-3 mb-8" data-hero-eyebrow>
+          <span className="signal-dot animate-pulse-signal" />
+          <p className="eyebrow">{t("eyebrow")}</p>
         </div>
 
-        <div className="grain z-20" />
+        <div className="max-w-5xl">
+          <h1 className="font-display font-medium text-display-xl text-fog leading-[0.92] text-balance">
+            <HeroLine>{t("heroH1a")}</HeroLine>{" "}
+            <HeroAccent>{t("heroH1b")}</HeroAccent>
+            <HeroLine>{t("heroH1c")}</HeroLine>{" "}
+            <HeroAccent>{t("heroH1d")}</HeroAccent>{" "}
+            <HeroLine>{t("heroH1e")}</HeroLine>{" "}
+            <HeroAccent>{t("heroH1f")}</HeroAccent>
+            <HeroLine>{t("heroH1g")}</HeroLine>
+          </h1>
 
-        <div className="relative z-30 container-x flex flex-col justify-end h-full pb-[14vh] pt-36">
-          <div className="flex items-center gap-3 mb-8" data-hero-eyebrow>
-            <span className="signal-dot animate-pulse-signal" />
-            <p className="eyebrow">{t("eyebrow")}</p>
+          <p
+            data-hero-sub
+            className="mt-10 max-w-2xl text-lg text-mist leading-relaxed text-pretty opacity-0"
+          >
+            {t("heroSub")}
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <Link href="/control-levers" data-hero-cta className="opacity-0 inline-block">
+              <Button variant="primary" size="lg" arrow>
+                {t("ctaExplore")}
+              </Button>
+            </Link>
+            <Link href="/contact" data-hero-cta className="opacity-0 inline-block">
+              <Button variant="outline" size="lg" arrow>
+                {t("ctaContact")}
+              </Button>
+            </Link>
           </div>
+        </div>
 
-          <div ref={copyRef} className="max-w-5xl">
-            <h1 className="font-display font-medium text-display-xl text-fog leading-[0.92] text-balance">
-              <HeroLine>{t("heroH1a")}</HeroLine>{" "}
-              <HeroAccent>{t("heroH1b")}</HeroAccent>
-              <HeroLine>{t("heroH1c")}</HeroLine>{" "}
-              <HeroAccent delay={0.12}>{t("heroH1d")}</HeroAccent>{" "}
-              <HeroLine>{t("heroH1e")}</HeroLine>{" "}
-              <HeroAccent delay={0.24}>{t("heroH1f")}</HeroAccent>
-              <HeroLine>{t("heroH1g")}</HeroLine>
-            </h1>
-
-            <p
-              data-hero-sub
-              className="mt-10 max-w-2xl text-lg text-mist leading-relaxed text-pretty opacity-0"
-            >
-              {t("heroSub")}
-            </p>
-
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-              <Link href="/control-levers" data-hero-cta className="opacity-0 inline-block">
-                <Button variant="primary" size="lg" arrow>
-                  {t("ctaExplore")}
-                </Button>
-              </Link>
-              <Link href="/contact" data-hero-cta className="opacity-0 inline-block">
-                <Button variant="outline" size="lg" arrow>
-                  {t("ctaContact")}
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-6 flex flex-col items-center gap-2 text-mist/70">
-            <span className="eyebrow text-[10px]">scroll</span>
-            <span className="w-px h-10 bg-gradient-to-b from-fog/40 to-transparent" />
-          </div>
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-6 flex flex-col items-center gap-2 text-mist/70">
+          <span className="eyebrow text-[10px]">scroll</span>
+          <span className="w-px h-10 bg-gradient-to-b from-fog/40 to-transparent" />
         </div>
       </div>
     </section>
@@ -152,13 +162,13 @@ function HeroLine({ children }: { children: React.ReactNode }) {
   );
 }
 
-function HeroAccent({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+function HeroAccent({ children }: { children: React.ReactNode }) {
   return (
     <span className="inline-block relative overflow-hidden align-baseline pr-[0.08em]">
       <span
         className="inline-block will-change-transform text-signal"
         data-hero-line
-        style={{ transform: "translateY(110%)", opacity: 0, animationDelay: `${delay}s` }}
+        style={{ transform: "translateY(110%)", opacity: 0 }}
       >
         {children}
       </span>

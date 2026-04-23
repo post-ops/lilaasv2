@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -9,16 +10,17 @@ import { SplitReveal } from "@/components/ui/SplitReveal";
 import { Badge } from "@/components/ui/Badge";
 import { Anchor, Shield, Activity, Rocket, ArrowUpRight } from "lucide-react";
 
-const OceanScene = dynamic(
-  () => import("@/components/three/OceanScene").then((m) => m.OceanScene),
-  { ssr: false, loading: () => <div style={{ height: 520 }} /> }
+const AmbientScene = dynamic(
+  () => import("@/components/three/AmbientScene").then((m) => m.AmbientScene),
+  { ssr: false, loading: () => null }
 );
 
 const DATA = {
   maritime: {
     icon: Anchor,
-    tone: "signal",
-    heroImage: "ocean",
+    tone: "signal" as const,
+    accent: "#FF6B35",
+    heroImage: "/images/lilaas/maritime.webp",
     applications: [
       "Supply vessels",
       "Ferries",
@@ -27,13 +29,14 @@ const DATA = {
       "Yachts",
       "Offshore platforms",
     ],
-    products: ["L01", "LF200", "LF180", "LF120", "LF50"],
+    products: ["L01", "LF180", "LF120", "LF90"],
     certifications: ["DNV GL type-approved", "EMC (marine)", "Vibration tested", "IP65 rated"],
   },
   defence: {
     icon: Shield,
-    tone: "fog",
-    heroImage: "field",
+    tone: "fog" as const,
+    accent: "#C9D1DE",
+    heroImage: "/images/lilaas/defence.webp",
     applications: [
       "Vehicle control systems",
       "Naval auxiliaries",
@@ -45,8 +48,9 @@ const DATA = {
   },
   medical: {
     icon: Activity,
-    tone: "chart",
-    heroImage: "sterile",
+    tone: "chart" as const,
+    accent: "#2BD4B4",
+    heroImage: "/images/lilaas/medicine.webp",
     applications: [
       "Surgical instrumentation housings",
       "Diagnostic equipment parts",
@@ -57,8 +61,10 @@ const DATA = {
   },
   space: {
     icon: Rocket,
-    tone: "copper",
-    heroImage: "stars",
+    tone: "copper" as const,
+    accent: "#C97E4F",
+    heroImage:
+      "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1800&q=80",
     applications: [
       "Large Hadron Collider components (CERN)",
       "Satellite hardware",
@@ -67,7 +73,7 @@ const DATA = {
     products: ["Precision mechanics"],
     certifications: ["Tolerance to 0.01 mm", "Documented process control"],
   },
-} as const;
+};
 
 export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
   const t = useTranslations(`industries.${industry}`);
@@ -79,22 +85,34 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
 
   return (
     <>
-      <section className="relative pt-40 lg:pt-52 pb-20 overflow-hidden">
-        {industry === "maritime" && (
-          <div className="absolute inset-x-0 bottom-0 h-[60vh] opacity-80 pointer-events-none">
-            <OceanScene height={600} />
-          </div>
-        )}
+      <section className="relative pt-40 lg:pt-52 pb-24 overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          <Image
+            src={data.heroImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/60 to-ink" />
+        </div>
+        <AmbientScene intensity="section" accent={data.accent} />
 
         <div className="container-x relative">
           <div className="flex items-center gap-3 mb-8">
-            <div className={
-              "w-10 h-10 rounded-lg border flex items-center justify-center " +
-              (data.tone === "signal" ? "border-signal/40 text-signal bg-signal/5" :
-               data.tone === "chart" ? "border-chart/40 text-chart bg-chart/5" :
-               data.tone === "copper" ? "border-copper/40 text-copper bg-copper/5" :
-               "border-fog/20 text-fog bg-fog/5")
-            }>
+            <div
+              className={
+                "w-10 h-10 rounded-lg border flex items-center justify-center backdrop-blur-sm " +
+                (data.tone === "signal"
+                  ? "border-signal/40 text-signal bg-signal/10"
+                  : data.tone === "chart"
+                  ? "border-chart/40 text-chart bg-chart/10"
+                  : data.tone === "copper"
+                  ? "border-copper/40 text-copper bg-copper/10"
+                  : "border-fog/20 text-fog bg-fog/10")
+              }
+            >
               <Icon size={18} strokeWidth={1.5} />
             </div>
             <p className="eyebrow">Application · {t("name")}</p>
@@ -109,6 +127,20 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
           <p className="text-lg text-mist leading-relaxed max-w-2xl mt-10 text-pretty">
             {t("body")}
           </p>
+        </div>
+      </section>
+
+      <section className="py-16">
+        <div className="container-x">
+          <div className="relative aspect-[16/7] rounded-2xl overflow-hidden border border-white/8">
+            <Image
+              src={data.heroImage}
+              alt={`${t("name")} context`}
+              fill
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </div>
         </div>
       </section>
 
@@ -158,7 +190,10 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
                       </div>
                       <span className="font-display text-xl text-fog">{industries(`${slug}.name`)}</span>
                     </div>
-                    <ArrowUpRight size={18} className="text-mist group-hover:text-signal group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500" />
+                    <ArrowUpRight
+                      size={18}
+                      className="text-mist group-hover:text-signal group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500"
+                    />
                   </Card>
                 </Link>
               );
