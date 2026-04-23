@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/ui/Reveal";
+import { NumberCounter } from "@/components/ui/NumberCounter";
 
 const CLIENTS = [
   "Kongsberg Maritime",
@@ -14,11 +15,28 @@ const CLIENTS = [
 export function ClientsBand() {
   const t = useTranslations("home");
   return (
-    <section className="relative py-20 lg:py-28 border-y border-white/5 bg-deep/30 overflow-hidden">
+    <section className="relative py-24 lg:py-32 border-y border-white/5 bg-deep/30 overflow-hidden">
       <div className="container-x">
         <Reveal variant="fade">
-          <p className="eyebrow text-center mb-12">{t("clientsEyebrow")}</p>
+          <p className="eyebrow text-center mb-10">{t("clientsEyebrow")}</p>
         </Reveal>
+
+        <div className="grid grid-cols-3 gap-4 lg:gap-10 mb-14 max-w-4xl mx-auto">
+          {[
+            { value: 12, suffix: "M+", label: "Parts shipped" },
+            { value: 4, label: "Continents" },
+            { value: 5, label: "Flagship clients" },
+          ].map((s, i) => (
+            <Reveal key={s.label} variant="up" delay={i * 120}>
+              <div className="text-center">
+                <div className="font-display text-[clamp(2rem,4.5vw,4rem)] tracking-tightest text-fog">
+                  <NumberCounter value={s.value} suffix={s.suffix} />
+                </div>
+                <p className="eyebrow mt-3 text-mist/70">{s.label}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </div>
 
       <div className="relative">
@@ -26,7 +44,8 @@ export function ClientsBand() {
           {CLIENTS.concat(CLIENTS, CLIENTS).map((name, i) => (
             <span
               key={i}
-              className="group inline-flex items-center gap-6 font-display text-[clamp(2rem,3.2vw,3rem)] tracking-tight text-mist/55 hover:text-fog transition-colors duration-500 cursor-default"
+              className="group inline-flex items-center gap-6 font-display text-[clamp(2rem,3.2vw,3rem)] tracking-tight text-mist/55 hover:text-fog hover:-translate-y-1 transition-all duration-500 cursor-default"
+              data-magnetic
             >
               {name}
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-signal/40 group-hover:bg-signal transition-colors" />
@@ -35,24 +54,6 @@ export function ClientsBand() {
         </div>
         <div className="absolute inset-y-0 left-0 w-32 lg:w-48 bg-gradient-to-r from-ink to-transparent pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-32 lg:w-48 bg-gradient-to-l from-ink to-transparent pointer-events-none" />
-      </div>
-
-      <div className="container-x mt-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-10 border-t border-white/8 pt-10 font-mono text-[11px] uppercase tracking-widest">
-          {[
-            ["Bridges", "thousands"],
-            ["Continents", "4"],
-            ["Since", "1961"],
-            ["Certified", "DNV GL"],
-          ].map(([k, v], i) => (
-            <Reveal key={k} variant="up" delay={i * 80}>
-              <div>
-                <p className="text-mist/60 mb-2">{k}</p>
-                <p className="font-display text-xl tracking-tight normal-case text-fog">{v}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );

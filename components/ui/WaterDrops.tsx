@@ -3,14 +3,14 @@
 import { useEffect, useRef } from "react";
 
 type Drop = {
-  x: number; // 0..100 (%)
-  y: number; // px from top of layer
-  vy: number; // px per frame base velocity
-  length: number; // streak length in px
+  x: number;
+  y: number;
+  vy: number;
+  length: number;
   opacity: number;
   width: number;
-  scrollKick: number; // how much scroll velocity accelerates this drop
-  delayLife: number; // frames to wait before spawning again after reset
+  scrollKick: number;
+  delayLife: number;
 };
 
 const DROP_COUNT = 60;
@@ -66,13 +66,20 @@ export function WaterDrops() {
       const y = window.scrollY;
       const delta = y - lastScrollRef.current;
       lastScrollRef.current = y;
-      // Positive delta = scrolling down = drops speed up; also spawn streaks.
       scrollVelRef.current += delta;
-      // Cap accumulation so a long scroll doesn't lead to explosion.
       if (scrollVelRef.current > 240) scrollVelRef.current = 240;
       if (scrollVelRef.current < -240) scrollVelRef.current = -240;
+
+      // Fade canvas in once user has scrolled past ~25% of viewport so the
+      // hero stays clean.
+      if (canvas) {
+        const threshold = window.innerHeight * 0.25;
+        const fade = Math.min(1, Math.max(0, (y - threshold) / (window.innerHeight * 0.3)));
+        canvas.style.opacity = String(fade);
+      }
     }
     lastScrollRef.current = window.scrollY;
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
     let raf = 0;
@@ -86,8 +93,6 @@ export function WaterDrops() {
 
       ctx.clearRect(0, 0, w, h);
 
-      // Decay scroll velocity (friction). Friction softer when positive
-      // (keeps some momentum) so pulses linger a beat.
       scrollVelRef.current *= 0.9;
       const scrollBoost = scrollVelRef.current;
 
@@ -102,7 +107,6 @@ export function WaterDrops() {
         d.y += v;
 
         if (d.y > h + 40) {
-          // reset above viewport
           d.y = -d.length - Math.random() * 120;
           d.x = Math.random() * 100;
           d.vy = 0.6 + Math.random() * 1.8;
@@ -126,7 +130,6 @@ export function WaterDrops() {
         ctx.lineTo(px, d.y);
         ctx.stroke();
 
-        // Head: a small brighter dot
         ctx.fillStyle = `rgba(235, 245, 255, ${d.opacity * 0.9})`;
         ctx.beginPath();
         ctx.arc(px, d.y, d.width * 0.9, 0, Math.PI * 2);
@@ -149,7 +152,11 @@ export function WaterDrops() {
       ref={canvasRef}
       aria-hidden
       className="fixed inset-0 z-[4] pointer-events-none"
-      style={{ mixBlendMode: "screen" }}
+      style={{
+        mixBlendMode: "screen",
+        opacity: 0,
+        transition: "opacity 400ms linear",
+      }}
     />
   );
 }
