@@ -3,6 +3,7 @@ import { Hero } from "@/components/sections/Hero";
 import { StatementBanner } from "@/components/sections/StatementBanner";
 import { StatsStrip } from "@/components/sections/StatsStrip";
 import { MarqueeStrip } from "@/components/sections/MarqueeStrip";
+import { RadarDisplay } from "@/components/sections/RadarDisplay";
 import { ProcessSticky } from "@/components/sections/ProcessSticky";
 import { CinematicReveal } from "@/components/sections/CinematicReveal";
 import { ProductRail } from "@/components/sections/ProductRail";
@@ -25,6 +26,7 @@ export default async function HomePage({
       <StatementBanner />
       <StatsStrip />
       <MarqueeStrip />
+      <RadarDisplay />
       <ProcessSticky />
       <CinematicReveal />
       <ProductRail />
