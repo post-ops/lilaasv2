@@ -41,6 +41,12 @@ export function Hero() {
         { opacity: 1, y: 0, ease: "expo.out", duration: 0.7 }
       )
         .fromTo(
+          "[data-hero-brand]",
+          { opacity: 0, y: 18, letterSpacing: "0.08em" },
+          { opacity: 1, y: 0, letterSpacing: "-0.04em", ease: "expo.out", duration: 1.1 },
+          "-=0.4"
+        )
+        .fromTo(
           "[data-hero-line]",
           { yPercent: 110, opacity: 0 },
           {
@@ -50,7 +56,7 @@ export function Hero() {
             duration: 1.0,
             stagger: 0.055,
           },
-          "-=0.4"
+          "-=0.6"
         )
         .fromTo(
           "[data-hero-sub]",
@@ -139,7 +145,7 @@ export function Hero() {
 
       <div
         data-hero-copy
-        className="relative z-30 container-x flex flex-col items-center text-center justify-end h-full pb-[16vh] pt-32 will-change-transform"
+        className="relative z-30 container-x flex flex-col items-center text-center justify-center h-full pb-[10vh] pt-28 will-change-transform"
       >
         <div
           data-hero-eyebrow
@@ -149,8 +155,28 @@ export function Hero() {
           <span className="eyebrow">{tExtra("live")} · {time}</span>
         </div>
 
+        <div data-hero-brand className="flex flex-col items-center mb-10 opacity-0">
+          <svg
+            viewBox="0 0 40 40"
+            width="56"
+            height="56"
+            fill="none"
+            aria-hidden
+            className="mb-5"
+          >
+            <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1" className="text-fog/70" />
+            <circle cx="20" cy="20" r="9" stroke="currentColor" strokeWidth="1" className="text-fog/70" />
+            <circle cx="20" cy="20" r="3.5" fill="#FF6B35" />
+            <path d="M20 2 V10 M20 30 V38 M2 20 H10 M30 20 H38" stroke="currentColor" strokeWidth="0.8" className="text-fog/40" />
+          </svg>
+          <p className="font-display font-semibold text-fog text-[clamp(3.5rem,9vw,8rem)] leading-none tracking-tightest">
+            LILAAS
+          </p>
+          <p className="eyebrow mt-4 text-mist/80">Precision engineering · Since 1961</p>
+        </div>
+
         <div className="max-w-5xl mx-auto">
-          <h1 className="font-display font-medium text-display-xl text-fog leading-[0.92] text-balance">
+          <h1 className="font-display font-medium text-[clamp(1.75rem,3.4vw,3rem)] text-fog leading-[1.05] text-balance">
             <HeroLine>{t("heroH1a")}</HeroLine>{" "}
             <HeroAccent>{t("heroH1b")}</HeroAccent>
             <HeroLine>{t("heroH1c")}</HeroLine>{" "}
@@ -162,7 +188,7 @@ export function Hero() {
 
           <p
             data-hero-sub
-            className="mt-10 max-w-2xl mx-auto text-lg text-mist leading-relaxed text-pretty opacity-0"
+            className="mt-8 max-w-xl mx-auto text-base lg:text-lg text-mist leading-relaxed text-pretty opacity-0"
           >
             {t("heroSub")}
           </p>
