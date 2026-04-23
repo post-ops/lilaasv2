@@ -65,9 +65,6 @@ function Stage({
 
   return (
     <>
-      <color attach="background" args={["#05070D"]} />
-      <fog attach="fog" args={["#05070D", 9, 22]} />
-
       <ambientLight intensity={0.25} />
 
       <DotRing progressRef={progressRef} />
@@ -81,7 +78,6 @@ function Stage({
           kernelSize={KernelSize.MEDIUM}
         />
         <Noise opacity={0.016} blendFunction={BlendFunction.OVERLAY} premultiply />
-        <Vignette eskil={false} offset={0.22} darkness={0.9} />
       </EffectComposer>
     </>
   );
@@ -98,7 +94,7 @@ export function CinematicHero({
     <Canvas
       shadows={false}
       dpr={[1, 1.5]}
-      gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       camera={{ position: [0, 0.1, 6.8], fov: 34, near: 0.1, far: 40 }}
       className="!absolute inset-0 !h-full !w-full"
       onPointerMove={(e) => {

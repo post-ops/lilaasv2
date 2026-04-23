@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
@@ -102,7 +103,28 @@ export function Hero() {
       className="relative h-[100svh] min-h-[720px] overflow-hidden bg-ink"
       aria-label="Lilaas introduction"
     >
-      <div className="absolute inset-0">
+      {/* Background marine image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/hero/helm.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(5,7,13,0.55) 0%, rgba(5,7,13,0.82) 55%, rgb(5,7,13) 100%)",
+          }}
+        />
+      </div>
+
+      {/* 3D dot ring overlay */}
+      <div className="absolute inset-0 z-[2]">
         <CinematicHero scrollProgress={scrollProgress} />
       </div>
 
