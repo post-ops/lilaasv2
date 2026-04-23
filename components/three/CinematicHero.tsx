@@ -7,38 +7,38 @@ import { BlendFunction, KernelSize } from "postprocessing";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
 
-const RINGS = [
+const DOT_RINGS = [
   {
+    count: 40,
     radius: 3.1,
-    tube: 0.004,
     tilt: [0, 0, 0] as const,
-    opacity: 0.9,
+    size: 0.022,
     scrollSpin: 4.2,
     idleSpin: 0.18,
   },
   {
+    count: 32,
     radius: 3.8,
-    tube: 0.003,
     tilt: [Math.PI / 2.3, 0, 0] as const,
-    opacity: 0.55,
+    size: 0.018,
     scrollSpin: -3.0,
     idleSpin: -0.12,
   },
   {
+    count: 26,
     radius: 4.5,
-    tube: 0.0022,
     tilt: [0, Math.PI / 4, Math.PI / 3] as const,
-    opacity: 0.35,
+    size: 0.014,
     scrollSpin: 2.4,
     idleSpin: 0.08,
   },
 ];
 
-function OrbitRing({
+function DotRing({
   ring,
   progressRef,
 }: {
-  ring: (typeof RINGS)[number];
+  ring: (typeof DOT_RINGS)[number];
   progressRef: React.MutableRefObject<number>;
 }) {
   const group = useRef<THREE.Group>(null);
@@ -50,17 +50,25 @@ function OrbitRing({
       t * ring.idleSpin + progressRef.current * ring.scrollSpin;
   });
 
-  return (
-    <group ref={group} rotation={ring.tilt}>
-      <mesh>
-        <torusGeometry args={[ring.radius, ring.tube, 6, 256]} />
-        <meshBasicMaterial
+  const dots = [];
+  for (let i = 0; i < ring.count; i++) {
+    const a = (i / ring.count) * Math.PI * 2;
+    dots.push(
+      <mesh key={i} position={[Math.cos(a) * ring.radius, Math.sin(a) * ring.radius, 0]}>
+        <sphereGeometry args={[ring.size, 10, 10]} />
+        <meshStandardMaterial
           color="#FF6B35"
-          transparent
-          opacity={ring.opacity}
+          emissive="#FF6B35"
+          emissiveIntensity={1.8}
           toneMapped={false}
         />
       </mesh>
+    );
+  }
+
+  return (
+    <group ref={group} rotation={ring.tilt}>
+      {dots}
     </group>
   );
 }
@@ -98,8 +106,8 @@ function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number
         </mesh>
       </Float>
 
-      {RINGS.map((ring, i) => (
-        <OrbitRing key={i} ring={ring} progressRef={progressRef} />
+      {DOT_RINGS.map((ring, i) => (
+        <DotRing key={i} ring={ring} progressRef={progressRef} />
       ))}
 
       <Float speed={1.4} rotationIntensity={0.4} floatIntensity={0.2}>
