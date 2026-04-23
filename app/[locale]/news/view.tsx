@@ -1,0 +1,74 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { SplitReveal } from "@/components/ui/SplitReveal";
+import { ArrowUpRight } from "lucide-react";
+
+const POSTS = [
+  {
+    date: "2025-09",
+    tag: "Operations",
+    title: "Lead times reduced: increased staffing and optimised internal processes.",
+    body: "An update on throughput after a year of new hires and process automation on the CNC floor.",
+  },
+  {
+    date: "2025-02",
+    tag: "Feature",
+    title: "Full gass med skipshendler og presisjonsmaskinering hos Lilaas i Horten.",
+    body: "Bakgrunnsartikkel om veksten de siste årene og veien videre for norsk finmekanikk.",
+  },
+  {
+    date: "2024-11",
+    tag: "Product",
+    title: "L01 control lever — next revision in testing.",
+    body: "Refinements to the integrated TFT display stack and synchronisation firmware enter field testing with two OEM partners.",
+  },
+  {
+    date: "2024-06",
+    tag: "Automation",
+    title: "Lilaas secures jobs through unmanned production.",
+    body: "How lights-out CNC keeps high-cost Norwegian manufacturing competitive on global contracts.",
+  },
+];
+
+export function NewsView() {
+  const t = useTranslations("news");
+  return (
+    <>
+      <section className="pt-40 lg:pt-52 pb-20">
+        <div className="container-x">
+          <p className="eyebrow mb-6">{t("eyebrow")}</p>
+          <SplitReveal
+            text={t("title")}
+            as="h1"
+            className="font-display text-display-xl text-fog text-balance max-w-4xl"
+            stagger={0.012}
+          />
+          <p className="text-lg text-mist leading-relaxed max-w-2xl mt-10">{t("sub")}</p>
+        </div>
+      </section>
+
+      <section className="py-12">
+        <div className="container-x">
+          <div className="divide-y divide-white/5 border-y border-white/5">
+            {POSTS.map((p, i) => (
+              <article key={i} className="py-10 grid md:grid-cols-[130px_1fr_120px] gap-6 items-start group cursor-pointer hover:bg-deep/20 px-4 -mx-4 rounded-xl transition-colors duration-300">
+                <p className="font-mono text-xs text-mist uppercase tracking-widest pt-1">{p.date}</p>
+                <div>
+                  <div className="mb-3"><Badge>{p.tag}</Badge></div>
+                  <h3 className="font-display text-2xl text-fog mb-3 text-balance">{p.title}</h3>
+                  <p className="text-mist text-sm max-w-xl">{p.body}</p>
+                </div>
+                <div className="flex justify-end pt-2">
+                  <ArrowUpRight size={20} className="text-mist group-hover:text-signal group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500" />
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

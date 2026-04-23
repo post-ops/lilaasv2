@@ -1,0 +1,211 @@
+{
+  "nav": {
+    "controlLevers": "Manøverspaker",
+    "precision": "Presisjonsmekanikk",
+    "industries": "Bransjer",
+    "caseStudies": "Referanser",
+    "about": "Om oss",
+    "support": "Support",
+    "contact": "Kontakt",
+    "news": "Nyheter",
+    "careers": "Karriere",
+    "menu": "Meny",
+    "close": "Lukk"
+  },
+  "meta": {
+    "siteName": "Lilaas",
+    "titleSuffix": "Lilaas AS — Presisjonsmekanikk siden 1961",
+    "description": "Eksperter på joysticker, manøverspaker og presisjonsmekanikk. Norsk ingeniørkunst, valgt av Kongsberg, Wärtsilä, Siemens, GE og CERN."
+  },
+  "home": {
+    "eyebrow": "Horten, Norge · Siden 1961",
+    "heroH1a": "Eksperter på",
+    "heroH1b": "joysticker",
+    "heroH1c": ",",
+    "heroH1d": "manøverspaker",
+    "heroH1e": "og",
+    "heroH1f": "presisjonsmekanikk",
+    "heroH1g": ".",
+    "heroSub": "Et høyteknologisk produksjonsselskap med ekspertise innen maskinering av et bredt materialspekter, og montering av mekanikk og elektronikk — alt under samme tak i Horten.",
+    "ctaExplore": "Se produktene",
+    "ctaContact": "Snakk med ingeniørene",
+    "statsTitle": "Sekstifire år med presisjon",
+    "statsSub": "Tall fra 2024.",
+    "stats": {
+      "foundedLabel": "Grunnlagt",
+      "foundedValue": "1961",
+      "employeesLabel": "Ingeniører & operatører",
+      "employeesValue": "55+",
+      "revenueLabel": "Omsetning (NOK)",
+      "revenueValue": "116M",
+      "exportLabel": "Direkte eksport",
+      "exportValue": "50%",
+      "continentsLabel": "Kontinenter",
+      "continentsValue": "4"
+    },
+    "clientsEyebrow": "Valgt av",
+    "clientsLine": "Kongsberg Maritime · Wärtsilä · Siemens · General Electric · CERN",
+    "industriesEyebrow": "Bruksområder",
+    "industriesTitle": "Bygget for de mest krevende miljøene — på og utenfor jorden.",
+    "industriesSub": "Fra skipsbruer på tvers av Nordsjøen til Large Hadron Collider — komponentene våre holder toleranser målt i tusendels millimeter.",
+    "caseEyebrow": "Utvalgt prosjekt",
+    "caseTitle": "Large Hadron Collider trengte nøyaktighet ned til hundredels millimeter. Vi leverte.",
+    "caseCta": "Les CERN-historien",
+    "ctaEyebrow": "La oss snakke spesifikasjoner",
+    "ctaTitle": "Vi designer, konstruerer og produserer internt. Fortell oss hva du trenger, så konstruerer vi det med deg.",
+    "ctaSub": "Hverdager 08–16 · Kongeveien 75, Horten",
+    "ctaButton": "Start en samtale"
+  },
+  "industries": {
+    "maritime": {
+      "name": "Maritim",
+      "tag": "Vårt største segment — broer verden over kjører på Lilaas-spaker.",
+      "body": "Forsyningsfartøy, ferger, tankskip, cruiseskip, yachter. Synkroniserte elektriske motorer lar kapteiner flytte seg mellom stasjoner uten å miste kontroll. DNV GL-typegodkjent."
+    },
+    "defence": {
+      "name": "Forsvar",
+      "tag": "Komponenter som består vibrasjons-, fuktighets- og EMI-typetester.",
+      "body": "Oppdragskritiske delkomponenter for krevende forsvarsintegratorer, maskinert i rustfritt stål, titan, Inconel og Hastelloy."
+    },
+    "medical": {
+      "name": "Medisin",
+      "tag": "Maskinering under millimeteren for livsviktig utstyr.",
+      "body": "Presisjonskomponenter fra under 1 mm til 200 mm i diameter, med toleranser ned til noen få tusendels millimeter."
+    },
+    "space": {
+      "name": "Rom",
+      "tag": "Fra Large Hadron Collider til satellittutstyr.",
+      "body": "Når prosjekter krever nøyaktighet målt i hundredels millimeter, står vi på kortlisten."
+    }
+  },
+  "controlLevers": {
+    "eyebrow": "Manøverspaker · Joysticker",
+    "title": "Elektrisk, taktil, typegodkjent.",
+    "sub": "Synkronisert mellom broer. Konstruert for å kjennes.",
+    "lineup": "Lilaas-serien",
+    "requestDatasheet": "Be om datablad",
+    "viewProduct": "Se produkt"
+  },
+  "precision": {
+    "eyebrow": "Presisjonsmekanikk",
+    "title": "Maskinert til tusendeler, montert med omhu.",
+    "sub": "15+ CNC-maskiner, 3- og 5-akset, automatiserte dreiebenker, egen elektronikk og programvare.",
+    "capabilities": "Kapasiteter",
+    "materials": "Materialer vi jobber med",
+    "materialsList": "Rustfritt stål · Titan · Inconel · Covar · Hastelloy · Kobber & messing · Aluminium · Tekniske plastmaterialer"
+  },
+  "about": {
+    "eyebrow": "Om Lilaas",
+    "title": "Sekstifire år med norsk presisjonsmekanikk.",
+    "founded": "Grunnlagt av Jan Lilaas i 1961 som Lilaas Finmekaniske AS. Selskapet har vokst til et 55 mann sterkt lag av ingeniører, maskinoperatører og programvareutviklere — fortsatt med hovedkontor i Horten.",
+    "ceoQuote": "Vi designer, konstruerer og produserer alt internt — mekanikk, programvare, montering — og vi tester hvert eneste produkt før det forlater fabrikken.",
+    "ceoName": "Espen Bergsted Hoff",
+    "ceoTitle": "Daglig leder, Lilaas AS",
+    "certs": "Sertifiseringer",
+    "certsList": "NS-EN ISO 9001:2015 · DNV GL-typegodkjent"
+  },
+  "contact": {
+    "eyebrow": "Kontakt",
+    "title": "La oss bygge det sammen.",
+    "sub": "Fortell oss om prosjektet. Vi svarer vanligvis innen én virkedag.",
+    "form": {
+      "name": "Fullt navn",
+      "email": "Jobb-e-post",
+      "company": "Selskap",
+      "topic": "Tema",
+      "topicOptions": {
+        "levers": "Manøverspaker / joysticker",
+        "precision": "Presisjonsmekanikk",
+        "support": "Produktsupport",
+        "press": "Presse & samarbeid",
+        "other": "Noe annet"
+      },
+      "message": "Fortell oss hva du trenger",
+      "submit": "Send melding",
+      "sending": "Sender…",
+      "success": "Takk — vi har mottatt meldingen. Regn med svar innen én virkedag.",
+      "errorGeneric": "Noe gikk galt. Prøv igjen eller send direkte til sales@lilaas.no.",
+      "errorName": "Vennligst fyll inn navn.",
+      "errorEmail": "Vennligst bruk en gyldig jobb-e-post.",
+      "errorMessage": "Skriv en kort melding (10+ tegn)."
+    },
+    "address": {
+      "label": "Hovedkontor",
+      "value": "Kongeveien 75, 3188 Horten, Norge"
+    },
+    "phone": {
+      "label": "Sentralbord",
+      "value": "+47 416 33 000",
+      "hours": "Hverdager 08–16"
+    },
+    "emails": {
+      "general": "lilaas@lilaas.no",
+      "sales": "sales@lilaas.no"
+    },
+    "teamTitle": "Salg & forretningsutvikling"
+  },
+  "footer": {
+    "tagline": "Eksperter på joysticker, manøverspaker og presisjonsmekanikk.",
+    "copyright": "© {year} Lilaas AS · Org 997 346 912",
+    "rights": "Alle rettigheter forbeholdt",
+    "terms": "Vilkår",
+    "transparency": "Åpenhetsloven",
+    "privacy": "Personvern",
+    "built": "Konseptside — foreløpig ikke en offisiell Lilaas-eiendom."
+  },
+  "common": {
+    "learnMore": "Les mer",
+    "readMore": "Les mer",
+    "viewAll": "Se alle",
+    "back": "Tilbake",
+    "scroll": "Scroll",
+    "languageToggleAria": "Bytt språk"
+  },
+  "support": {
+    "eyebrow": "Support",
+    "title": "Datablad, distributører og dedikerte ingeniører.",
+    "sub": "Velg region under. For direkte teknisk support, send til support@lilaas.no.",
+    "distributorsTitle": "Globalt distributørnettverk"
+  },
+  "cases": {
+    "eyebrow": "Referanser",
+    "title": "Der delene våre havner.",
+    "sub": "Fra broer i Nordsjøen til partikkeldetektorer 100 meter under bakken."
+  },
+  "news": {
+    "eyebrow": "Nyheter",
+    "title": "Det som skjer hos Lilaas.",
+    "sub": "Produktlanseringer, nyheter fra fabrikken og et par milepæler."
+  },
+  "careers": {
+    "eyebrow": "Karriere",
+    "title": "Bygg det skarpeste verktøyet i Norge.",
+    "sub": "Vi vokser. Hvis du elsker trange toleranser og store kunder, burde vi snakke.",
+    "cta": "Åpen søknad — send CV til hr@lilaas.no"
+  },
+  "legal": {
+    "terms": {
+      "eyebrow": "Juridisk",
+      "title": "Vilkår",
+      "p1": "Dette nettstedet er en konseptpitch laget for å vise hvordan Lilaas-merket kan presenteres med et større produksjonsbudsjett. Det er ikke en offisiell Lilaas AS-eiendom, og produktspesifikasjoner, bilder og sitater er hentet fra offentlige kilder.",
+      "p2": "Alle produktdatablad, tekniske spesifikasjoner og kommersielle vilkår for faktisk leveranse reguleres av avtaler direkte med Lilaas AS. Ingenting på denne siden skal tolkes som et bindende tilbud eller en erklæring.",
+      "p3": "Varemerker, logoer og merkenavn tilhører sine respektive eiere. For spørsmål om bruk av innhold, kontakt Lilaas-kontoret i Horten."
+    },
+    "privacy": {
+      "eyebrow": "Juridisk",
+      "title": "Personvern",
+      "p1": "Denne konseptsiden bruker ikke analyse- eller sporingsinformasjonskapsler. Den eneste personopplysningen som behandles er det du frivillig sender inn via kontaktskjemaet (navn, e-post, selskap, melding).",
+      "p2": "Innsendte skjemadata videresendes til salgsteamet i Horten slik at vi kan svare på henvendelsen. De deles ikke med tredjeparter og oppbevares bare så lenge som nødvendig for oppfølging.",
+      "p3": "Du kan når som helst be om innsyn, retting eller sletting av dine data ved å sende oss en e-post.",
+      "contact": "lilaas@lilaas.no"
+    },
+    "transparency": {
+      "eyebrow": "Åpenhetsloven",
+      "title": "Åpenhetsloven-redegjørelse",
+      "p1": "I tråd med åpenhetsloven utfører Lilaas AS aktsomhetsvurderinger knyttet til grunnleggende menneskerettigheter og anstendige arbeidsforhold i egen virksomhet og i leverandørkjeden.",
+      "p2": "Den årlige redegjørelsen, inkludert metodikk for risikovurdering og identifiserte tiltak, er tilgjengelig på forespørsel fra enhver interessent.",
+      "p3": "Skriftlige henvendelser besvares innen tre uker i tråd med § 6 i loven.",
+      "contact": "apenhet@lilaas.no"
+    }
+  }
+}

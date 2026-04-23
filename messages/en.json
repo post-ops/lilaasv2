@@ -1,0 +1,211 @@
+{
+  "nav": {
+    "controlLevers": "Control Levers",
+    "precision": "Precision Mechanics",
+    "industries": "Industries",
+    "caseStudies": "Case Studies",
+    "about": "About",
+    "support": "Support",
+    "contact": "Contact",
+    "news": "News",
+    "careers": "Careers",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "meta": {
+    "siteName": "Lilaas",
+    "titleSuffix": "Lilaas AS — Precision engineering, since 1961",
+    "description": "Experts on joysticks, control levers and precision mechanics. Norwegian engineering trusted by Kongsberg, Wärtsilä, Siemens, GE and CERN."
+  },
+  "home": {
+    "eyebrow": "Horten, Norway · Since 1961",
+    "heroH1a": "Experts on",
+    "heroH1b": "joysticks",
+    "heroH1c": ",",
+    "heroH1d": "control levers",
+    "heroH1e": "and",
+    "heroH1f": "precision mechanics",
+    "heroH1g": ".",
+    "heroSub": "A high-tech production company with expertise in machining a wide range of materials, and assembling mechanics and electronics — all under one roof in Horten.",
+    "ctaExplore": "Explore the levers",
+    "ctaContact": "Talk to engineering",
+    "statsTitle": "Sixty-four years of precision",
+    "statsSub": "Numbers from 2024.",
+    "stats": {
+      "foundedLabel": "Founded",
+      "foundedValue": "1961",
+      "employeesLabel": "Engineers & operators",
+      "employeesValue": "55+",
+      "revenueLabel": "Revenue (NOK)",
+      "revenueValue": "116M",
+      "exportLabel": "Exported directly",
+      "exportValue": "50%",
+      "continentsLabel": "Continents served",
+      "continentsValue": "4"
+    },
+    "clientsEyebrow": "Trusted by",
+    "clientsLine": "Kongsberg Maritime · Wärtsilä · Siemens · General Electric · CERN",
+    "industriesEyebrow": "Application areas",
+    "industriesTitle": "Built for the most demanding environments on — and off — earth.",
+    "industriesSub": "From ship bridges crossing the North Sea to the Large Hadron Collider, our components hold tolerances measured in thousandths of a millimetre.",
+    "caseEyebrow": "Featured work",
+    "caseTitle": "The Large Hadron Collider needed accuracy down to hundredths of a millimetre. We delivered.",
+    "caseCta": "Read the CERN story",
+    "ctaEyebrow": "Let's talk specs",
+    "ctaTitle": "We design, engineer and produce in-house. Tell us what you need and we'll engineer it with you.",
+    "ctaSub": "Weekdays 08–16 CET · Kongeveien 75, Horten, Norway",
+    "ctaButton": "Start a conversation"
+  },
+  "industries": {
+    "maritime": {
+      "name": "Maritime",
+      "tag": "Our largest segment — bridges worldwide run on Lilaas levers.",
+      "body": "Supply vessels, ferries, tankers, cruise ships, yachts. Synchronised electric motors let captains move between stations seamlessly. DNV GL type-approved."
+    },
+    "defence": {
+      "name": "Defence",
+      "tag": "Components that pass vibration, humidity and EMI type-testing.",
+      "body": "Mission-critical subcomponents for demanding defence integrators, machined from stainless steel, titanium, Inconel and Hastelloy."
+    },
+    "medical": {
+      "name": "Medical",
+      "tag": "Sub-millimetre machining for life-critical hardware.",
+      "body": "Precision components from under 1 mm up to 200 mm in diameter, tolerances down to a few thousandths of a millimetre."
+    },
+    "space": {
+      "name": "Space",
+      "tag": "From the Large Hadron Collider to satellite hardware.",
+      "body": "When projects require accuracy measured in hundredths of a millimetre, we're on the shortlist."
+    }
+  },
+  "controlLevers": {
+    "eyebrow": "Control Levers · Joysticks",
+    "title": "Electric, tactile, type-approved.",
+    "sub": "Synchronised across bridges. Engineered to be felt.",
+    "lineup": "The Lilaas lineup",
+    "requestDatasheet": "Request datasheet",
+    "viewProduct": "View product"
+  },
+  "precision": {
+    "eyebrow": "Precision Mechanics",
+    "title": "Machined to thousandths, assembled with care.",
+    "sub": "15+ CNC machines, 3- and 5-axis, automated lathes, in-house electronics and software.",
+    "capabilities": "Capabilities",
+    "materials": "Materials we work with",
+    "materialsList": "Stainless steel · Titanium · Inconel · Covar · Hastelloy · Copper & brass · Aluminium · Engineering plastics"
+  },
+  "about": {
+    "eyebrow": "About Lilaas",
+    "title": "Sixty-four years of Norwegian precision engineering.",
+    "founded": "Founded by Jan Lilaas in 1961 as Lilaas Finmekaniske AS, the company has grown into a 55-strong team of engineers, machinists and software developers — still headquartered in Horten.",
+    "ceoQuote": "We design, engineer, and produce everything in-house — mechanics, software, assembly production — and we test every product before it leaves the factory.",
+    "ceoName": "Espen Bergsted Hoff",
+    "ceoTitle": "CEO, Lilaas AS",
+    "certs": "Certifications",
+    "certsList": "NS-EN ISO 9001:2015 · DNV GL type-approved"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Let's engineer it together.",
+    "sub": "Tell us about your project. We typically reply within one business day.",
+    "form": {
+      "name": "Full name",
+      "email": "Work email",
+      "company": "Company",
+      "topic": "Topic",
+      "topicOptions": {
+        "levers": "Control levers / joysticks",
+        "precision": "Precision mechanics",
+        "support": "Product support",
+        "press": "Press & partnerships",
+        "other": "Something else"
+      },
+      "message": "Tell us what you need",
+      "submit": "Send message",
+      "sending": "Sending…",
+      "success": "Thanks — we've got it. Expect a reply within one business day.",
+      "errorGeneric": "Something went wrong. Please try again or email sales@lilaas.no directly.",
+      "errorName": "Please enter your name.",
+      "errorEmail": "Please enter a valid work email.",
+      "errorMessage": "Please add a short message (10+ characters)."
+    },
+    "address": {
+      "label": "Headquarters",
+      "value": "Kongeveien 75, 3188 Horten, Norway"
+    },
+    "phone": {
+      "label": "Switchboard",
+      "value": "+47 416 33 000",
+      "hours": "Weekdays 08–16 CET"
+    },
+    "emails": {
+      "general": "lilaas@lilaas.no",
+      "sales": "sales@lilaas.no"
+    },
+    "teamTitle": "Sales & business development"
+  },
+  "footer": {
+    "tagline": "Experts on joysticks, control levers and precision mechanics.",
+    "copyright": "© {year} Lilaas AS · Org 997 346 912",
+    "rights": "All rights reserved",
+    "terms": "Terms & Conditions",
+    "transparency": "Åpenhetsloven",
+    "privacy": "Privacy",
+    "built": "Concept site — not yet an official Lilaas property."
+  },
+  "common": {
+    "learnMore": "Learn more",
+    "readMore": "Read more",
+    "viewAll": "View all",
+    "back": "Back",
+    "scroll": "Scroll",
+    "languageToggleAria": "Switch language"
+  },
+  "support": {
+    "eyebrow": "Support",
+    "title": "Datasheets, distributors, and dedicated engineers.",
+    "sub": "Pick your region below. For direct technical support, email support@lilaas.no.",
+    "distributorsTitle": "Global distributor network"
+  },
+  "cases": {
+    "eyebrow": "Case Studies",
+    "title": "Where our parts end up.",
+    "sub": "From bridges on the North Sea to particle detectors 100 metres underground."
+  },
+  "news": {
+    "eyebrow": "News",
+    "title": "What's happening at Lilaas.",
+    "sub": "Product launches, facility news, and the occasional milestone."
+  },
+  "careers": {
+    "eyebrow": "Careers",
+    "title": "Build the sharpest tooling in Norway.",
+    "sub": "We're growing. If you love tight tolerances and big customers, we should talk.",
+    "cta": "Open applications — send CV to hr@lilaas.no"
+  },
+  "legal": {
+    "terms": {
+      "eyebrow": "Legal",
+      "title": "Terms & Conditions",
+      "p1": "This website is a concept pitch built to demonstrate how the Lilaas brand could be presented with a larger production budget. It is not an official Lilaas AS property, and product specifications, imagery and quotes have been gathered from public sources.",
+      "p2": "All product datasheets, technical specifications and commercial terms for actual supply are governed by agreements with Lilaas AS directly. Nothing on this site should be construed as a binding offer or representation.",
+      "p3": "Trademarks, logos and brand names belong to their respective owners. For questions about use of content, contact the Lilaas office in Horten."
+    },
+    "privacy": {
+      "eyebrow": "Legal",
+      "title": "Privacy",
+      "p1": "This concept site does not use analytics or tracking cookies. The only personal data processed is whatever you voluntarily submit through the contact form (name, email, company, message).",
+      "p2": "Submitted form data is forwarded to the sales team in Horten so we can respond to your enquiry. It is not shared with third parties and is retained only as long as needed to follow up.",
+      "p3": "You can request access, correction or deletion of your data at any time by emailing us.",
+      "contact": "lilaas@lilaas.no"
+    },
+    "transparency": {
+      "eyebrow": "Åpenhetsloven",
+      "title": "Transparency Act statement",
+      "p1": "Under the Norwegian Transparency Act (Åpenhetsloven), Lilaas AS conducts due diligence on fundamental human rights and decent working conditions across its own operations and its supply chain.",
+      "p2": "The annual statement, including risk assessment methodology and identified measures, is available on request to any interested party.",
+      "p3": "Written enquiries are responded to within three weeks in line with § 6 of the Act.",
+      "contact": "apenhet@lilaas.no"
+    }
+  }
+}
