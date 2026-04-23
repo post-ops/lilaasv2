@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
@@ -9,14 +8,15 @@ import { Link } from "@/i18n/routing";
 import { Scramble } from "@/components/ui/Scramble";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
-const AmbientScene = dynamic(
-  () => import("@/components/three/AmbientScene").then((m) => m.AmbientScene),
+const CinematicHero = dynamic(
+  () => import("@/components/three/CinematicHero").then((m) => m.CinematicHero),
   { ssr: false, loading: () => null }
 );
 
 export function Hero() {
   const t = useTranslations("home");
   const sectionRef = useRef<HTMLElement>(null);
+  const scrollProgress = useRef(0);
   const spotlightRef = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState(() => formatTime(new Date()));
 
@@ -44,11 +44,11 @@ export function Hero() {
       return () => el.removeEventListener("mousemove", onMove);
     }
 
-    const { gsap } = useGsap();
+    const { gsap, ScrollTrigger } = useGsap();
     const mq = gsap.matchMedia();
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 1.4 });
+      const tl = gsap.timeline({ delay: 1.2 });
 
       tl.fromTo(
         "[data-hero-rule]",
@@ -72,12 +72,6 @@ export function Hero() {
             stagger: 0.06,
           },
           "-=0.6"
-        )
-        .fromTo(
-          "[data-hero-ghost]",
-          { opacity: 0, letterSpacing: "0.12em" },
-          { opacity: 1, letterSpacing: "-0.02em", ease: "expo.out", duration: 2.2 },
-          "-=1.4"
         )
         .fromTo(
           "[data-hero-sub]",
@@ -104,15 +98,13 @@ export function Hero() {
           "-=0.6"
         );
 
-      gsap.to("[data-hero-image]", {
-        scale: 1.08,
-        yPercent: -6,
-        ease: "none",
-        scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.4,
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top top",
+        end: "bottom top",
+        scrub: 0.4,
+        onUpdate: (self) => {
+          scrollProgress.current = self.progress;
         },
       });
 
@@ -128,49 +120,14 @@ export function Hero() {
         },
       });
 
-      gsap.to("[data-hero-ghost]", {
-        xPercent: -8,
-        ease: "none",
-        scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.6,
-        },
-      });
-
-      gsap.to("[data-hero-mark]", {
-        rotate: 80,
-        ease: "none",
-        scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1.2,
-        },
-      });
-
       mq.add("(hover: hover) and (pointer: fine)", () => {
         const onMoveParallax = (e: MouseEvent) => {
           const x = (e.clientX / window.innerWidth - 0.5) * 2;
           const y = (e.clientY / window.innerHeight - 0.5) * 2;
-          gsap.to("[data-hero-image]", {
-            x: -x * 24,
-            y: -y * 16,
-            duration: 0.8,
-            ease: "expo.out",
-          });
-          gsap.to("[data-hero-ghost]", {
-            x: -x * 50,
-            y: -y * 24,
-            duration: 1.2,
-            ease: "expo.out",
-            overwrite: "auto",
-          });
-          gsap.to("[data-hero-mark]", {
-            x: x * 30,
-            y: y * 20,
-            duration: 1.0,
+          gsap.to("[data-hero-copy]", {
+            x: -x * 10,
+            y: -y * 6,
+            duration: 1,
             ease: "expo.out",
             overwrite: "auto",
           });
@@ -190,89 +147,34 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[100svh] min-h-[680px] overflow-hidden"
+      className="relative h-[100svh] min-h-[720px] overflow-hidden bg-ink"
       aria-label="Lilaas introduction"
     >
-      <div data-hero-image className="absolute inset-0 will-change-transform">
-        <Image
-          src="/images/hero/bridge.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/55 to-ink" />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/75 via-transparent to-ink/40" />
+      <div className="absolute inset-0">
+        <CinematicHero scrollProgress={scrollProgress} />
       </div>
 
       <div
         ref={spotlightRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-[2] mix-blend-screen"
+        className="pointer-events-none absolute inset-0 z-[5] mix-blend-screen"
         style={{
           background:
-            "radial-gradient(480px circle at var(--mx, 50%) var(--my, 50%), rgba(255,107,53,0.22), transparent 60%)",
-          transition: "background 180ms linear",
+            "radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(255,107,53,0.20), transparent 60%)",
+          transition: "background 200ms linear",
         }}
       />
 
-      <AmbientScene intensity="hero" accent="#FF6B35" />
-
       <div
-        data-hero-mark
         aria-hidden
-        className="pointer-events-none absolute -right-[18vw] -top-[14vw] w-[70vw] max-w-[1100px] aspect-square opacity-[0.06] will-change-transform"
-      >
-        <svg viewBox="0 0 100 100" className="w-full h-full">
-          <circle cx="50" cy="50" r="48" fill="none" stroke="#FF6B35" strokeWidth="0.2" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke="#C9D1DE" strokeWidth="0.15" />
-          <circle cx="50" cy="50" r="28" fill="none" stroke="#FF6B35" strokeWidth="0.2" />
-          <circle cx="50" cy="50" r="18" fill="none" stroke="#C9D1DE" strokeWidth="0.15" />
-          <circle cx="50" cy="50" r="8" fill="#FF6B35" opacity="0.4" />
-          {Array.from({ length: 48 }).map((_, i) => {
-            const a = (i / 48) * Math.PI * 2;
-            return (
-              <line
-                key={i}
-                x1={50 + Math.cos(a) * 40}
-                y1={50 + Math.sin(a) * 40}
-                x2={50 + Math.cos(a) * 48}
-                y2={50 + Math.sin(a) * 48}
-                stroke="#C9D1DE"
-                strokeOpacity="0.5"
-                strokeWidth="0.12"
-              />
-            );
-          })}
-          {Array.from({ length: 12 }).map((_, i) => {
-            const a = (i / 12) * Math.PI * 2;
-            return (
-              <line
-                key={`m${i}`}
-                x1={50 + Math.cos(a) * 32}
-                y1={50 + Math.sin(a) * 32}
-                x2={50 + Math.cos(a) * 38}
-                y2={50 + Math.sin(a) * 38}
-                stroke="#FF6B35"
-                strokeOpacity="0.8"
-                strokeWidth="0.2"
-              />
-            );
-          })}
-        </svg>
-      </div>
-
-      <p
-        data-hero-ghost
-        aria-hidden
-        className="pointer-events-none absolute left-[-2vw] bottom-[10vh] lg:bottom-[6vh] font-display font-semibold text-fog/[0.055] leading-none text-[clamp(8rem,22vw,22rem)] tracking-tightest whitespace-nowrap will-change-transform"
-      >
-        LILAAS
-      </p>
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] z-[8]"
+        style={{
+          background:
+            "linear-gradient(180deg, transparent 0%, rgba(5,7,13,0.55) 40%, rgba(5,7,13,0.92) 80%, rgb(5,7,13) 100%)",
+        }}
+      />
 
       <div aria-hidden className="hero-scan absolute inset-0 pointer-events-none z-10" />
-
       <div className="grain z-20 absolute inset-0 pointer-events-none" />
 
       <div
@@ -428,7 +330,7 @@ function HeroAccent({ children }: { children: React.ReactNode }) {
         style={{ transform: "translateY(110%)", opacity: 0 }}
       >
         {typeof children === "string" ? (
-          <Scramble text={children} duration={600} delay={1700} />
+          <Scramble text={children} duration={600} delay={1600} />
         ) : (
           children
         )}
