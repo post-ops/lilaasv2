@@ -50,13 +50,10 @@ export function Nav() {
         <div className="container-x flex items-center justify-between h-[72px]">
           <Link
             href="/"
-            className="flex items-center gap-2.5 group"
+            className="flex items-center group"
             aria-label="Lilaas home"
           >
-            <LilaasMark />
-            <span className="font-display text-[17px] font-semibold tracking-tight text-fog group-hover:text-white transition-colors">
-              LILAAS
-            </span>
+            <LilaasWordmark className="font-display text-[17px] font-semibold tracking-tight text-fog group-hover:text-white transition-colors" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -115,20 +112,23 @@ export function Nav() {
   );
 }
 
-function LilaasMark() {
+export function LilaasWordmark({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 40 40"
-      width="28"
-      height="28"
-      fill="none"
-      aria-hidden
-      className="shrink-0"
-    >
-      <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1.2" className="text-fog opacity-70" />
-      <circle cx="20" cy="20" r="9" stroke="currentColor" strokeWidth="1.2" className="text-fog opacity-70" />
-      <circle cx="20" cy="20" r="3" fill="#FF6B35" />
-      <path d="M20 2 V10 M20 30 V38 M2 20 H10 M30 20 H38" stroke="currentColor" strokeWidth="1" className="text-fog opacity-40" />
-    </svg>
+    <span className={className} aria-label="Lilaas">
+      L
+      <span className="relative inline-block" aria-hidden>
+        I
+        <span
+          className="absolute left-1/2 -translate-x-1/2 rounded-full bg-signal"
+          style={{
+            width: "0.22em",
+            height: "0.22em",
+            top: "-0.3em",
+            boxShadow: "0 0 0.3em rgba(255,107,53,0.6)",
+          }}
+        />
+      </span>
+      LAAS
+    </span>
   );
 }

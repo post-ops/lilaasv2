@@ -146,7 +146,22 @@ export function Hero() {
 
         <div data-hero-brand className="flex flex-col items-center mb-10 opacity-0">
           <p className="font-display font-semibold text-fog text-[clamp(3.5rem,9vw,8rem)] leading-none tracking-tightest">
-            LILAAS
+            <span aria-label="Lilaas">
+              L
+              <span className="relative inline-block" aria-hidden>
+                I
+                <span
+                  className="absolute left-1/2 -translate-x-1/2 rounded-full bg-signal"
+                  style={{
+                    width: "0.22em",
+                    height: "0.22em",
+                    top: "-0.3em",
+                    boxShadow: "0 0 0.4em rgba(255,107,53,0.7)",
+                  }}
+                />
+              </span>
+              LAAS
+            </span>
           </p>
           <p className="eyebrow mt-4 text-mist/80">Precision engineering · Since 1961</p>
         </div>
