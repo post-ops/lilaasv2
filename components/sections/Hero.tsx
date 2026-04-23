@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/i18n/routing";
+import { Scramble } from "@/components/ui/Scramble";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
 const AmbientScene = dynamic(
@@ -16,6 +17,7 @@ const AmbientScene = dynamic(
 export function Hero() {
   const t = useTranslations("home");
   const sectionRef = useRef<HTMLElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState(() => formatTime(new Date()));
 
   useEffect(() => {
@@ -26,13 +28,27 @@ export function Hero() {
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-    if (prefersReducedMotion()) return;
+
+    const spot = spotlightRef.current;
+    const onMove = (e: MouseEvent) => {
+      if (!spot) return;
+      const r = el.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      spot.style.setProperty("--mx", `${x}%`);
+      spot.style.setProperty("--my", `${y}%`);
+    };
+    el.addEventListener("mousemove", onMove);
+
+    if (prefersReducedMotion()) {
+      return () => el.removeEventListener("mousemove", onMove);
+    }
 
     const { gsap } = useGsap();
     const mq = gsap.matchMedia();
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
+      const tl = gsap.timeline({ delay: 1.4 });
 
       tl.fromTo(
         "[data-hero-rule]",
@@ -135,7 +151,7 @@ export function Hero() {
       });
 
       mq.add("(hover: hover) and (pointer: fine)", () => {
-        const onMove = (e: MouseEvent) => {
+        const onMoveParallax = (e: MouseEvent) => {
           const x = (e.clientX / window.innerWidth - 0.5) * 2;
           const y = (e.clientY / window.innerHeight - 0.5) * 2;
           gsap.to("[data-hero-image]", {
@@ -159,12 +175,13 @@ export function Hero() {
             overwrite: "auto",
           });
         };
-        window.addEventListener("mousemove", onMove);
-        return () => window.removeEventListener("mousemove", onMove);
+        window.addEventListener("mousemove", onMoveParallax);
+        return () => window.removeEventListener("mousemove", onMoveParallax);
       });
     }, sectionRef);
 
     return () => {
+      el.removeEventListener("mousemove", onMove);
       mq.revert();
       ctx.revert();
     };
@@ -188,6 +205,17 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-ink/85 via-ink/55 to-ink" />
         <div className="absolute inset-0 bg-gradient-to-r from-ink/75 via-transparent to-ink/40" />
       </div>
+
+      <div
+        ref={spotlightRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-[2] mix-blend-screen"
+        style={{
+          background:
+            "radial-gradient(480px circle at var(--mx, 50%) var(--my, 50%), rgba(255,107,53,0.22), transparent 60%)",
+          transition: "background 180ms linear",
+        }}
+      />
 
       <AmbientScene intensity="hero" accent="#FF6B35" />
 
@@ -257,13 +285,15 @@ export function Hero() {
             className="inline-flex items-center gap-2 opacity-0"
           >
             <span className="signal-dot animate-pulse-signal" />
-            <span className="eyebrow">LIVE · HORTEN NO</span>
+            <span className="eyebrow">
+              <Scramble text="LIVE · HORTEN NO" duration={700} />
+            </span>
           </span>
           <span
             data-hero-eyebrow-item
             className="eyebrow text-mist/70 opacity-0"
           >
-            59°25′N · 10°29′E
+            <Scramble text="59°25′N · 10°29′E" duration={700} delay={120} />
           </span>
           <span
             data-hero-eyebrow-item
@@ -275,7 +305,7 @@ export function Hero() {
             data-hero-eyebrow-item
             className="eyebrow text-mist/70 opacity-0"
           >
-            SINCE 1961
+            <Scramble text="SINCE 1961" duration={700} delay={240} />
           </span>
         </div>
 
@@ -336,7 +366,7 @@ export function Hero() {
       </div>
 
       <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[clamp(92px,10vh,120px)] z-30 flex flex-col items-center gap-2 text-mist/70">
-        <span className="eyebrow text-[10px]">scroll</span>
+        <span className="eyebrow text-[10px] animate-pulse-signal">scroll</span>
         <span className="w-px h-10 bg-gradient-to-b from-fog/40 to-transparent" />
       </div>
 
@@ -397,7 +427,11 @@ function HeroAccent({ children }: { children: React.ReactNode }) {
         data-hero-line
         style={{ transform: "translateY(110%)", opacity: 0 }}
       >
-        {children}
+        {typeof children === "string" ? (
+          <Scramble text={children} duration={600} delay={1700} />
+        ) : (
+          children
+        )}
       </span>
     </span>
   );

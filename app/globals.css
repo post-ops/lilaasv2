@@ -242,6 +242,41 @@
   height: 1px;
   background: var(--color-signal);
   display: inline-block;
+  animation: ruleDraw 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: left;
+}
+
+@keyframes ruleDraw {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.pulse-ring {
+  position: relative;
+}
+.pulse-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 107, 53, 0.6);
+  animation: pulseRing 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  pointer-events: none;
+}
+
+.card-tilt {
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
 }
 
 @media (prefers-reduced-motion: reduce) {
