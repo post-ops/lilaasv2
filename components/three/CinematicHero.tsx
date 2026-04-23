@@ -8,9 +8,9 @@ import { Suspense, useRef } from "react";
 import * as THREE from "three";
 
 const DOT_RINGS = [
-  { count: 28, radius: 3.1, tilt: [0, 0, 0] as const, color: "#FF6B35", size: 0.06, scrollSpin: 4.2, idleSpin: 0.18 },
-  { count: 20, radius: 3.8, tilt: [Math.PI / 2.3, 0, 0] as const, color: "#FF6B35", size: 0.045, scrollSpin: -3.0, idleSpin: -0.12 },
-  { count: 16, radius: 4.5, tilt: [0, Math.PI / 4, Math.PI / 3] as const, color: "#2BD4B4", size: 0.038, scrollSpin: 2.4, idleSpin: 0.08 },
+  { count: 36, radius: 3.1, tilt: [0, 0, 0] as const, color: "#FF6B35", size: 0.024, scrollSpin: 4.2, idleSpin: 0.18 },
+  { count: 28, radius: 3.8, tilt: [Math.PI / 2.3, 0, 0] as const, color: "#FF6B35", size: 0.018, scrollSpin: -3.0, idleSpin: -0.12 },
+  { count: 22, radius: 4.5, tilt: [0, Math.PI / 4, Math.PI / 3] as const, color: "#FF6B35", size: 0.014, scrollSpin: 2.4, idleSpin: 0.08 },
 ];
 
 function DotRing({
@@ -149,11 +149,11 @@ function Stage({ progressRef, mouseRef }: { progressRef: React.MutableRefObject<
 
       <EffectComposer multisampling={2}>
         <Bloom
-          intensity={0.9}
-          luminanceThreshold={0.65}
-          luminanceSmoothing={0.22}
+          intensity={0.65}
+          luminanceThreshold={0.7}
+          luminanceSmoothing={0.25}
           mipmapBlur
-          kernelSize={KernelSize.LARGE}
+          kernelSize={KernelSize.MEDIUM}
         />
         <Noise
           opacity={0.02}
