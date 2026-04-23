@@ -7,8 +7,53 @@ import { BlendFunction, KernelSize } from "postprocessing";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
 
+const DOT_RINGS = [
+  { count: 28, radius: 3.1, tilt: [0, 0, 0] as const, color: "#FF6B35", size: 0.06, scrollSpin: 4.2, idleSpin: 0.18 },
+  { count: 20, radius: 3.8, tilt: [Math.PI / 2.3, 0, 0] as const, color: "#FF6B35", size: 0.045, scrollSpin: -3.0, idleSpin: -0.12 },
+  { count: 16, radius: 4.5, tilt: [0, Math.PI / 4, Math.PI / 3] as const, color: "#2BD4B4", size: 0.038, scrollSpin: 2.4, idleSpin: 0.08 },
+];
+
+function DotRing({
+  ring,
+  progressRef,
+}: {
+  ring: (typeof DOT_RINGS)[number];
+  progressRef: React.MutableRefObject<number>;
+}) {
+  const group = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!group.current) return;
+    const t = state.clock.elapsedTime;
+    group.current.rotation.z = t * ring.idleSpin + progressRef.current * ring.scrollSpin;
+  });
+
+  const dots = [];
+  for (let i = 0; i < ring.count; i++) {
+    const a = (i / ring.count) * Math.PI * 2;
+    const x = Math.cos(a) * ring.radius;
+    const y = Math.sin(a) * ring.radius;
+    dots.push(
+      <mesh key={i} position={[x, y, 0]}>
+        <sphereGeometry args={[ring.size, 12, 12]} />
+        <meshStandardMaterial
+          color={ring.color}
+          emissive={ring.color}
+          emissiveIntensity={1.6}
+          toneMapped={false}
+        />
+      </mesh>
+    );
+  }
+
+  return (
+    <group ref={group} rotation={ring.tilt}>
+      {dots}
+    </group>
+  );
+}
+
 function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number> }) {
-  const ring = useRef<THREE.Mesh>(null);
   const torus = useRef<THREE.Mesh>(null);
   const group = useRef<THREE.Group>(null);
 
@@ -19,7 +64,6 @@ function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number
       group.current.rotation.y = t * 0.12 + p * 0.9;
       group.current.rotation.x = Math.sin(t * 0.08) * 0.08 + p * 0.25;
     }
-    if (ring.current) ring.current.rotation.z = t * 0.05;
     if (torus.current) {
       torus.current.rotation.x = t * 0.14;
       torus.current.rotation.y = t * 0.09;
@@ -42,10 +86,9 @@ function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number
         </mesh>
       </Float>
 
-      <mesh ref={ring}>
-        <torusGeometry args={[3.2, 0.012, 8, 180]} />
-        <meshBasicMaterial color="#FF6B35" transparent opacity={0.5} />
-      </mesh>
+      {DOT_RINGS.map((ring, i) => (
+        <DotRing key={i} ring={ring} progressRef={progressRef} />
+      ))}
 
       <Float speed={1.4} rotationIntensity={0.4} floatIntensity={0.2}>
         <mesh position={[2.4, 1.2, 0.6]}>
