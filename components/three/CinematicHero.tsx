@@ -7,17 +7,38 @@ import { BlendFunction, KernelSize } from "postprocessing";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
 
-const DOT_RINGS = [
-  { count: 36, radius: 3.1, tilt: [0, 0, 0] as const, color: "#FF6B35", size: 0.024, scrollSpin: 4.2, idleSpin: 0.18 },
-  { count: 28, radius: 3.8, tilt: [Math.PI / 2.3, 0, 0] as const, color: "#FF6B35", size: 0.018, scrollSpin: -3.0, idleSpin: -0.12 },
-  { count: 22, radius: 4.5, tilt: [0, Math.PI / 4, Math.PI / 3] as const, color: "#FF6B35", size: 0.014, scrollSpin: 2.4, idleSpin: 0.08 },
+const RINGS = [
+  {
+    radius: 3.1,
+    tube: 0.004,
+    tilt: [0, 0, 0] as const,
+    opacity: 0.9,
+    scrollSpin: 4.2,
+    idleSpin: 0.18,
+  },
+  {
+    radius: 3.8,
+    tube: 0.003,
+    tilt: [Math.PI / 2.3, 0, 0] as const,
+    opacity: 0.55,
+    scrollSpin: -3.0,
+    idleSpin: -0.12,
+  },
+  {
+    radius: 4.5,
+    tube: 0.0022,
+    tilt: [0, Math.PI / 4, Math.PI / 3] as const,
+    opacity: 0.35,
+    scrollSpin: 2.4,
+    idleSpin: 0.08,
+  },
 ];
 
-function DotRing({
+function OrbitRing({
   ring,
   progressRef,
 }: {
-  ring: (typeof DOT_RINGS)[number];
+  ring: (typeof RINGS)[number];
   progressRef: React.MutableRefObject<number>;
 }) {
   const group = useRef<THREE.Group>(null);
@@ -25,30 +46,21 @@ function DotRing({
   useFrame((state) => {
     if (!group.current) return;
     const t = state.clock.elapsedTime;
-    group.current.rotation.z = t * ring.idleSpin + progressRef.current * ring.scrollSpin;
+    group.current.rotation.z =
+      t * ring.idleSpin + progressRef.current * ring.scrollSpin;
   });
-
-  const dots = [];
-  for (let i = 0; i < ring.count; i++) {
-    const a = (i / ring.count) * Math.PI * 2;
-    const x = Math.cos(a) * ring.radius;
-    const y = Math.sin(a) * ring.radius;
-    dots.push(
-      <mesh key={i} position={[x, y, 0]}>
-        <sphereGeometry args={[ring.size, 12, 12]} />
-        <meshStandardMaterial
-          color={ring.color}
-          emissive={ring.color}
-          emissiveIntensity={1.6}
-          toneMapped={false}
-        />
-      </mesh>
-    );
-  }
 
   return (
     <group ref={group} rotation={ring.tilt}>
-      {dots}
+      <mesh>
+        <torusGeometry args={[ring.radius, ring.tube, 6, 256]} />
+        <meshBasicMaterial
+          color="#FF6B35"
+          transparent
+          opacity={ring.opacity}
+          toneMapped={false}
+        />
+      </mesh>
     </group>
   );
 }
@@ -86,8 +98,8 @@ function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number
         </mesh>
       </Float>
 
-      {DOT_RINGS.map((ring, i) => (
-        <DotRing key={i} ring={ring} progressRef={progressRef} />
+      {RINGS.map((ring, i) => (
+        <OrbitRing key={i} ring={ring} progressRef={progressRef} />
       ))}
 
       <Float speed={1.4} rotationIntensity={0.4} floatIntensity={0.2}>
