@@ -10,14 +10,22 @@ export function Footer() {
     <footer className="relative mt-32 border-t border-white/5 bg-deep/40">
       <div className="container-x py-20 grid gap-14 lg:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="max-w-sm">
-          <div className="flex items-center gap-2.5">
-            <svg viewBox="0 0 40 40" width="32" height="32" fill="none" aria-hidden>
-              <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1.2" className="text-fog opacity-70" />
-              <circle cx="20" cy="20" r="9" stroke="currentColor" strokeWidth="1.2" className="text-fog opacity-70" />
-              <circle cx="20" cy="20" r="3" fill="#FF6B35" />
-            </svg>
-            <span className="font-display text-lg font-semibold tracking-tight text-fog">LILAAS</span>
-          </div>
+          <span className="font-display text-lg font-semibold tracking-tight text-fog" aria-label="Lilaas">
+            L
+            <span className="relative inline-block" aria-hidden>
+              I
+              <span
+                className="absolute left-1/2 -translate-x-1/2 rounded-full bg-signal"
+                style={{
+                  width: "0.22em",
+                  height: "0.22em",
+                  top: "-0.3em",
+                  boxShadow: "0 0 0.3em rgba(255,107,53,0.6)",
+                }}
+              />
+            </span>
+            LAAS
+          </span>
           <p className="mt-6 text-sm text-mist leading-relaxed">{t("tagline")}</p>
           <p className="mt-4 text-xs text-mist/70">{t("built")}</p>
         </div>
