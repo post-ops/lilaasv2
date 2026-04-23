@@ -103,10 +103,10 @@ export function Hero() {
       className="relative h-[100svh] min-h-[720px] overflow-hidden bg-ink"
       aria-label="Lilaas introduction"
     >
-      {/* Background marine image */}
+      {/* Background marine image — vessel at sea matches Lilaas' market */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/hero/helm.webp"
+          src="/images/hero/bridge.webp"
           alt=""
           fill
           priority
