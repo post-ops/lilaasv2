@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 import { NumberCounter } from "@/components/ui/NumberCounter";
 import { useReveal } from "@/components/ui/useReveal";
 
 export function StatementBanner() {
+  const t = useTranslations("homeExtra.statement");
   const sectionRef = useReveal<HTMLElement>();
   const parallaxRef = useRef<HTMLElement | null>(null);
 
@@ -60,12 +62,12 @@ export function StatementBanner() {
         <div className="grid lg:grid-cols-[1fr_auto] gap-16 items-end">
           <div className="max-w-5xl">
             <p data-reveal="out" className="section-index mb-10">
-              01 · Since 1961
+              {t("indexLabel")}
             </p>
             <h2 className="font-display font-medium text-[clamp(3rem,10vw,10rem)] leading-[0.88] tracking-tightest text-fog text-balance">
-              <Line>Sixty-four</Line>
-              <Line>years of</Line>
-              <Line accent>precision.</Line>
+              <Line>{t("line1")}</Line>
+              <Line>{t("line2")}</Line>
+              <Line accent>{t("line3")}</Line>
             </h2>
           </div>
 
@@ -74,25 +76,25 @@ export function StatementBanner() {
             className="grid grid-cols-2 lg:grid-cols-1 gap-8 lg:gap-10 lg:text-right font-mono text-xs uppercase tracking-widest text-mist"
           >
             <div>
-              <dt className="text-mist/60 mb-2">Founded</dt>
+              <dt className="text-mist/60 mb-2">{t("metaFounded")}</dt>
               <dd className="font-display text-3xl text-fog tracking-tight normal-case tabular-nums">
-                <NumberCounter value={1961} format={(n) => String(n)} />
+                <NumberCounter value={1961} format={rawYear} />
               </dd>
             </div>
             <div>
-              <dt className="text-mist/60 mb-2">Parts shipped</dt>
+              <dt className="text-mist/60 mb-2">{t("metaParts")}</dt>
               <dd className="font-display text-3xl text-fog tracking-tight normal-case tabular-nums">
                 <NumberCounter value={12} suffix="M+" />
               </dd>
             </div>
             <div>
-              <dt className="text-mist/60 mb-2">Continents</dt>
+              <dt className="text-mist/60 mb-2">{t("metaContinents")}</dt>
               <dd className="font-display text-3xl text-fog tracking-tight normal-case tabular-nums">
                 <NumberCounter value={4} />
               </dd>
             </div>
             <div>
-              <dt className="text-mist/60 mb-2">Tolerance</dt>
+              <dt className="text-mist/60 mb-2">{t("metaTolerance")}</dt>
               <dd className="font-display text-3xl text-fog tracking-tight normal-case">0.01 mm</dd>
             </div>
           </dl>
@@ -101,6 +103,8 @@ export function StatementBanner() {
     </section>
   );
 }
+
+const rawYear = (n: number) => String(n);
 
 function Line({ children, accent }: { children: React.ReactNode; accent?: boolean }) {
   return (

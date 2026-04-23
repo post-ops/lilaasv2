@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { PRODUCTS } from "@/lib/products";
 import { Badge } from "@/components/ui/Badge";
@@ -9,6 +10,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
 export function ProductRail() {
+  const t = useTranslations("homeExtra.productRail");
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -70,13 +72,13 @@ export function ProductRail() {
       <div className="container-x">
         <div className="flex items-end justify-between mb-12">
           <div>
-            <p className="section-index mb-5">06 · The lineup</p>
+            <p className="section-index mb-5">{t("indexLabel")}</p>
             <h2 className="font-display text-display-md text-fog max-w-2xl text-balance">
-              One family, from workboat to flagship.
+              {t("title")}
             </h2>
           </div>
           <p className="eyebrow hidden md:block">
-            {PRODUCTS.length} models · DNV GL approved · drag →
+            {PRODUCTS.length} {t("footerLabel")}
           </p>
         </div>
       </div>

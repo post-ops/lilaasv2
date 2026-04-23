@@ -1,10 +1,10 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Float, MeshTransmissionMaterial } from "@react-three/drei";
+import { Environment, Float } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette, Noise } from "@react-three/postprocessing";
 import { BlendFunction, KernelSize } from "postprocessing";
-import { Suspense, useRef } from "react";
+import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 const DOT_RINGS = [
@@ -74,7 +74,6 @@ function DotRing({
 }
 
 const CENTER_CIRCLES: [number, number, number, number][] = [
-  // [x, y, z, size]
   [0, 0, 0, 0.16],
   [0.55, 0.3, 0.2, 0.09],
   [-0.45, 0.48, -0.1, 0.07],
@@ -83,6 +82,89 @@ const CENTER_CIRCLES: [number, number, number, number][] = [
   [0.05, 0.7, -0.3, 0.05],
   [-0.15, -0.75, 0.25, 0.055],
 ];
+
+// Which pairs form the constellation's connecting lines.
+const CONSTELLATION_PAIRS: [number, number][] = [
+  [0, 1],
+  [0, 2],
+  [0, 3],
+  [0, 4],
+  [1, 5],
+  [2, 5],
+  [3, 6],
+  [4, 6],
+  [5, 2],
+];
+
+function ConstellationLines() {
+  const geom = useMemo(() => {
+    const points: THREE.Vector3[] = [];
+    for (const [a, b] of CONSTELLATION_PAIRS) {
+      const [ax, ay, az] = CENTER_CIRCLES[a];
+      const [bx, by, bz] = CENTER_CIRCLES[b];
+      points.push(new THREE.Vector3(ax, ay, az));
+      points.push(new THREE.Vector3(bx, by, bz));
+    }
+    const g = new THREE.BufferGeometry().setFromPoints(points);
+    return g;
+  }, []);
+
+  const mat = useRef<THREE.LineBasicMaterial>(null);
+
+  useFrame((s) => {
+    if (!mat.current) return;
+    mat.current.opacity = 0.35 + Math.sin(s.clock.elapsedTime * 0.9) * 0.12;
+  });
+
+  return (
+    <lineSegments geometry={geom}>
+      <lineBasicMaterial
+        ref={mat}
+        color="#FF6B35"
+        transparent
+        opacity={0.35}
+        toneMapped={false}
+      />
+    </lineSegments>
+  );
+}
+
+function SonarPings() {
+  const a = useRef<THREE.Mesh>(null);
+  const b = useRef<THREE.Mesh>(null);
+  const c = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    const cycle = 3.2;
+    const refs = [a, b, c];
+    refs.forEach((r, i) => {
+      if (!r.current) return;
+      const phase = ((t + i * (cycle / 3)) % cycle) / cycle; // 0..1
+      const scale = 0.3 + phase * 5.6;
+      r.current.scale.setScalar(scale);
+      const mat = r.current.material as THREE.MeshBasicMaterial;
+      mat.opacity = Math.max(0, 0.55 - phase * 0.55);
+    });
+  });
+
+  return (
+    <>
+      {[a, b, c].map((r, i) => (
+        <mesh key={i} ref={r}>
+          <ringGeometry args={[0.98, 1.0, 96]} />
+          <meshBasicMaterial
+            color="#FF6B35"
+            transparent
+            opacity={0}
+            side={THREE.DoubleSide}
+            toneMapped={false}
+          />
+        </mesh>
+      ))}
+    </>
+  );
+}
 
 function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number> }) {
   const group = useRef<THREE.Group>(null);
@@ -98,8 +180,11 @@ function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number
 
   return (
     <group ref={group}>
+      <SonarPings />
+
       <Float speed={0.7} rotationIntensity={0.3} floatIntensity={0.35}>
         <group>
+          <ConstellationLines />
           {CENTER_CIRCLES.map(([x, y, z, size], i) => (
             <mesh key={i} position={[x, y, z]}>
               <sphereGeometry args={[size, 16, 16]} />
@@ -121,7 +206,13 @@ function Sculpture({ progressRef }: { progressRef: React.MutableRefObject<number
   );
 }
 
-function Stage({ progressRef, mouseRef }: { progressRef: React.MutableRefObject<number>; mouseRef: React.MutableRefObject<{ x: number; y: number }> }) {
+function Stage({
+  progressRef,
+  mouseRef,
+}: {
+  progressRef: React.MutableRefObject<number>;
+  mouseRef: React.MutableRefObject<{ x: number; y: number }>;
+}) {
   const camera = useThree((s) => s.camera);
 
   useFrame(() => {
@@ -143,20 +234,10 @@ function Stage({ progressRef, mouseRef }: { progressRef: React.MutableRefObject<
       <fog attach="fog" args={["#05070D", 9, 22]} />
 
       <ambientLight intensity={0.15} />
-      <directionalLight
-        position={[-5, 6, 4]}
-        intensity={3.2}
-        color="#fff2d4"
-      />
+      <directionalLight position={[-5, 6, 4]} intensity={3.2} color="#fff2d4" />
       <pointLight position={[6, 2, -2]} intensity={2.5} color="#FF6B35" distance={14} />
       <pointLight position={[-5, -3, 5]} intensity={1.6} color="#2BD4B4" distance={12} />
-      <spotLight
-        position={[0, 8, 4]}
-        angle={0.5}
-        penumbra={0.8}
-        intensity={1.8}
-        color="#ffffff"
-      />
+      <spotLight position={[0, 8, 4]} angle={0.5} penumbra={0.8} intensity={1.8} color="#ffffff" />
 
       <Environment preset="city" environmentIntensity={0.7} />
 
@@ -164,17 +245,13 @@ function Stage({ progressRef, mouseRef }: { progressRef: React.MutableRefObject<
 
       <EffectComposer multisampling={2}>
         <Bloom
-          intensity={0.65}
-          luminanceThreshold={0.7}
-          luminanceSmoothing={0.25}
+          intensity={0.75}
+          luminanceThreshold={0.6}
+          luminanceSmoothing={0.22}
           mipmapBlur
           kernelSize={KernelSize.MEDIUM}
         />
-        <Noise
-          opacity={0.02}
-          blendFunction={BlendFunction.OVERLAY}
-          premultiply
-        />
+        <Noise opacity={0.02} blendFunction={BlendFunction.OVERLAY} premultiply />
         <Vignette eskil={false} offset={0.2} darkness={0.88} />
       </EffectComposer>
     </>

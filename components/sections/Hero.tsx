@@ -14,6 +14,7 @@ const CinematicHero = dynamic(
 
 export function Hero() {
   const t = useTranslations("home");
+  const tExtra = useTranslations("homeExtra.hero");
   const sectionRef = useRef<HTMLElement>(null);
   const scrollProgress = useRef(0);
   const spotlightRef = useRef<HTMLDivElement>(null);
@@ -148,7 +149,7 @@ export function Hero() {
           className="inline-flex items-center gap-3 mb-10 opacity-0"
         >
           <span className="signal-dot animate-pulse-signal" />
-          <span className="eyebrow">Horten, Norway · Since 1961 · {time}</span>
+          <span className="eyebrow">{tExtra("live")} · {time}</span>
         </div>
 
         <div className="max-w-5xl">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { SplitReveal } from "@/components/ui/SplitReveal";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -24,6 +25,7 @@ const BLIPS: Blip[] = [
 const SWEEP_DURATION_S = 6;
 
 export function RadarDisplay() {
+  const t = useTranslations("homeExtra.radar");
   const [activeBlip, setActiveBlip] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [now, setNow] = useState(() => new Date());
@@ -80,20 +82,16 @@ export function RadarDisplay() {
       <div className="container-x relative">
         <div className="max-w-3xl mb-14">
           <Reveal variant="fade">
-            <p className="section-index mb-5">04 · At sea, right now</p>
+            <p className="section-index mb-5">{t("indexLabel")}</p>
           </Reveal>
           <SplitReveal
-            text="Bridges worldwide run on Lilaas levers."
+            text={t("title")}
             as="h2"
             className="font-display text-display-md text-fog text-balance"
             stagger={0.014}
           />
           <Reveal variant="up" delay={250}>
-            <p className="text-mist mt-6 max-w-xl leading-relaxed">
-              Every orange blip below is a vessel with our control hardware on
-              the bridge — from supply runs in the North Sea to Asia-Pacific
-              ferry operations.
-            </p>
+            <p className="text-mist mt-6 max-w-xl leading-relaxed">{t("body")}</p>
           </Reveal>
         </div>
 
@@ -109,17 +107,17 @@ export function RadarDisplay() {
               <div className="flex items-center gap-3">
                 <span className="signal-dot animate-pulse-signal" />
                 <p className="font-mono text-xs uppercase tracking-widest text-mist">
-                  LIVE · LILAAS BRIDGE NETWORK · UTC {clock}
+                  {t("live")} {clock}
                 </p>
               </div>
             </Reveal>
 
             <div className="grid grid-cols-2 gap-6 font-mono text-sm">
               {[
-                ["Range", "250 NM"],
-                ["Pulse", `${SWEEP_DURATION_S} s`],
-                ["Vessels", String(BLIPS.length)],
-                ["Bearing", "036°"],
+                [t("range"), "250 NM"],
+                [t("pulse"), `${SWEEP_DURATION_S} s`],
+                [t("vessels"), String(BLIPS.length)],
+                [t("bearing"), "036°"],
               ].map(([k, v], i) => (
                 <Reveal key={k} variant="right" delay={80 + i * 80}>
                   <div className="border-l border-signal/40 pl-4">
@@ -136,7 +134,7 @@ export function RadarDisplay() {
 
             <Reveal variant="right" delay={320}>
               <div className="border border-white/8 rounded-2xl p-5 bg-deep/40 backdrop-blur-sm">
-                <p className="eyebrow mb-3 text-signal">Active contact</p>
+                <p className="eyebrow mb-3 text-signal">{t("activeContact")}</p>
                 {activeBlip !== null ? (
                   <>
                     <p className="font-display text-xl text-fog tracking-tight">
@@ -149,10 +147,10 @@ export function RadarDisplay() {
                 ) : (
                   <>
                     <p className="font-display text-xl text-fog/50 tracking-tight">
-                      sweeping…
+                      {t("sweeping")}
                     </p>
                     <p className="font-mono text-xs text-mist/40 mt-1.5">
-                      waiting for return
+                      {t("waiting")}
                     </p>
                   </>
                 )}

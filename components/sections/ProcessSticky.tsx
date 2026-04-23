@@ -5,29 +5,20 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
-const STEPS = [
-  {
-    eyebrow: "01 · Mechanics",
-    title: "3- and 5-axis CNC",
-    body: "Fifteen-plus CNC machines, unmanned lights-out production. Tolerances down to 0.01 mm, from sub-millimetre parts up to 200 mm diameters.",
-    image: "/images/factory/cnc.webp",
-  },
-  {
-    eyebrow: "02 · Electronics",
-    title: "Firmware & integration",
-    body: "PCBs designed in-house, firmware written next door, system integration against every major marine bus — CAN, Modbus, NMEA 2000.",
-    image: "/images/factory/machining.webp",
-  },
-  {
-    eyebrow: "03 · Assembly & test",
-    title: "Built and validated on-site",
-    body: "Every lever goes through vibration, humidity and EMI rigs before it leaves Horten. Every CNC batch is measured on the CMM against the original drawing.",
-    image: "/images/hero/industrial.webp",
-  },
+const STEP_IMAGES = [
+  "/images/factory/cnc.webp",
+  "/images/factory/machining.webp",
+  "/images/hero/industrial.webp",
 ];
 
 export function ProcessSticky() {
   const sectionRef = useRef<HTMLElement>(null);
+  const t = useTranslations("homeExtra.process");
+  const STEPS = [
+    { eyebrow: t("step1.eyebrow"), title: t("step1.title"), body: t("step1.body"), image: STEP_IMAGES[0] },
+    { eyebrow: t("step2.eyebrow"), title: t("step2.title"), body: t("step2.body"), image: STEP_IMAGES[1] },
+    { eyebrow: t("step3.eyebrow"), title: t("step3.title"), body: t("step3.body"), image: STEP_IMAGES[2] },
+  ];
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -72,9 +63,9 @@ export function ProcessSticky() {
     <section ref={sectionRef} className="relative py-24 lg:py-32">
       <div className="container-x">
         <div className="max-w-2xl mb-16">
-          <p className="section-index mb-5">03 · Full-stack production</p>
+          <p className="section-index mb-5">{t("indexLabel")}</p>
           <h2 className="font-display text-display-md text-fog text-balance">
-            Mechanics, electronics and software — designed, built and tested in Horten.
+            {t("title")}
           </h2>
         </div>
 

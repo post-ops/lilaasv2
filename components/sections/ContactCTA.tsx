@@ -9,6 +9,7 @@ import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
 export function ContactCTA() {
   const t = useTranslations("home");
+  const tExtra = useTranslations("homeExtra.cta");
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export function ContactCTA() {
       />
       <div className="container-x text-center relative">
         <p className="section-index mb-6 justify-center inline-flex">
-          08 · Let&rsquo;s build it
+          {tExtra("indexLabel")}
         </p>
         <p className="eyebrow mb-8 text-mist/70">{t("ctaEyebrow")}</p>
         <div className="max-w-4xl mx-auto">

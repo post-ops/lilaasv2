@@ -11,14 +11,15 @@ const AmbientScene = dynamic(
   { ssr: false, loading: () => null }
 );
 
+const rawYearFmt = (n: number) => String(n);
+
 export function StatsStrip() {
   const t = useTranslations("home");
+  const tExtra = useTranslations("homeExtra.stats");
   const sectionRef = useReveal<HTMLElement>();
-  // useReveal returns RefObject<HTMLElement | null> — cast for <section>
-
 
   const items = [
-    { label: t("stats.foundedLabel"), value: 1961, format: (n: number) => String(n) },
+    { label: t("stats.foundedLabel"), value: 1961, format: rawYearFmt },
     { label: t("stats.employeesLabel"), value: 55, suffix: "+" },
     { label: t("stats.revenueLabel"), value: 116, suffix: "M", prefix: "NOK " },
     { label: t("stats.exportLabel"), value: 50, suffix: "%" },
@@ -30,7 +31,7 @@ export function StatsStrip() {
       <AmbientScene intensity="whisper" accent="#2BD4B4" />
       <div className="container-x relative">
         <div className="max-w-3xl mb-20">
-          <p className="section-index mb-4">02 · By the numbers</p>
+          <p className="section-index mb-4">{tExtra("indexLabel")}</p>
           <p className="eyebrow mb-4 text-mist/70">{t("statsSub")}</p>
           <SplitReveal
             text={t("statsTitle")}

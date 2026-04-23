@@ -17,6 +17,7 @@ const INDUSTRIES = [
 export function IndustriesGrid() {
   const t = useTranslations("home");
   const ind = useTranslations("industries");
+  const tExtra = useTranslations("homeExtra.industries");
   const sectionRef = useReveal<HTMLElement>();
 
   return (
@@ -24,7 +25,7 @@ export function IndustriesGrid() {
       <div className="container-x">
         <div className="grid lg:grid-cols-[1fr_1.15fr] gap-16 lg:gap-24 mb-20">
           <div>
-            <p className="section-index mb-6">05 · Where we deliver</p>
+            <p className="section-index mb-6">{tExtra("indexLabel")}</p>
             <p className="eyebrow mb-5 text-mist/70">{t("industriesEyebrow")}</p>
             <SplitReveal
               text={t("industriesTitle")}

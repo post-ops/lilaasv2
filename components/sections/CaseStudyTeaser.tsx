@@ -10,6 +10,7 @@ import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
 export function CaseStudyTeaser() {
   const t = useTranslations("home");
+  const tExtra = useTranslations("homeExtra.caseTeaser");
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export function CaseStudyTeaser() {
       <div className="container-x relative">
         <div className="grid lg:grid-cols-[1.3fr_1fr] gap-16 items-end">
           <div>
-            <p className="section-index mb-6">07 · Case study</p>
+            <p className="section-index mb-6">{tExtra("indexLabel")}</p>
             <p className="eyebrow mb-4 text-mist/70">{t("caseEyebrow")}</p>
             <SplitReveal
               text={t("caseTitle")}

@@ -161,6 +161,84 @@
     "scroll": "Scroll",
     "languageToggleAria": "Bytt språk"
   },
+  "homeExtra": {
+    "hero": {
+      "live": "Horten, Norge · Siden 1961"
+    },
+    "marquee": {
+      "w1": "PRESISJON",
+      "w2": "INTERNT",
+      "w3": "TYPEGODKJENT",
+      "w4": "HORTEN NO",
+      "w5": "SIDEN 1961",
+      "w6": "TOLERANSE 0.01"
+    },
+    "statement": {
+      "indexLabel": "01 · Siden 1961",
+      "line1": "Sekstifire",
+      "line2": "år med",
+      "line3": "presisjon.",
+      "metaFounded": "Grunnlagt",
+      "metaParts": "Deler levert",
+      "metaContinents": "Kontinenter",
+      "metaTolerance": "Toleranse"
+    },
+    "stats": {
+      "indexLabel": "02 · I tall"
+    },
+    "process": {
+      "indexLabel": "03 · Full-stack produksjon",
+      "title": "Mekanikk, elektronikk og programvare — designet, bygd og testet i Horten.",
+      "step1": {
+        "eyebrow": "01 · Mekanikk",
+        "title": "3- og 5-akset CNC",
+        "body": "15+ CNC-maskiner, ubemannet 'lights-out'-produksjon. Toleranser ned til 0,01 mm, fra under en millimeter opp til 200 mm i diameter."
+      },
+      "step2": {
+        "eyebrow": "02 · Elektronikk",
+        "title": "Firmware & integrasjon",
+        "body": "Kretskort designet i huset, firmware skrevet i naborommet, systemintegrasjon mot alle store maritime busser — CAN, Modbus, NMEA 2000."
+      },
+      "step3": {
+        "eyebrow": "03 · Montering & test",
+        "title": "Bygget og validert på stedet",
+        "body": "Hver spak går gjennom vibrasjons-, fuktighets- og EMI-rigger før den forlater Horten. Hver CNC-batch måles mot originaltegningen på CMM før utsendelse."
+      }
+    },
+    "radar": {
+      "indexLabel": "04 · På sjøen, akkurat nå",
+      "title": "Broer verden over går på Lilaas-spaker.",
+      "body": "Hvert oransje blip under er et fartøy med vår styringshardware på broen — fra forsyningstokter i Nordsjøen til fergedrift i Asia-Pacific.",
+      "live": "LIVE · LILAAS BRIDGE NETWORK · UTC",
+      "range": "Rekkevidde",
+      "pulse": "Puls",
+      "vessels": "Fartøy",
+      "bearing": "Kurs",
+      "activeContact": "Aktivt kontakt",
+      "sweeping": "skanner…",
+      "waiting": "venter på retur"
+    },
+    "cinematic": {
+      "indexLabel": "04 · Inne i Horten-verkstedet",
+      "titlePart1": "Mekanikk, elektronikk og programvare —",
+      "titleAccent": "alt under samme tak.",
+      "body": "Femten CNC-maskiner. Ubemannet lights-out-produksjon. Kretskort designet, firmware skrevet og monteringslinjer kalibrert innenfor de samme veggene som tegnekontoret. Korte sløyfer, full sporbarhet, null overleveringer til tredjepart."
+    },
+    "productRail": {
+      "indexLabel": "06 · Serien",
+      "title": "Én familie, fra arbeidsbåt til flaggskip.",
+      "footerLabel": "modeller · DNV GL-godkjent · dra →"
+    },
+    "industries": {
+      "indexLabel": "05 · Der vi leverer"
+    },
+    "caseTeaser": {
+      "indexLabel": "07 · Referansecase"
+    },
+    "cta": {
+      "indexLabel": "08 · La oss bygge det"
+    }
+  },
   "support": {
     "eyebrow": "Support",
     "title": "Datablad, distributører og dedikerte ingeniører.",

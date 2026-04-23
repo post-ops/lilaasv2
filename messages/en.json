@@ -161,6 +161,84 @@
     "scroll": "Scroll",
     "languageToggleAria": "Switch language"
   },
+  "homeExtra": {
+    "hero": {
+      "live": "Horten, Norway · Since 1961"
+    },
+    "marquee": {
+      "w1": "PRECISION",
+      "w2": "IN-HOUSE",
+      "w3": "TYPE APPROVED",
+      "w4": "HORTEN NO",
+      "w5": "SINCE 1961",
+      "w6": "TOLERANCE 0.01"
+    },
+    "statement": {
+      "indexLabel": "01 · Since 1961",
+      "line1": "Sixty-four",
+      "line2": "years of",
+      "line3": "precision.",
+      "metaFounded": "Founded",
+      "metaParts": "Parts shipped",
+      "metaContinents": "Continents",
+      "metaTolerance": "Tolerance"
+    },
+    "stats": {
+      "indexLabel": "02 · By the numbers"
+    },
+    "process": {
+      "indexLabel": "03 · Full-stack production",
+      "title": "Mechanics, electronics and software — designed, built and tested in Horten.",
+      "step1": {
+        "eyebrow": "01 · Mechanics",
+        "title": "3- and 5-axis CNC",
+        "body": "Fifteen-plus CNC machines, unmanned lights-out production. Tolerances down to 0.01 mm, from sub-millimetre parts up to 200 mm diameters."
+      },
+      "step2": {
+        "eyebrow": "02 · Electronics",
+        "title": "Firmware & integration",
+        "body": "PCBs designed in-house, firmware written next door, system integration against every major marine bus — CAN, Modbus, NMEA 2000."
+      },
+      "step3": {
+        "eyebrow": "03 · Assembly & test",
+        "title": "Built and validated on-site",
+        "body": "Every lever goes through vibration, humidity and EMI rigs before it leaves Horten. Every CNC batch is measured on the CMM against the original drawing."
+      }
+    },
+    "radar": {
+      "indexLabel": "04 · At sea, right now",
+      "title": "Bridges worldwide run on Lilaas levers.",
+      "body": "Every orange blip below is a vessel with our control hardware on the bridge — from supply runs in the North Sea to Asia-Pacific ferry operations.",
+      "live": "LIVE · LILAAS BRIDGE NETWORK · UTC",
+      "range": "Range",
+      "pulse": "Pulse",
+      "vessels": "Vessels",
+      "bearing": "Bearing",
+      "activeContact": "Active contact",
+      "sweeping": "sweeping…",
+      "waiting": "waiting for return"
+    },
+    "cinematic": {
+      "indexLabel": "04 · Inside the Horten workshop",
+      "titlePart1": "Mechanics, electronics and software —",
+      "titleAccent": "all in one building.",
+      "body": "Fifteen CNC machines. Unmanned lights-out production. PCBs designed, firmware written and assembly lines calibrated inside the same walls as the drawing office. Short loops, complete traceability, zero hand-offs to third parties."
+    },
+    "productRail": {
+      "indexLabel": "06 · The lineup",
+      "title": "One family, from workboat to flagship.",
+      "footerLabel": "models · DNV GL approved · drag →"
+    },
+    "industries": {
+      "indexLabel": "05 · Where we deliver"
+    },
+    "caseTeaser": {
+      "indexLabel": "07 · Case study"
+    },
+    "cta": {
+      "indexLabel": "08 · Let's build it"
+    }
+  },
   "support": {
     "eyebrow": "Support",
     "title": "Datasheets, distributors, and dedicated engineers.",

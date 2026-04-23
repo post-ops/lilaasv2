@@ -2,10 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 import { useReveal } from "@/components/ui/useReveal";
 
 export function CinematicReveal() {
+  const t = useTranslations("homeExtra.cinematic");
   const sectionRef = useReveal<HTMLElement>();
   const coverRef = useRef<HTMLDivElement>(null);
 
@@ -96,23 +98,20 @@ export function CinematicReveal() {
 
       <div className="relative z-30 h-full container-x flex flex-col justify-end pb-20 lg:pb-28">
         <p data-reveal="out" className="section-index mb-6">
-          04 · Inside the Horten workshop
+          {t("indexLabel")}
         </p>
         <h2
           data-reveal="out"
           className="font-display font-medium text-[clamp(2.5rem,7vw,6rem)] leading-[0.95] tracking-tightest text-fog max-w-5xl text-balance"
         >
-          Mechanics, electronics and software —{" "}
-          <span className="text-signal">all in one building.</span>
+          {t("titlePart1")}{" "}
+          <span className="text-signal">{t("titleAccent")}</span>
         </h2>
         <p
           data-reveal="out"
           className="mt-8 max-w-2xl text-mist text-lg leading-relaxed"
         >
-          Fifteen CNC machines. Unmanned lights-out production. PCBs designed,
-          firmware written and assembly lines calibrated inside the same walls
-          as the drawing office. Short loops, complete traceability, zero
-          hand-offs to third parties.
+          {t("body")}
         </p>
       </div>
     </section>
