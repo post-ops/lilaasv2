@@ -25,8 +25,8 @@ const CAPABILITIES = [
   { icon: TestTube, title: "Type-test fixtures", body: "Vibration, humidity, EMI rigs for defence and marine approvals." },
 ];
 
-const CNC_IMAGE =
-  "https://images.unsplash.com/photo-1565024146180-3dbc9d2fd1f2?auto=format&fit=crop&w=1800&q=80";
+const CNC_IMAGE = "/images/factory/cnc.webp";
+const MACHINING_IMAGE = "/images/factory/machining.webp";
 
 export function PrecisionView() {
   const t = useTranslations("precision");
@@ -109,8 +109,18 @@ export function PrecisionView() {
         </div>
       </section>
 
-      <section className="py-24 border-y border-white/5 bg-deep/30">
-        <div className="container-x grid lg:grid-cols-[1fr_1.3fr] gap-14">
+      <section className="relative py-24 border-y border-white/5 overflow-hidden">
+        <div className="absolute inset-0 opacity-25">
+          <Image
+            src={MACHINING_IMAGE}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink" />
+        </div>
+        <div className="container-x relative grid lg:grid-cols-[1fr_1.3fr] gap-14">
           <div>
             <p className="eyebrow mb-4">{t("materials")}</p>
             <h2 className="font-display text-display-sm text-fog text-balance mb-6">

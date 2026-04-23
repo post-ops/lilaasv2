@@ -9,16 +9,10 @@ import { ArrowUpRight, Anchor, Shield, Activity, Rocket } from "lucide-react";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
 const INDUSTRIES = [
-  { slug: "maritime", icon: Anchor, tone: "signal", image: "/images/lilaas/maritime.webp" },
-  { slug: "defence", icon: Shield, tone: "fog", image: "/images/lilaas/defence.webp" },
-  { slug: "medical", icon: Activity, tone: "chart", image: "/images/lilaas/medicine.webp" },
-  {
-    slug: "space",
-    icon: Rocket,
-    tone: "copper",
-    image:
-      "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1600&q=75",
-  },
+  { slug: "maritime", icon: Anchor, tone: "signal", image: "/images/industries/maritime.webp" },
+  { slug: "defence", icon: Shield, tone: "fog", image: "/images/industries/defence.webp" },
+  { slug: "medical", icon: Activity, tone: "chart", image: "/images/industries/medical.webp" },
+  { slug: "space", icon: Rocket, tone: "copper", image: "/images/industries/space.webp" },
 ] as const;
 
 export function IndustriesGrid() {

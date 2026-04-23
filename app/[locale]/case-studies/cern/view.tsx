@@ -9,8 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { ArrowLeft } from "lucide-react";
 import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
-const CERN_HERO =
-  "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=2000&q=80";
+const CERN_HERO = "/images/hero/industrial.webp";
 
 export function CernStory() {
   const heroRef = useRef<HTMLElement>(null);

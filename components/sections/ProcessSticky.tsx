@@ -10,19 +10,19 @@ const STEPS = [
     eyebrow: "01 · Mechanics",
     title: "3- and 5-axis CNC",
     body: "Fifteen-plus CNC machines, unmanned lights-out production. Tolerances down to 0.01 mm, from sub-millimetre parts up to 200 mm diameters.",
-    image: "/images/lilaas/l01-detail.webp",
+    image: "/images/factory/cnc.webp",
   },
   {
     eyebrow: "02 · Electronics",
     title: "Firmware & integration",
     body: "PCBs designed in-house, firmware written next door, system integration against every major marine bus — CAN, Modbus, NMEA 2000.",
-    image: "/images/lilaas/le90-detail.webp",
+    image: "/images/factory/machining.webp",
   },
   {
     eyebrow: "03 · Assembly & test",
     title: "Built and validated on-site",
     body: "Every lever goes through vibration, humidity and EMI rigs before it leaves Horten. Every CNC batch is measured on the CMM against the original drawing.",
-    image: "/images/lilaas/lf120-detail.webp",
+    image: "/images/hero/industrial.webp",
   },
 ];
 

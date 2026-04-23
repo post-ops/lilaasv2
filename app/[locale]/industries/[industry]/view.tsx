@@ -20,7 +20,7 @@ const DATA = {
     icon: Anchor,
     tone: "signal" as const,
     accent: "#FF6B35",
-    heroImage: "/images/lilaas/maritime.webp",
+    heroImage: "/images/industries/maritime.webp",
     applications: [
       "Supply vessels",
       "Ferries",
@@ -36,7 +36,7 @@ const DATA = {
     icon: Shield,
     tone: "fog" as const,
     accent: "#C9D1DE",
-    heroImage: "/images/lilaas/defence.webp",
+    heroImage: "/images/industries/defence.webp",
     applications: [
       "Vehicle control systems",
       "Naval auxiliaries",
@@ -50,7 +50,7 @@ const DATA = {
     icon: Activity,
     tone: "chart" as const,
     accent: "#2BD4B4",
-    heroImage: "/images/lilaas/medicine.webp",
+    heroImage: "/images/industries/medical.webp",
     applications: [
       "Surgical instrumentation housings",
       "Diagnostic equipment parts",
@@ -63,8 +63,7 @@ const DATA = {
     icon: Rocket,
     tone: "copper" as const,
     accent: "#C97E4F",
-    heroImage:
-      "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1800&q=80",
+    heroImage: "/images/industries/space.webp",
     applications: [
       "Large Hadron Collider components (CERN)",
       "Satellite hardware",

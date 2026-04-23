@@ -178,7 +178,7 @@ export function Hero() {
     >
       <div data-hero-image className="absolute inset-0 will-change-transform">
         <Image
-          src="/images/lilaas/hero-main.webp"
+          src="/images/hero/bridge.webp"
           alt=""
           fill
           priority

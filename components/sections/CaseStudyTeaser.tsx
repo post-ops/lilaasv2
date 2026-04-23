@@ -42,11 +42,11 @@ export function CaseStudyTeaser() {
     >
       <div data-case-bg className="absolute inset-0 -inset-y-20 will-change-transform">
         <Image
-          src="/images/lilaas/l01.webp"
+          src="/images/hero/industrial.webp"
           alt=""
           fill
           sizes="100vw"
-          className="object-cover object-center opacity-30"
+          className="object-cover object-center opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/70 to-ink" />
         <div
