@@ -7,6 +7,7 @@ import { Link } from "@/i18n/routing";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { SplitReveal } from "@/components/ui/SplitReveal";
+import { Reveal } from "@/components/ui/Reveal";
 import { Badge } from "@/components/ui/Badge";
 import { Anchor, Shield, Activity, Rocket, ArrowUpRight } from "lucide-react";
 
@@ -99,23 +100,25 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
         <AmbientScene intensity="section" accent={data.accent} />
 
         <div className="container-x relative">
-          <div className="flex items-center gap-3 mb-8">
-            <div
-              className={
-                "w-10 h-10 rounded-lg border flex items-center justify-center backdrop-blur-sm " +
-                (data.tone === "signal"
-                  ? "border-signal/40 text-signal bg-signal/10"
-                  : data.tone === "chart"
-                  ? "border-chart/40 text-chart bg-chart/10"
-                  : data.tone === "copper"
-                  ? "border-copper/40 text-copper bg-copper/10"
-                  : "border-fog/20 text-fog bg-fog/10")
-              }
-            >
-              <Icon size={18} strokeWidth={1.5} />
+          <Reveal variant="up">
+            <div className="flex items-center gap-3 mb-8">
+              <div
+                className={
+                  "w-10 h-10 rounded-lg border flex items-center justify-center backdrop-blur-sm " +
+                  (data.tone === "signal"
+                    ? "border-signal/40 text-signal bg-signal/10"
+                    : data.tone === "chart"
+                    ? "border-chart/40 text-chart bg-chart/10"
+                    : data.tone === "copper"
+                    ? "border-copper/40 text-copper bg-copper/10"
+                    : "border-fog/20 text-fog bg-fog/10")
+                }
+              >
+                <Icon size={18} strokeWidth={1.5} />
+              </div>
+              <p className="eyebrow">Application · {t("name")}</p>
             </div>
-            <p className="eyebrow">Application · {t("name")}</p>
-          </div>
+          </Reveal>
 
           <SplitReveal
             text={t("tag")}
@@ -123,78 +126,90 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
             className="font-display text-display-lg text-fog max-w-4xl text-balance"
             stagger={0.012}
           />
-          <p className="text-lg text-mist leading-relaxed max-w-2xl mt-10 text-pretty">
-            {t("body")}
-          </p>
+          <Reveal variant="up" delay={300}>
+            <p className="text-lg text-mist leading-relaxed max-w-2xl mt-10 text-pretty">
+              {t("body")}
+            </p>
+          </Reveal>
         </div>
       </section>
 
       <section className="py-16">
         <div className="container-x">
-          <div className="relative aspect-[16/7] rounded-2xl overflow-hidden border border-white/8">
-            <Image
-              src={data.heroImage}
-              alt={`${t("name")} context`}
-              fill
-              sizes="100vw"
-              className="object-cover object-center"
-            />
-          </div>
+          <Reveal variant="scale">
+            <div className="relative aspect-[16/7] rounded-2xl overflow-hidden border border-white/8 group">
+              <Image
+                src={data.heroImage}
+                alt={`${t("name")} context`}
+                fill
+                sizes="100vw"
+                className="object-cover object-center transition-transform duration-[1.8s] ease-out-expo group-hover:scale-105"
+              />
+            </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="py-20 lg:py-28">
         <div className="container-x grid lg:grid-cols-3 gap-10">
-          <div>
+          <Reveal variant="up">
             <p className="eyebrow mb-6">Applications</p>
             <ul className="space-y-3">
-              {data.applications.map((a) => (
-                <li key={a} className="flex items-center gap-3 text-fog">
+              {data.applications.map((a, i) => (
+                <li
+                  key={a}
+                  className="flex items-center gap-3 text-fog transition-all duration-300 hover:gap-4 hover:text-signal"
+                  style={{ transitionDelay: `${i * 30}ms` }}
+                >
                   <span className="signal-dot" /> {a}
                 </li>
               ))}
             </ul>
-          </div>
-          <div>
+          </Reveal>
+          <Reveal variant="up" delay={120}>
             <p className="eyebrow mb-6">Products we supply</p>
             <ul className="space-y-3">
               {data.products.map((p) => (
                 <li key={p} className="font-mono text-sm text-fog">{p}</li>
               ))}
             </ul>
-          </div>
-          <div>
+          </Reveal>
+          <Reveal variant="up" delay={240}>
             <p className="eyebrow mb-6">Certifications</p>
             <div className="flex flex-wrap gap-2">
               {data.certifications.map((c) => (
                 <Badge key={c}>{c}</Badge>
               ))}
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="py-24 border-t border-white/5">
         <div className="container-x">
-          <p className="eyebrow mb-6">Other industries we serve</p>
+          <Reveal variant="fade">
+            <p className="eyebrow mb-6">Other industries we serve</p>
+          </Reveal>
           <div className="grid sm:grid-cols-3 gap-5">
-            {otherIndustries.map((slug) => {
+            {otherIndustries.map((slug, i) => {
               const I = DATA[slug].icon;
               return (
-                <Link key={slug} href={`/industries/${slug}`} className="group block">
-                  <Card className="p-7 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-fog">
-                        <I size={16} strokeWidth={1.5} />
+                <Reveal key={slug} variant="up" delay={i * 90}>
+                  <Link href={`/industries/${slug}`} className="group block">
+                    <Card className="p-7 flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-fog">
+                          <I size={16} strokeWidth={1.5} />
+                        </div>
+                        <span className="font-display text-xl text-fog">{industries(`${slug}.name`)}</span>
                       </div>
-                      <span className="font-display text-xl text-fog">{industries(`${slug}.name`)}</span>
-                    </div>
-                    <ArrowUpRight
-                      size={18}
-                      className="text-mist group-hover:text-signal group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500"
-                    />
-                  </Card>
-                </Link>
+                      <ArrowUpRight
+                        size={18}
+                        className="text-mist group-hover:text-signal group-hover:-translate-y-1 group-hover:translate-x-1 transition-all duration-500"
+                      />
+                    </Card>
+                  </Link>
+                </Reveal>
               );
             })}
           </div>
@@ -203,13 +218,19 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
 
       <section className="py-24">
         <div className="container-x text-center">
-          <p className="eyebrow mb-6">Let's build it together</p>
-          <h2 className="font-display text-display-md text-fog max-w-3xl mx-auto text-balance mb-10">
-            Our engineers are ready to spec your next project.
-          </h2>
-          <Link href="/contact">
-            <Button variant="primary" size="lg" arrow>Talk to engineering</Button>
-          </Link>
+          <Reveal variant="fade">
+            <p className="eyebrow mb-6">Let's build it together</p>
+          </Reveal>
+          <Reveal variant="up" delay={120}>
+            <h2 className="font-display text-display-md text-fog max-w-3xl mx-auto text-balance mb-10">
+              Our engineers are ready to spec your next project.
+            </h2>
+          </Reveal>
+          <Reveal variant="scale" delay={240}>
+            <Link href="/contact">
+              <Button variant="primary" size="lg" arrow>Talk to engineering</Button>
+            </Link>
+          </Reveal>
         </div>
       </section>
     </>
