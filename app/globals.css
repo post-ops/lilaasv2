@@ -154,6 +154,62 @@
   .text-pretty { text-wrap: pretty; }
 }
 
+@keyframes heroScan {
+  0% { transform: translateY(-20%); opacity: 0; }
+  10% { opacity: 0.35; }
+  80% { opacity: 0.35; }
+  100% { transform: translateY(120%); opacity: 0; }
+}
+
+.hero-scan::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 12vh;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 107, 53, 0.06) 35%,
+    rgba(255, 107, 53, 0.14) 50%,
+    rgba(255, 107, 53, 0.06) 65%,
+    transparent 100%
+  );
+  filter: blur(6px);
+  animation: heroScan 9s cubic-bezier(0.87, 0, 0.13, 1) infinite;
+  animation-delay: 2s;
+  will-change: transform, opacity;
+}
+
+@keyframes underlineSweep {
+  0% { transform: scaleX(0); transform-origin: left; }
+  60% { transform: scaleX(1); transform-origin: left; }
+  61% { transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+.sweep-underline {
+  position: relative;
+}
+.sweep-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.05em;
+  height: 2px;
+  background: currentColor;
+  animation: underlineSweep 2.6s cubic-bezier(0.87, 0, 0.13, 1) 1.4s forwards;
+  transform: scaleX(0);
+}
+
+@keyframes counterTick {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-8%); }
+  100% { transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

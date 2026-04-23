@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { Nav } from "@/components/ui/Nav";
 import { Footer } from "@/components/ui/Footer";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -29,6 +30,7 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SmoothScroll>
+        <ScrollProgress />
         <Nav />
         <main id="content">{children}</main>
         <Footer />
