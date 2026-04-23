@@ -161,6 +161,28 @@
   100% { transform: translateY(120%); opacity: 0; }
 }
 
+@keyframes heroLightSweep {
+  0% { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  10% { opacity: 0.35; }
+  50% { opacity: 0.45; }
+  90% { opacity: 0.2; }
+  100% { transform: translateX(160%) skewX(-18deg); opacity: 0; }
+}
+
+.hero-light-sweep {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 107, 53, 0.08) 35%,
+    rgba(255, 208, 181, 0.18) 50%,
+    rgba(255, 107, 53, 0.08) 65%,
+    transparent 100%
+  );
+  filter: blur(24px);
+  animation: heroLightSweep 11s cubic-bezier(0.87, 0, 0.13, 1) 1.6s infinite;
+  will-change: transform, opacity;
+}
+
 .hero-scan::before {
   content: "";
   position: absolute;
