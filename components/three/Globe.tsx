@@ -75,6 +75,10 @@ export function Globe({
     controls.autoRotateSpeed = 0.5;
     controls.enableZoom = false;
     controls.enablePan = false;
+    // All Lilaas partners sit between ~1° and ~60° N. Tilt the camera down
+    // to ~35° latitude so the cluster sits in the middle of the globe as it
+    // spins, instead of hugging the top edge.
+    g.pointOfView({ lat: 35, lng: 10, altitude: 2.2 }, 0);
 
     let raf = 0;
     let lastReported: number | null = null;
