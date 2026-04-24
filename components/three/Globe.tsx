@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { GlobeMethods } from "react-globe.gl";
 
-// react-globe.gl can't render server-side (uses WebGL + window).
 const ReactGlobe = dynamic(() => import("react-globe.gl"), { ssr: false });
 
 export type GlobePoint = {
@@ -25,6 +24,9 @@ export function Globe({
   const ref = useRef<GlobeMethods | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 440, h: 440 });
+  const readyRef = useRef(false);
+  const onActiveChangeRef = useRef(onActiveChange);
+  onActiveChangeRef.current = onActiveChange;
 
   useEffect(() => {
     const el = containerRef.current;
@@ -37,39 +39,37 @@ export function Globe({
     return () => ro.disconnect();
   }, []);
 
-  const home = points.find((p) => p.home);
-  const partners = points.filter((p) => !p.home);
-
-  // Arcs from Horten to every partner
-  const arcs = useMemo(
-    () =>
-      home
-        ? partners.map((p) => ({
-            startLat: home.lat,
-            startLng: home.lng,
-            endLat: p.lat,
-            endLng: p.lng,
-          }))
-        : [],
-    [home, partners]
-  );
-
-  const globePoints = useMemo(
-    () =>
-      points.map((p) => ({
+  // Stable references so Scene props don't churn every parent render.
+  const { home, partners, globePoints, arcs } = useMemo(() => {
+    const h = points.find((p) => p.home);
+    const rest = points.filter((p) => !p.home);
+    return {
+      home: h,
+      partners: rest,
+      globePoints: points.map((p) => ({
         lat: p.lat,
         lng: p.lng,
         name: p.name,
         region: p.region,
         home: !!p.home,
       })),
-    [points]
-  );
+      arcs: h
+        ? rest.map((p) => ({
+            startLat: h.lat,
+            startLng: h.lng,
+            endLat: p.lat,
+            endLng: p.lng,
+          }))
+        : [],
+    };
+  }, [points]);
 
-  // Auto-rotate, pick the partner closest to the camera as "active"
-  useEffect(() => {
+  // Set up controls + initial tilt exactly once, when the globe signals ready.
+  const handleReady = useCallback(() => {
     const g = ref.current;
-    if (!g) return;
+    if (!g || readyRef.current) return;
+    readyRef.current = true;
+
     const controls = g.controls() as any;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.5;
@@ -79,39 +79,26 @@ export function Globe({
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     controls.rotateSpeed = 0.6;
-    // Keep auto-spin running even while the user drags.
-    controls.addEventListener?.("start", () => {});
-    // All Lilaas partners sit between ~1° and ~60° N. Tilt the camera down
-    // to ~35° latitude so the cluster sits in the middle of the globe as it
-    // spins, instead of hugging the top edge.
-    g.pointOfView({ lat: 35, lng: 10, altitude: 2.2 }, 0);
 
+    g.pointOfView({ lat: 35, lng: 10, altitude: 2.2 }, 0);
+  }, []);
+
+  // Active-partner detection via RAF. Doesn't touch controls or POV, so it
+  // can keep running without ever snapping the camera back.
+  useEffect(() => {
     let raf = 0;
     let lastReported: number | null = null;
     function loop() {
-      if (g) {
-        const camPos = (g as any).camera().position as {
-          x: number;
-          y: number;
-          z: number;
-        };
-        // Find partner whose latitude/longitude projects closest to the
-        // camera-facing direction. We use the globe's own coords2ScreenCoords
-        // helper to get on-screen positions and pick the centre-most one.
+      const g = ref.current;
+      if (g && readyRef.current) {
         let bestIndex: number | null = null;
         let bestDistSq = Infinity;
         partners.forEach((p, i) => {
-          const screen = (g as any).getCoords(p.lat, p.lng, 0) as {
-            x: number;
-            y: number;
-            z: number;
-          };
-          // approximate camera-forward dot: a point "in front" of the globe
-          // has a positive z component in camera-space; we cheat with world z.
-          const camZ = camPos.z;
-          if (screen.z * Math.sign(camZ) < 0) return;
-          const dx = screen.x;
-          const dy = screen.y;
+          const screen = (g as any).getScreenCoords?.(p.lat, p.lng, 0) ?? null;
+          if (!screen) return;
+          // behind the globe gets flagged by react-globe.gl with z missing
+          const dx = screen.x - size.w / 2;
+          const dy = screen.y - size.h / 2;
           const d = dx * dx + dy * dy;
           if (d < bestDistSq) {
             bestDistSq = d;
@@ -120,14 +107,14 @@ export function Globe({
         });
         if (bestIndex !== lastReported) {
           lastReported = bestIndex;
-          onActiveChange(bestIndex);
+          onActiveChangeRef.current(bestIndex);
         }
       }
       raf = requestAnimationFrame(loop);
     }
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [partners, onActiveChange]);
+  }, [partners, size.w, size.h]);
 
   return (
     <div ref={containerRef} className="absolute inset-0">
@@ -141,6 +128,7 @@ export function Globe({
         showAtmosphere
         atmosphereColor="#FF6B35"
         atmosphereAltitude={0.16}
+        onGlobeReady={handleReady}
         pointsData={globePoints}
         pointLat="lat"
         pointLng="lng"
@@ -160,7 +148,8 @@ export function Globe({
           const lat1 = (d.startLat * Math.PI) / 180;
           const lat2 = (d.endLat * Math.PI) / 180;
           const dLng = ((d.endLng - d.startLng) * Math.PI) / 180;
-          const cos = Math.sin(lat1) * Math.sin(lat2) +
+          const cos =
+            Math.sin(lat1) * Math.sin(lat2) +
             Math.cos(lat1) * Math.cos(lat2) * Math.cos(dLng);
           const angle = Math.acos(Math.max(-1, Math.min(1, cos)));
           return 0.04 + angle * 0.08;
