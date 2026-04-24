@@ -108,32 +108,43 @@ function Atmosphere() {
   );
 }
 
+// Pillar lengths used in Pins — arcs need to start/end at the same elevation
+// as each pin's glowing tip so the lines visually connect the dots, not the
+// planet surface underneath them.
+const HOME_PILLAR = 0.22;
+const DIST_PILLAR = 0.14;
+
 function Arcs({ points }: { points: GlobePoint[] }) {
   const { tubes, particleCurves } = useMemo(() => {
     const home = points.find((p) => p.home);
     if (!home) return { tubes: [], particleCurves: [] };
-    const homeVec = latLngToVec3(home.lat, home.lng, R);
+    // Arc start is at the top of the HQ pillar.
+    const homeTip = latLngToVec3(home.lat, home.lng, R + HOME_PILLAR + 0.02);
 
     const ts: { geom: THREE.TubeGeometry; mat: THREE.MeshBasicMaterial }[] = [];
     const curves: THREE.QuadraticBezierCurve3[] = [];
 
     points.forEach((p) => {
       if (p.home) return;
-      const end = latLngToVec3(p.lat, p.lng, R);
-      const angle = homeVec.angleTo(end);
-      const arcHeight = R + angle * 0.55;
-      const mid = homeVec
+      // Arc end is at the top of the distributor pillar.
+      const end = latLngToVec3(p.lat, p.lng, R + DIST_PILLAR + 0.02);
+      const angle = homeTip.angleTo(end);
+      // Raise the midpoint further so even antipodal arcs stay well clear of
+      // the sphere and read as a proper great-circle sweep.
+      const arcHeight = R + HOME_PILLAR + 0.35 + angle * 0.6;
+      const mid = homeTip
         .clone()
         .add(end)
         .normalize()
         .multiplyScalar(arcHeight);
-      const curve = new THREE.QuadraticBezierCurve3(homeVec, mid, end);
-      const tube = new THREE.TubeGeometry(curve, 96, 0.01, 8, false);
+      const curve = new THREE.QuadraticBezierCurve3(homeTip, mid, end);
+      const tube = new THREE.TubeGeometry(curve, 96, 0.011, 8, false);
       const mat = new THREE.MeshBasicMaterial({
         color: "#FF6B35",
         transparent: true,
-        opacity: 0.5,
+        opacity: 0.6,
         toneMapped: false,
+        depthWrite: false,
       });
       ts.push({ geom: tube, mat });
       curves.push(curve);
@@ -233,7 +244,7 @@ function Pins({
       {points.map((p, i) => {
         const surface = latLngToVec3(p.lat, p.lng, R);
         const normal = surface.clone().normalize();
-        const pillarLength = p.home ? 0.22 : 0.14;
+        const pillarLength = p.home ? HOME_PILLAR : DIST_PILLAR;
         const pillarMid = surface
           .clone()
           .add(normal.clone().multiplyScalar(pillarLength / 2));
