@@ -53,7 +53,14 @@ export function Nav() {
             className="flex items-center group"
             aria-label="Lilaas home"
           >
-            <LilaasWordmark className="font-display text-[17px] font-semibold tracking-tight text-fog group-hover:text-white transition-colors" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/brand/lilaas-logo.svg"
+              alt="Lilaas"
+              width={98}
+              height={30}
+              className="h-[22px] w-auto transition-opacity duration-300 group-hover:opacity-80"
+            />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">

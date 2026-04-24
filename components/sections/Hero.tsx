@@ -145,25 +145,14 @@ export function Hero() {
         </div>
 
         <div data-hero-brand className="flex flex-col items-center mb-10 opacity-0">
-          <p className="font-display font-semibold text-fog text-[clamp(3.5rem,9vw,8rem)] leading-none tracking-tightest">
-            <span aria-label="Lilaas">
-              L
-              <span className="relative inline-block" aria-hidden>
-                {"ı"}
-                <span
-                  className="absolute left-1/2 -translate-x-1/2 rounded-full bg-signal"
-                  style={{
-                    width: "0.18em",
-                    height: "0.18em",
-                    top: "-0.05em",
-                    boxShadow: "0 0 0.4em rgba(255,107,53,0.75)",
-                  }}
-                />
-              </span>
-              laas
-            </span>
-          </p>
-          <p className="eyebrow mt-4 text-mist/80">{tExtra("tagline")}</p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/brand/lilaas-logo.svg"
+            alt="Lilaas"
+            className="w-[clamp(14rem,36vw,32rem)] h-auto"
+            draggable={false}
+          />
+          <p className="eyebrow mt-6 text-mist/80">{tExtra("tagline")}</p>
         </div>
 
         <div className="max-w-5xl mx-auto">

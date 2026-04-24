@@ -10,22 +10,13 @@ export function Footer() {
     <footer className="relative mt-32 border-t border-white/5 bg-deep/40">
       <div className="container-x py-20 grid gap-14 lg:grid-cols-[2fr_1fr_1fr_1fr]">
         <div className="max-w-sm">
-          <span className="font-display text-lg font-semibold tracking-tight text-fog" aria-label="Lilaas">
-            L
-            <span className="relative inline-block" aria-hidden>
-              {"ı"}
-              <span
-                className="absolute left-1/2 -translate-x-1/2 rounded-full bg-signal"
-                style={{
-                  width: "0.18em",
-                  height: "0.18em",
-                  top: "-0.05em",
-                  boxShadow: "0 0 0.3em rgba(255,107,53,0.7)",
-                }}
-              />
-            </span>
-            laas
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/brand/lilaas-logo.svg"
+            alt="Lilaas"
+            className="h-[28px] w-auto"
+            draggable={false}
+          />
           <p className="mt-6 text-sm text-mist leading-relaxed">{t("tagline")}</p>
           <p className="mt-4 text-xs text-mist/70">{t("built")}</p>
         </div>
