@@ -75,6 +75,12 @@ export function Globe({
     controls.autoRotateSpeed = 0.5;
     controls.enableZoom = false;
     controls.enablePan = false;
+    controls.enableRotate = true;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.rotateSpeed = 0.6;
+    // Keep auto-spin running even while the user drags.
+    controls.addEventListener?.("start", () => {});
     // All Lilaas partners sit between ~1° and ~60° N. Tilt the camera down
     // to ~35° latitude so the cluster sits in the middle of the globe as it
     // spins, instead of hugging the top edge.
