@@ -13,18 +13,18 @@ export function Footer() {
           <span className="font-display text-lg font-semibold tracking-tight text-fog" aria-label="Lilaas">
             L
             <span className="relative inline-block" aria-hidden>
-              I
+              {"ı"}
               <span
                 className="absolute left-1/2 -translate-x-1/2 rounded-full bg-signal"
                 style={{
-                  width: "0.22em",
-                  height: "0.22em",
-                  top: "-0.3em",
-                  boxShadow: "0 0 0.3em rgba(255,107,53,0.6)",
+                  width: "0.2em",
+                  height: "0.2em",
+                  top: "-0.08em",
+                  boxShadow: "0 0 0.28em rgba(255,107,53,0.6)",
                 }}
               />
             </span>
-            LAAS
+            laas
           </span>
           <p className="mt-6 text-sm text-mist leading-relaxed">{t("tagline")}</p>
           <p className="mt-4 text-xs text-mist/70">{t("built")}</p>

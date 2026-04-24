@@ -256,6 +256,7 @@ function Radar({ activeBlip }: { activeBlip: number | null }) {
       <g
         style={{
           transformOrigin: `${cx}px ${cy}px`,
+          transformBox: "fill-box",
           animation: `radarSpin ${SWEEP_DURATION_S}s linear infinite`,
         }}
       >
@@ -307,13 +308,6 @@ function Radar({ activeBlip }: { activeBlip: number | null }) {
       {/* center dot */}
       <circle cx={cx} cy={cy} r={6} fill="#FF6B35" />
       <circle cx={cx} cy={cy} r={14} fill="none" stroke="#FF6B35" strokeOpacity={0.5} strokeWidth={1} />
-
-      <style>{`
-        @keyframes radarSpin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </svg>
   );
 }

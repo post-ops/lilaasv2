@@ -117,18 +117,18 @@ export function LilaasWordmark({ className }: { className?: string }) {
     <span className={className} aria-label="Lilaas">
       L
       <span className="relative inline-block" aria-hidden>
-        I
+        {"ı"}
         <span
           className="absolute left-1/2 -translate-x-1/2 rounded-full bg-signal"
           style={{
-            width: "0.22em",
-            height: "0.22em",
-            top: "-0.3em",
-            boxShadow: "0 0 0.3em rgba(255,107,53,0.6)",
+            width: "0.2em",
+            height: "0.2em",
+            top: "-0.08em",
+            boxShadow: "0 0 0.28em rgba(255,107,53,0.6)",
           }}
         />
       </span>
-      LAAS
+      laas
     </span>
   );
 }
