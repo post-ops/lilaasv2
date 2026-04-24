@@ -14,11 +14,15 @@ export type GlobePoint = {
 
 const R = 1.8;
 
+// Matches three-globe's coordinate convention, which is what the
+// earth-blue-marble.jpg texture from the same package is drawn against.
+// With this formula, Greenwich (lng 0) sits at the +Z axis, i.e. directly
+// in front of the default camera, so Europe is visible on first render.
 function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
   const phi = ((90 - lat) * Math.PI) / 180;
-  const theta = ((lng + 180) * Math.PI) / 180;
+  const theta = ((90 - lng) * Math.PI) / 180;
   return new THREE.Vector3(
-    -r * Math.sin(phi) * Math.cos(theta),
+    r * Math.sin(phi) * Math.cos(theta),
     r * Math.cos(phi),
     r * Math.sin(phi) * Math.sin(theta)
   );
