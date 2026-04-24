@@ -25,7 +25,7 @@ function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
 }
 
 function Earth() {
-  const texture = useLoader(THREE.TextureLoader, "/images/earth/earth-dark.jpg");
+  const texture = useLoader(THREE.TextureLoader, "/images/earth/earth-night.jpg");
   useMemo(() => {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = 8;
@@ -33,30 +33,85 @@ function Earth() {
 
   return (
     <mesh>
-      <sphereGeometry args={[R, 64, 48]} />
+      <sphereGeometry args={[R, 96, 64]} />
       <meshStandardMaterial
         map={texture}
-        roughness={0.95}
-        metalness={0.05}
-        emissive="#0a1422"
-        emissiveIntensity={0.4}
+        roughness={1}
+        metalness={0}
+        emissive="#0c1828"
+        emissiveIntensity={0.55}
       />
     </mesh>
   );
 }
 
-function AtmosphereGlow() {
+function Atmosphere() {
   return (
-    <mesh>
-      <sphereGeometry args={[R * 1.04, 48, 32]} />
-      <meshBasicMaterial
-        color="#FF6B35"
-        transparent
-        opacity={0.06}
-        side={THREE.BackSide}
-        toneMapped={false}
-      />
-    </mesh>
+    <>
+      {/* Outer atmosphere shell — warm signal glow */}
+      <mesh>
+        <sphereGeometry args={[R * 1.05, 64, 48]} />
+        <meshBasicMaterial
+          color="#FF6B35"
+          transparent
+          opacity={0.07}
+          side={THREE.BackSide}
+          toneMapped={false}
+          depthWrite={false}
+        />
+      </mesh>
+      {/* Inner rim light */}
+      <mesh>
+        <sphereGeometry args={[R * 1.015, 64, 48]} />
+        <meshBasicMaterial
+          color="#C9D1DE"
+          transparent
+          opacity={0.04}
+          side={THREE.BackSide}
+          toneMapped={false}
+          depthWrite={false}
+        />
+      </mesh>
+    </>
+  );
+}
+
+function Arcs({ points }: { points: GlobePoint[] }) {
+  const home = points.find((p) => p.home);
+  const { geometries, dashMats } = useMemo(() => {
+    if (!home) return { geometries: [], dashMats: [] };
+    const homeVec = latLngToVec3(home.lat, home.lng, R);
+    const gs: THREE.BufferGeometry[] = [];
+    const mats: THREE.LineBasicMaterial[] = [];
+
+    points.forEach((p) => {
+      if (p.home) return;
+      const end = latLngToVec3(p.lat, p.lng, R);
+      const angle = homeVec.angleTo(end);
+      const arcHeight = R + angle * 0.45;
+      const mid = homeVec.clone().add(end).normalize().multiplyScalar(arcHeight);
+      const curve = new THREE.QuadraticBezierCurve3(homeVec, mid, end);
+      const pts = curve.getPoints(80);
+      const g = new THREE.BufferGeometry().setFromPoints(pts);
+      gs.push(g);
+      mats.push(
+        new THREE.LineBasicMaterial({
+          color: "#FF6B35",
+          transparent: true,
+          opacity: 0.35,
+          toneMapped: false,
+        })
+      );
+    });
+    return { geometries: gs, dashMats: mats };
+  }, [points, home]);
+
+  return (
+    <>
+      {geometries.map((g, i) => (
+        <primitive key={i} object={new THREE.Line(g, dashMats[i])} />
+      ))}
+    </>
   );
 }
 
@@ -69,32 +124,61 @@ function DistributorDots({
 }) {
   const haloRefs = useRef<(THREE.Mesh | null)[]>([]);
   const coreRefs = useRef<(THREE.Mesh | null)[]>([]);
+  const pulseRefs = useRef<(THREE.Mesh | null)[]>([]);
 
-  useFrame(() => {
+  useFrame((state) => {
     const active = activeRef.current;
+    const t = state.clock.elapsedTime;
+
     haloRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      const target = isActive ? 0.09 : 0.04;
-      mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.15);
+      const target = isActive ? 0.11 : 0.045;
+      mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.14);
       const mat = mesh.material as THREE.MeshBasicMaterial;
-      const tOp = isActive ? 0.5 : 0.16;
-      mat.opacity += (tOp - mat.opacity) * 0.15;
+      const tOp = isActive ? 0.55 : 0.18;
+      mat.opacity += (tOp - mat.opacity) * 0.14;
     });
     coreRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      const target = isActive ? 0.05 : 0.028;
-      mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.15);
+      const target = isActive ? 0.055 : 0.03;
+      mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.14);
+    });
+    pulseRefs.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      // each pulse staggered by index
+      const phase = ((t + i * 0.5) % 3) / 3;
+      const scale = 0.045 + phase * 0.18;
+      mesh.scale.setScalar(scale);
+      const mat = mesh.material as THREE.MeshBasicMaterial;
+      mat.opacity = Math.max(0, 0.5 - phase * 0.5);
     });
   });
 
   return (
     <>
       {points.map((p, i) => {
-        const pos = latLngToVec3(p.lat, p.lng, R * 1.01);
+        const pos = latLngToVec3(p.lat, p.lng, R * 1.008);
         return (
           <group key={i} position={pos}>
+            {/* pulse ring */}
+            {!p.home && (
+              <mesh
+                ref={(el) => {
+                  pulseRefs.current[i] = el;
+                }}
+              >
+                <sphereGeometry args={[1, 16, 16]} />
+                <meshBasicMaterial
+                  color="#FF6B35"
+                  transparent
+                  opacity={0}
+                  toneMapped={false}
+                  depthTest={false}
+                />
+              </mesh>
+            )}
             <mesh
               ref={(el) => {
                 haloRefs.current[i] = el;
@@ -117,7 +201,7 @@ function DistributorDots({
             >
               <sphereGeometry args={[1, 12, 12]} />
               <meshBasicMaterial
-                color={p.home ? "#FFFFFF" : "#FF6B35"}
+                color={p.home ? "#FFFFFF" : "#FFD0B5"}
                 toneMapped={false}
                 depthTest={false}
               />
@@ -142,7 +226,7 @@ function Scene({
 
   useFrame(() => {
     if (!group.current) return;
-    group.current.rotation.y += 0.003;
+    group.current.rotation.y += 0.0028;
 
     const q = group.current.quaternion;
     let best: number | null = null;
@@ -166,14 +250,15 @@ function Scene({
 
   return (
     <>
-      <ambientLight intensity={0.55} />
-      <directionalLight position={[3, 2, 5]} intensity={0.9} color="#fff4e0" />
-      <directionalLight position={[-4, -2, -3]} intensity={0.3} color="#6ea0ff" />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[4, 2, 5]} intensity={0.8} color="#fff2d4" />
+      <directionalLight position={[-5, -2, -3]} intensity={0.35} color="#5a7aa8" />
       <group ref={group}>
         <Earth />
+        <Arcs points={points} />
         <DistributorDots points={points} activeRef={activeRef} />
       </group>
-      <AtmosphereGlow />
+      <Atmosphere />
     </>
   );
 }
@@ -189,7 +274,7 @@ export function Globe({
     <Canvas
       dpr={[1, 1.6]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 0.2, 5.8], fov: 34 }}
+      camera={{ position: [0, 0.25, 5.8], fov: 34 }}
       className="!absolute inset-0 !h-full !w-full"
     >
       <Suspense fallback={null}>
