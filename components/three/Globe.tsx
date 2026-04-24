@@ -26,12 +26,11 @@ function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
 }
 
 function Starfield() {
-  const count = 1600;
+  const count = 1000;
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      // Stars on a larger sphere behind the globe
-      const r = 14 + Math.random() * 10;
+      const r = 18 + Math.random() * 12;
       const phi = Math.acos(2 * Math.random() - 1);
       const theta = 2 * Math.PI * Math.random();
       arr[i * 3] = r * Math.sin(phi) * Math.cos(theta);
@@ -40,17 +39,16 @@ function Starfield() {
     }
     return arr;
   }, []);
-
   return (
     <points>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.04}
+        size={0.045}
         color="#C9D1DE"
         transparent
-        opacity={0.5}
+        opacity={0.45}
         sizeAttenuation
         depthWrite={false}
       />
@@ -64,7 +62,6 @@ function Earth() {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = 16;
   }, [texture]);
-
   return (
     <mesh>
       <sphereGeometry args={[R, 128, 80]} />
@@ -83,22 +80,22 @@ function Atmosphere() {
   return (
     <>
       <mesh>
-        <sphereGeometry args={[R * 1.06, 64, 48]} />
+        <sphereGeometry args={[R * 1.05, 64, 48]} />
         <meshBasicMaterial
           color="#FF6B35"
           transparent
-          opacity={0.1}
+          opacity={0.09}
           side={THREE.BackSide}
           toneMapped={false}
           depthWrite={false}
         />
       </mesh>
       <mesh>
-        <sphereGeometry args={[R * 1.02, 64, 48]} />
+        <sphereGeometry args={[R * 1.015, 64, 48]} />
         <meshBasicMaterial
           color="#7fb4ff"
           transparent
-          opacity={0.07}
+          opacity={0.06}
           side={THREE.BackSide}
           toneMapped={false}
           depthWrite={false}
@@ -108,41 +105,34 @@ function Atmosphere() {
   );
 }
 
-// Pillar lengths used in Pins — arcs need to start/end at the same elevation
-// as each pin's glowing tip so the lines visually connect the dots, not the
-// planet surface underneath them.
-const HOME_PILLAR = 0.22;
-const DIST_PILLAR = 0.14;
+const PIN_LIFT = 0.05; // small radial offset so pin sits just above surface
 
 function Arcs({ points }: { points: GlobePoint[] }) {
   const { tubes, particleCurves } = useMemo(() => {
     const home = points.find((p) => p.home);
     if (!home) return { tubes: [], particleCurves: [] };
-    // Arc start is at the top of the HQ pillar.
-    const homeTip = latLngToVec3(home.lat, home.lng, R + HOME_PILLAR + 0.02);
+    const homePos = latLngToVec3(home.lat, home.lng, R + PIN_LIFT);
 
     const ts: { geom: THREE.TubeGeometry; mat: THREE.MeshBasicMaterial }[] = [];
     const curves: THREE.QuadraticBezierCurve3[] = [];
 
     points.forEach((p) => {
       if (p.home) return;
-      // Arc end is at the top of the distributor pillar.
-      const end = latLngToVec3(p.lat, p.lng, R + DIST_PILLAR + 0.02);
-      const angle = homeTip.angleTo(end);
-      // Raise the midpoint further so even antipodal arcs stay well clear of
-      // the sphere and read as a proper great-circle sweep.
-      const arcHeight = R + HOME_PILLAR + 0.35 + angle * 0.6;
-      const mid = homeTip
+      const end = latLngToVec3(p.lat, p.lng, R + PIN_LIFT);
+      const angle = homePos.angleTo(end);
+      // Keep arcs low so the full flight fits inside the viewport.
+      const arcHeight = R + 0.12 + angle * 0.22;
+      const mid = homePos
         .clone()
         .add(end)
         .normalize()
         .multiplyScalar(arcHeight);
-      const curve = new THREE.QuadraticBezierCurve3(homeTip, mid, end);
-      const tube = new THREE.TubeGeometry(curve, 96, 0.011, 8, false);
+      const curve = new THREE.QuadraticBezierCurve3(homePos, mid, end);
+      const tube = new THREE.TubeGeometry(curve, 96, 0.009, 8, false);
       const mat = new THREE.MeshBasicMaterial({
         color: "#FF6B35",
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.55,
         toneMapped: false,
         depthWrite: false,
       });
@@ -160,15 +150,13 @@ function Arcs({ points }: { points: GlobePoint[] }) {
     particleCurves.forEach((curve, i) => {
       const mesh = particleRefs.current[i];
       if (!mesh) return;
-      // Each particle travels home → distributor in 2 s, staggered by pin index
       const cycle = 2.4;
       const phase = ((t + i * 0.25) % cycle) / cycle;
       const pos = curve.getPointAt(phase);
       mesh.position.copy(pos);
       const mat = mesh.material as THREE.MeshBasicMaterial;
-      // fade in at start, fade out at end
       mat.opacity = Math.sin(phase * Math.PI);
-      mesh.scale.setScalar(0.03 + Math.sin(phase * Math.PI) * 0.025);
+      mesh.scale.setScalar(0.024 + Math.sin(phase * Math.PI) * 0.018);
     });
   });
 
@@ -206,7 +194,6 @@ function Pins({
 }) {
   const haloRefs = useRef<(THREE.Mesh | null)[]>([]);
   const coreRefs = useRef<(THREE.Mesh | null)[]>([]);
-  const pillarRefs = useRef<(THREE.Mesh | null)[]>([]);
 
   useFrame((state) => {
     const active = activeRef.current;
@@ -215,117 +202,77 @@ function Pins({
     haloRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      const pulse = isActive ? 0.14 : 0.06 + Math.sin(t * 2 + i) * 0.01;
-      mesh.scale.setScalar(mesh.scale.x + (pulse - mesh.scale.x) * 0.15);
+      const target = isActive ? 0.16 : 0.075 + Math.sin(t * 2 + i) * 0.012;
+      mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.15);
       const mat = mesh.material as THREE.MeshBasicMaterial;
-      const tOp = isActive ? 0.7 : 0.3;
+      const tOp = isActive ? 0.75 : 0.35;
       mat.opacity += (tOp - mat.opacity) * 0.14;
     });
     coreRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      const target = isActive ? 0.075 : 0.045;
+      const target = isActive ? 0.08 : 0.05;
       mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.14);
-    });
-    pillarRefs.current.forEach((mesh, i) => {
-      if (!mesh) return;
-      const isActive = i === active;
-      const targetY = isActive ? 1 : 0.6;
-      mesh.scale.y += (targetY - mesh.scale.y) * 0.14;
-      const mat = mesh.material as THREE.MeshBasicMaterial;
-      const tOp = isActive ? 0.9 : 0.55;
-      mat.opacity += (tOp - mat.opacity) * 0.14;
     });
   });
 
   return (
     <>
       {points.map((p, i) => {
-        const surface = latLngToVec3(p.lat, p.lng, R);
-        const normal = surface.clone().normalize();
-        const pillarLength = p.home ? HOME_PILLAR : DIST_PILLAR;
-        const pillarMid = surface
-          .clone()
-          .add(normal.clone().multiplyScalar(pillarLength / 2));
-        const tipPos = surface
-          .clone()
-          .add(normal.clone().multiplyScalar(pillarLength + 0.02));
-
-        // Rotation for cylinder to align with surface normal
-        const quat = new THREE.Quaternion();
-        quat.setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal);
-
+        const pos = latLngToVec3(p.lat, p.lng, R + PIN_LIFT);
         return (
-          <group key={i}>
+          <group key={i} position={pos}>
             <mesh
               ref={(el) => {
-                pillarRefs.current[i] = el;
+                haloRefs.current[i] = el;
               }}
-              position={pillarMid}
-              quaternion={quat}
-              scale={[1, 0.6, 1]}
             >
-              <cylinderGeometry args={[0.006, 0.006, pillarLength, 8]} />
+              <sphereGeometry args={[1, 16, 16]} />
               <meshBasicMaterial
-                color={p.home ? "#FFFFFF" : "#FF6B35"}
+                color={p.home ? "#FFD0B5" : "#FF6B35"}
                 transparent
-                opacity={0.55}
+                opacity={0.35}
                 toneMapped={false}
               />
             </mesh>
-            <group position={tipPos}>
-              <mesh
-                ref={(el) => {
-                  haloRefs.current[i] = el;
-                }}
+            <mesh
+              ref={(el) => {
+                coreRefs.current[i] = el;
+              }}
+            >
+              <sphereGeometry args={[1, 16, 16]} />
+              <meshBasicMaterial
+                color={p.home ? "#FFFFFF" : "#FFE0C8"}
+                toneMapped={false}
+              />
+            </mesh>
+            {p.home && (
+              <Html
+                center
+                distanceFactor={10}
+                position={[0, 0.18, 0]}
+                style={{ pointerEvents: "none" }}
+                occlude="blending"
               >
-                <sphereGeometry args={[1, 16, 16]} />
-                <meshBasicMaterial
-                  color={p.home ? "#FFD0B5" : "#FF6B35"}
-                  transparent
-                  opacity={0.3}
-                  toneMapped={false}
-                />
-              </mesh>
-              <mesh
-                ref={(el) => {
-                  coreRefs.current[i] = el;
-                }}
-              >
-                <sphereGeometry args={[1, 16, 16]} />
-                <meshBasicMaterial
-                  color={p.home ? "#FFFFFF" : "#FFE0C8"}
-                  toneMapped={false}
-                />
-              </mesh>
-              {p.home && (
-                <Html
-                  center
-                  distanceFactor={10}
-                  position={[0, 0.25, 0]}
-                  style={{ pointerEvents: "none" }}
-                  occlude="blending"
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono), ui-monospace, monospace",
+                    fontSize: "10px",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.9)",
+                    whiteSpace: "nowrap",
+                    padding: "2px 6px",
+                    background: "rgba(5,7,13,0.6)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    borderRadius: "2px",
+                    backdropFilter: "blur(4px)",
+                  }}
                 >
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono), ui-monospace, monospace",
-                      fontSize: "10px",
-                      letterSpacing: "0.2em",
-                      textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.9)",
-                      whiteSpace: "nowrap",
-                      padding: "2px 6px",
-                      background: "rgba(5,7,13,0.6)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      borderRadius: "2px",
-                      backdropFilter: "blur(4px)",
-                    }}
-                  >
-                    HORTEN · HQ
-                  </span>
-                </Html>
-              )}
-            </group>
+                  HORTEN · HQ
+                </span>
+              </Html>
+            )}
           </group>
         );
       })}
@@ -395,7 +342,7 @@ export function Globe({
     <Canvas
       dpr={[1, 1.75]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 0.25, 5.6], fov: 36 }}
+      camera={{ position: [0, 0.15, 7.5], fov: 32 }}
       className="!absolute inset-0 !h-full !w-full"
     >
       <Suspense fallback={null}>
