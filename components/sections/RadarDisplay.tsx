@@ -80,13 +80,13 @@ export function RadarDisplay() {
 
         <div className="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-center">
           <Reveal variant="scale">
-            <div className="relative aspect-square max-w-[640px] mx-auto">
+            <div className="relative aspect-square max-w-[420px] mx-auto">
               <div
                 aria-hidden
                 className="absolute inset-0 rounded-full pointer-events-none"
                 style={{
                   background:
-                    "radial-gradient(circle at 50% 50%, rgba(255,107,53,0.06) 0%, transparent 55%)",
+                    "radial-gradient(circle at 50% 50%, rgba(255,107,53,0.08) 0%, transparent 55%)",
                 }}
               />
               <Globe points={POINTS} onActiveChange={setActive} />

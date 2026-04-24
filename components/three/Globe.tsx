@@ -1,14 +1,14 @@
 "use client";
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 export type GlobePoint = {
   name: string;
   region: string;
-  lat: number; // degrees
-  lng: number; // degrees
+  lat: number;
+  lng: number;
   home?: boolean;
 };
 
@@ -24,53 +24,39 @@ function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
   );
 }
 
-function BaseSphere() {
+function Earth() {
+  const texture = useLoader(THREE.TextureLoader, "/images/earth/earth-dark.jpg");
+  useMemo(() => {
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
+  }, [texture]);
+
   return (
-    <>
-      <mesh>
-        <sphereGeometry args={[R, 48, 32]} />
-        <meshBasicMaterial color="#0F1B2E" transparent opacity={0.6} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[R * 1.002, 48, 32]} />
-        <meshBasicMaterial color="#2A3A52" wireframe transparent opacity={0.25} />
-      </mesh>
-    </>
+    <mesh>
+      <sphereGeometry args={[R, 64, 48]} />
+      <meshStandardMaterial
+        map={texture}
+        roughness={0.95}
+        metalness={0.05}
+        emissive="#0a1422"
+        emissiveIntensity={0.4}
+      />
+    </mesh>
   );
 }
 
-function Meridians() {
-  // Draw a few prominent latitude rings (equator, tropics) for an atlas feel.
-  const rings = useMemo(() => {
-    const list: { lat: number; opacity: number }[] = [
-      { lat: 0, opacity: 0.35 },
-      { lat: 23.5, opacity: 0.18 },
-      { lat: -23.5, opacity: 0.18 },
-      { lat: 60, opacity: 0.15 },
-      { lat: -60, opacity: 0.15 },
-    ];
-    return list;
-  }, []);
-
+function AtmosphereGlow() {
   return (
-    <>
-      {rings.map((ring, i) => {
-        const phi = ((90 - ring.lat) * Math.PI) / 180;
-        const r = R * Math.sin(phi);
-        const y = R * Math.cos(phi);
-        return (
-          <mesh key={i} position={[0, y, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[r - 0.003, r + 0.003, 128]} />
-            <meshBasicMaterial
-              color="#C9D1DE"
-              transparent
-              opacity={ring.opacity}
-              side={THREE.DoubleSide}
-            />
-          </mesh>
-        );
-      })}
-    </>
+    <mesh>
+      <sphereGeometry args={[R * 1.04, 48, 32]} />
+      <meshBasicMaterial
+        color="#FF6B35"
+        transparent
+        opacity={0.06}
+        side={THREE.BackSide}
+        toneMapped={false}
+      />
+    </mesh>
   );
 }
 
@@ -89,18 +75,16 @@ function DistributorDots({
     haloRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      const target = isActive ? 0.1 : 0.045;
-      mesh.scale.setScalar(
-        mesh.scale.x + (target - mesh.scale.x) * 0.15
-      );
+      const target = isActive ? 0.09 : 0.04;
+      mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.15);
       const mat = mesh.material as THREE.MeshBasicMaterial;
-      const tOp = isActive ? 0.45 : 0.12;
+      const tOp = isActive ? 0.5 : 0.16;
       mat.opacity += (tOp - mat.opacity) * 0.15;
     });
     coreRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      const target = isActive ? 0.055 : 0.03;
+      const target = isActive ? 0.05 : 0.028;
       mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.15);
     });
   });
@@ -108,7 +92,7 @@ function DistributorDots({
   return (
     <>
       {points.map((p, i) => {
-        const pos = latLngToVec3(p.lat, p.lng, R * 1.005);
+        const pos = latLngToVec3(p.lat, p.lng, R * 1.01);
         return (
           <group key={i} position={pos}>
             <mesh
@@ -120,19 +104,22 @@ function DistributorDots({
               <meshBasicMaterial
                 color={p.home ? "#FFD0B5" : "#FF6B35"}
                 transparent
-                opacity={0.15}
+                opacity={0.2}
                 toneMapped={false}
+                depthTest={false}
               />
             </mesh>
             <mesh
               ref={(el) => {
                 coreRefs.current[i] = el;
               }}
+              renderOrder={2}
             >
               <sphereGeometry args={[1, 12, 12]} />
               <meshBasicMaterial
                 color={p.home ? "#FFFFFF" : "#FF6B35"}
                 toneMapped={false}
+                depthTest={false}
               />
             </mesh>
           </group>
@@ -150,28 +137,16 @@ function Scene({
   onActiveChange: (i: number | null) => void;
 }) {
   const group = useRef<THREE.Group>(null);
-  const camera = useThree((s) => s.camera);
   const activeRef = useRef<number | null>(null);
   const lastReportedRef = useRef<number | null>(null);
 
   useFrame(() => {
     if (!group.current) return;
-    group.current.rotation.y += 0.0035;
+    group.current.rotation.y += 0.003;
 
-    // Which distributor is currently closest to the camera (highest z after
-    // rotation). The camera sits at z=+5 looking at origin, so the front of
-    // the globe is the front hemisphere. Skip the home-point marker when
-    // picking the active contact.
-    const worldPos = new THREE.Vector3();
+    const q = group.current.quaternion;
     let best: number | null = null;
     let bestZ = -Infinity;
-    group.current.children.forEach((child, childIndex) => {
-      // child is a group per point (from DistributorDots), BaseSphere (meshes)
-      // and Meridians (meshes). We only iterate the first <points.length>
-      // groups — but to keep this safe, reparse via names/types:
-    });
-    // Simpler: compute directly from each point's rotated lat/lng.
-    const q = group.current.quaternion;
     for (let i = 0; i < points.length; i++) {
       const p = points[i];
       if (p.home) continue;
@@ -191,12 +166,14 @@ function Scene({
 
   return (
     <>
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[3, 2, 5]} intensity={0.9} color="#fff4e0" />
+      <directionalLight position={[-4, -2, -3]} intensity={0.3} color="#6ea0ff" />
       <group ref={group}>
-        <BaseSphere />
-        <Meridians />
+        <Earth />
         <DistributorDots points={points} activeRef={activeRef} />
       </group>
+      <AtmosphereGlow />
     </>
   );
 }
@@ -210,9 +187,9 @@ export function Globe({
 }) {
   return (
     <Canvas
-      dpr={[1, 1.5]}
+      dpr={[1, 1.6]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 0.2, 5.2], fov: 36 }}
+      camera={{ position: [0, 0.2, 5.8], fov: 34 }}
       className="!absolute inset-0 !h-full !w-full"
     >
       <Suspense fallback={null}>
