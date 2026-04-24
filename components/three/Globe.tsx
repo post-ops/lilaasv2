@@ -215,7 +215,6 @@ function Pins({
     haloRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      // pulse even when not active
       const pulse = isActive ? 0.14 : 0.06 + Math.sin(t * 2 + i) * 0.01;
       mesh.scale.setScalar(mesh.scale.x + (pulse - mesh.scale.x) * 0.15);
       const mat = mesh.material as THREE.MeshBasicMaterial;
@@ -286,14 +285,12 @@ function Pins({
                   transparent
                   opacity={0.3}
                   toneMapped={false}
-                  depthWrite={false}
                 />
               </mesh>
               <mesh
                 ref={(el) => {
                   coreRefs.current[i] = el;
                 }}
-                renderOrder={2}
               >
                 <sphereGeometry args={[1, 16, 16]} />
                 <meshBasicMaterial
@@ -307,6 +304,7 @@ function Pins({
                   distanceFactor={10}
                   position={[0, 0.25, 0]}
                   style={{ pointerEvents: "none" }}
+                  occlude="blending"
                 >
                   <span
                     style={{
