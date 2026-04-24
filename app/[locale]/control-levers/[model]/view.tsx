@@ -13,7 +13,17 @@ import { ArrowLeft } from "lucide-react";
 
 export function ProductDetail({ product }: { product: Product }) {
   const t = useTranslations("controlLevers");
+  const p = useTranslations("products");
   const common = useTranslations("common");
+
+  const applications = p(`${product.slug}.applications`).split("|").map((s) => s.trim());
+  const specs = p(`${product.slug}.specs`)
+    .split("|")
+    .map((s) => s.trim())
+    .map((pair) => {
+      const [label, value] = pair.split("¦").map((x) => x.trim());
+      return { label, value };
+    });
 
   return (
     <>
@@ -48,16 +58,16 @@ export function ProductDetail({ product }: { product: Product }) {
                 />
                 <div className="absolute top-5 left-5 flex gap-2">
                   <Badge tone={product.family === "L" ? "signal" : product.family === "LE" ? "chart" : "copper"}>
-                    Series {product.family}
+                    {t("series")} {product.family}
                   </Badge>
-                  <Badge>DNV GL approved</Badge>
+                  <Badge>{t("approved")}</Badge>
                 </div>
               </div>
             </Reveal>
 
             <div>
               <Reveal variant="fade">
-                <p className="eyebrow mb-4">Control lever</p>
+                <p className="eyebrow mb-4">{t("detailEyebrow")}</p>
               </Reveal>
               <SplitReveal
                 text={product.model}
@@ -67,11 +77,11 @@ export function ProductDetail({ product }: { product: Product }) {
               />
               <Reveal variant="up" delay={150}>
                 <p className="text-xl text-fog leading-relaxed mb-6 text-balance">
-                  {product.tagline}
+                  {p(`${product.slug}.tagline`)}
                 </p>
               </Reveal>
               <Reveal variant="up" delay={250}>
-                <p className="text-mist leading-relaxed mb-8">{product.description}</p>
+                <p className="text-mist leading-relaxed mb-8">{p(`${product.slug}.description`)}</p>
               </Reveal>
               <Reveal variant="up" delay={350}>
                 <div className="flex flex-wrap gap-3 mb-10">
@@ -82,7 +92,7 @@ export function ProductDetail({ product }: { product: Product }) {
                   </Link>
                   <Link href="/support">
                     <Button variant="outline" arrow>
-                      Find a distributor
+                      {t("findDistributor")}
                     </Button>
                   </Link>
                 </div>
@@ -99,7 +109,7 @@ export function ProductDetail({ product }: { product: Product }) {
               <div className="relative aspect-[16/8] rounded-2xl overflow-hidden border border-white/8 bg-deep/40">
                 <Image
                   src={product.detailImage}
-                  alt={`${product.model} detail view`}
+                  alt={`${product.model} ${t("detailAlt")}`}
                   fill
                   sizes="100vw"
                   className="object-cover object-center"
@@ -113,9 +123,9 @@ export function ProductDetail({ product }: { product: Product }) {
       <section className="py-20 lg:py-28">
         <div className="container-x grid lg:grid-cols-[1fr_1.3fr] gap-16">
           <Reveal variant="left">
-            <p className="eyebrow mb-4">Applications</p>
+            <p className="eyebrow mb-4">{t("applicationsLabel")}</p>
             <ul className="space-y-4">
-              {product.applications.map((a, i) => (
+              {applications.map((a) => (
                 <li key={a} className="flex items-center gap-3 text-fog">
                   <span className="signal-dot" />
                   {a}
@@ -124,7 +134,7 @@ export function ProductDetail({ product }: { product: Product }) {
             </ul>
           </Reveal>
           <Reveal variant="right" delay={120}>
-            <SpecTable specs={product.specs} title="Technical specifications" />
+            <SpecTable specs={specs} title={t("specsTitle")} />
           </Reveal>
         </div>
       </section>

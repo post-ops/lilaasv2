@@ -13,9 +13,10 @@ import { ArrowUpRight } from "lucide-react";
 
 export function ControlLeversView({ products }: { products: Product[] }) {
   const t = useTranslations("controlLevers");
+  const p = useTranslations("products");
 
-  const flagship = products.find((p) => p.slug === "l01")!;
-  const rest = products.filter((p) => p.slug !== "l01");
+  const flagship = products.find((x) => x.slug === "l01")!;
+  const rest = products.filter((x) => x.slug !== "l01");
 
   return (
     <>
@@ -60,18 +61,18 @@ export function ControlLeversView({ products }: { products: Product[] }) {
                   className="object-contain object-center p-10 lg:p-16 transition-transform duration-[1.4s] ease-out-expo group-hover:scale-110"
                 />
                 <div className="absolute top-5 left-5">
-                  <Badge tone="signal">Flagship · {flagship.model}</Badge>
+                  <Badge tone="signal">{t("flagship")} · {flagship.model}</Badge>
                 </div>
               </div>
             </Reveal>
             <Reveal variant="right" delay={120}>
-              <p className="eyebrow mb-4">Model {flagship.model}</p>
+              <p className="eyebrow mb-4">{t("model")} {flagship.model}</p>
               <h2 className="font-display text-display-md text-fog mb-6 text-balance">
-                {flagship.tagline}
+                {p(`${flagship.slug}.tagline`)}
               </h2>
-              <p className="text-mist leading-relaxed mb-6">{flagship.description}</p>
+              <p className="text-mist leading-relaxed mb-6">{p(`${flagship.slug}.description`)}</p>
               <p className="font-mono text-xs uppercase tracking-widest text-signal mb-8">
-                {flagship.highlight}
+                {p(`${flagship.slug}.highlight`)}
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href={`/control-levers/${flagship.slug}`}>
@@ -96,28 +97,28 @@ export function ControlLeversView({ products }: { products: Product[] }) {
             <div className="flex items-end justify-between mb-12">
               <h2 className="font-display text-display-md text-fog">{t("lineup")}</h2>
               <p className="eyebrow hidden md:block">
-                {rest.length + 1} models · DNV GL approved
+                {rest.length + 1} {t("lineupMeta")}
               </p>
             </div>
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {rest.map((p, i) => (
-              <Reveal key={p.slug} variant="up" delay={i * 90}>
-                <Link href={`/control-levers/${p.slug}`} className="group block h-full">
+            {rest.map((prod, i) => (
+              <Reveal key={prod.slug} variant="up" delay={i * 90}>
+                <Link href={`/control-levers/${prod.slug}`} className="group block h-full">
                   <Card className="h-full flex flex-col p-0 overflow-hidden">
                     <div className="relative aspect-square bg-ink/40">
                       <Image
-                        src={p.image}
-                        alt={`${p.model} control lever`}
+                        src={prod.image}
+                        alt={`${prod.model} control lever`}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-contain object-center p-8 transition-transform duration-700 ease-out-expo group-hover:scale-110 group-hover:rotate-[-3deg]"
                       />
                       <div className="absolute top-5 left-5">
                         <Badge
-                          tone={p.family === "L" ? "signal" : p.family === "LE" ? "chart" : "copper"}
+                          tone={prod.family === "L" ? "signal" : prod.family === "LE" ? "chart" : "copper"}
                         >
-                          Series {p.family}
+                          {t("series")} {prod.family}
                         </Badge>
                       </div>
                       <ArrowUpRight
@@ -126,10 +127,10 @@ export function ControlLeversView({ products }: { products: Product[] }) {
                       />
                     </div>
                     <div className="p-7 border-t border-white/5">
-                      <p className="font-display text-4xl text-fog tracking-tight mb-3">{p.model}</p>
-                      <p className="text-sm text-fog/80 mb-3 min-h-[2.5rem]">{p.tagline}</p>
+                      <p className="font-display text-4xl text-fog tracking-tight mb-3">{prod.model}</p>
+                      <p className="text-sm text-fog/80 mb-3 min-h-[2.5rem]">{p(`${prod.slug}.tagline`)}</p>
                       <p className="font-mono text-[10px] uppercase tracking-widest text-mist">
-                        {p.highlight}
+                        {p(`${prod.slug}.highlight`)}
                       </p>
                     </div>
                   </Card>

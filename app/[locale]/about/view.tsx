@@ -7,26 +7,24 @@ import { Badge } from "@/components/ui/Badge";
 import { NumberCounter } from "@/components/ui/NumberCounter";
 import { Quote } from "lucide-react";
 
-const TIMELINE = [
-  { year: "1961", title: "Founded", body: "Jan Lilaas establishes Lilaas Finmekaniske AS in Horten." },
-  { year: "1980s", title: "Marine specialisation", body: "First generation of marine control levers reach shipyards across Norway." },
-  { year: "2000s", title: "Electric feedback", body: "Introduction of synchronised electric haptic feedback — a category-defining shift." },
-  { year: "2011", title: "Re-registered", body: "Restructured as Lilaas AS. Share capital NOK 5,000,000." },
-  { year: "2020s", title: "Scaling & automation", body: "Unmanned 'lights-out' CNC production. 55+ employees, NOK 116M projected (2024)." },
-  { year: "Today", title: "Global distribution", body: "Products on 4 continents. ~50% exported directly." },
+const LEADERSHIP_KEYS: { name: string; titleKey: string; initial: string }[] = [
+  { name: "Espen Bergsted Hoff", titleKey: "ceo", initial: "E" },
+  { name: "Petter Akerholt Kjær", titleKey: "director", initial: "P" },
+  { name: "Øyvind", titleKey: "businessDev", initial: "Ø" },
+  { name: "Kirsti", titleKey: "keyAccount", initial: "K" },
+  { name: "Lars Erik", titleKey: "kamPrecision", initial: "L" },
+  { name: "Dan Gunnar", titleKey: "kamControl", initial: "D" },
 ];
 
-const LEADERSHIP = [
-  { name: "Espen Bergsted Hoff", title: "CEO / Daglig leder", initial: "E" },
-  { name: "Petter Akerholt Kjær", title: "Director, Sales & Marketing", initial: "P" },
-  { name: "Øyvind", title: "Business Development", initial: "Ø" },
-  { name: "Kirsti", title: "Key Account Manager", initial: "K" },
-  { name: "Lars Erik", title: "KAM · Precision Mechanics", initial: "L" },
-  { name: "Dan Gunnar", title: "KAM · Control Levers", initial: "D" },
-];
+type TimelineItem = { year: string; title: string; body: string };
 
 export function AboutView() {
   const t = useTranslations("about");
+  const timeline = useTranslations("about.timeline");
+  const leadership = useTranslations("about.leadership");
+  const stats = useTranslations("about.stats");
+
+  const items = timeline.raw("items") as TimelineItem[];
 
   return (
     <>
@@ -52,19 +50,15 @@ export function AboutView() {
       <section className="py-24">
         <div className="container-x grid sm:grid-cols-4 gap-8 border-y border-white/8 py-10">
           {[
-            { label: "Founded", value: 1961, format: (n: number) => String(n) },
-            { label: "Years of expertise", value: 64 },
-            { label: "Employees", value: 55, suffix: "+" },
-            { label: "Continents", value: 4 },
+            { label: stats("founded"), value: 1961, format: (n: number) => String(n) },
+            { label: stats("years"), value: 64 },
+            { label: stats("employees"), value: 55, suffix: "+" },
+            { label: stats("continents"), value: 4 },
           ].map((it, i) => (
             <Reveal key={it.label} variant="up" delay={i * 90}>
               <p className="eyebrow mb-3">{it.label}</p>
               <p className="font-display text-4xl text-fog">
-                <NumberCounter
-                  value={it.value}
-                  suffix={it.suffix}
-                  format={it.format}
-                />
+                <NumberCounter value={it.value} suffix={it.suffix} format={it.format} />
               </p>
             </Reveal>
           ))}
@@ -93,10 +87,10 @@ export function AboutView() {
 
           <div>
             <Reveal variant="fade">
-              <p className="eyebrow mb-8">Timeline</p>
+              <p className="eyebrow mb-8">{timeline("label")}</p>
             </Reveal>
             <div className="space-y-10">
-              {TIMELINE.map((item, i) => (
+              {items.map((item, i) => (
                 <Reveal key={i} variant="left" delay={i * 80}>
                   <div className="grid grid-cols-[100px_1fr] gap-6 border-b border-white/5 pb-10 last:border-0">
                     <p className="font-mono text-sm text-signal uppercase tracking-widest pt-1">
@@ -117,15 +111,15 @@ export function AboutView() {
       <section className="py-24 border-y border-white/5 bg-deep/30">
         <div className="container-x">
           <Reveal variant="fade">
-            <p className="eyebrow mb-4">Leadership</p>
+            <p className="eyebrow mb-4">{leadership("label")}</p>
           </Reveal>
           <Reveal variant="up" delay={120}>
             <h2 className="font-display text-display-md text-fog mb-14 text-balance max-w-3xl">
-              Engineers, machinists and commercial operators — with direct lines to every customer.
+              {leadership("heading")}
             </h2>
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {LEADERSHIP.map((p, i) => (
+            {LEADERSHIP_KEYS.map((p, i) => (
               <Reveal key={p.name} variant="up" delay={i * 80}>
                 <div className="flex items-center gap-5 p-5 rounded-xl border border-white/8 bg-deep/40 transition-all duration-500 hover:border-signal/30 hover:bg-deep/60">
                   <div className="w-14 h-14 rounded-full border border-white/15 flex items-center justify-center font-display text-xl text-signal bg-signal/5 shrink-0">
@@ -133,7 +127,7 @@ export function AboutView() {
                   </div>
                   <div>
                     <p className="font-display text-lg text-fog">{p.name}</p>
-                    <p className="text-xs text-mist">{p.title}</p>
+                    <p className="text-xs text-mist">{leadership(`titles.${p.titleKey}`)}</p>
                   </div>
                 </div>
               </Reveal>

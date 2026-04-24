@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { PRODUCTS, getProduct } from "@/lib/products";
 import { ProductDetail } from "./view";
 import type { Metadata } from "next";
@@ -16,12 +16,13 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string; model: string }>;
 }): Promise<Metadata> {
-  const { model } = await params;
+  const { locale, model } = await params;
   const p = getProduct(model);
   if (!p) return {};
+  const t = await getTranslations({ locale, namespace: "products" });
   return {
-    title: `${p.model} control lever`,
-    description: p.tagline,
+    title: `${p.model}`,
+    description: t(`${p.slug}.tagline`),
   };
 }
 

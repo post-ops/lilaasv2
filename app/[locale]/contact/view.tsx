@@ -11,17 +11,18 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Badge } from "@/components/ui/Badge";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
-const TEAM = [
-  { name: "Petter Akerholt Kjær", title: "Director, Sales & Marketing", email: "petter@lilaas.no", phone: "+47 412 53 859" },
-  { name: "Øyvind", title: "Business Development", email: "oyvind@lilaas.no", phone: "+47 901 08 658" },
-  { name: "Novy", title: "Sales & Marketing Coordinator", email: "sales@lilaas.no", phone: "" },
-  { name: "Dan Gunnar", title: "KAM · Control Levers", email: "sales@lilaas.no", phone: "" },
-  { name: "Lars Erik", title: "KAM · Precision Mechanics", email: "sales@lilaas.no", phone: "" },
-  { name: "Kirsti", title: "Key Account Manager", email: "sales@lilaas.no", phone: "" },
+const TEAM: { name: string; titleKey: string; email: string; phone: string }[] = [
+  { name: "Petter Akerholt Kjær", titleKey: "director", email: "petter@lilaas.no", phone: "+47 412 53 859" },
+  { name: "Øyvind", titleKey: "businessDev", email: "oyvind@lilaas.no", phone: "+47 901 08 658" },
+  { name: "Novy", titleKey: "salesCoord", email: "sales@lilaas.no", phone: "" },
+  { name: "Dan Gunnar", titleKey: "kamControl", email: "sales@lilaas.no", phone: "" },
+  { name: "Lars Erik", titleKey: "kamPrecision", email: "sales@lilaas.no", phone: "" },
+  { name: "Kirsti", titleKey: "keyAccount", email: "sales@lilaas.no", phone: "" },
 ];
 
 export function ContactView() {
   const t = useTranslations("contact");
+  const titles = useTranslations("contact.teamTitles");
 
   const schema = z.object({
     name: z.string().min(2, t("form.errorName")),
@@ -166,8 +167,8 @@ export function ContactView() {
             {[
               { icon: MapPin, label: t("address.label"), value: t("address.value") },
               { icon: Phone, label: t("phone.label"), value: t("phone.value"), secondary: t("phone.hours") },
-              { icon: Mail, label: "Email", value: t("emails.general"), secondary: t("emails.sales") },
-              { icon: Clock, label: "Hours", value: "Mon–Fri 08:00 – 16:00 CET" },
+              { icon: Mail, label: t("email"), value: t("emails.general"), secondary: t("emails.sales") },
+              { icon: Clock, label: t("hours"), value: t("hoursValue") },
             ].map((item, i) => (
               <Reveal key={item.label} variant="right" delay={i * 120}>
                 <Info icon={item.icon} label={item.label} value={item.value} secondary={item.secondary} />
@@ -176,7 +177,7 @@ export function ContactView() {
 
             <Reveal variant="up" delay={520}>
               <div className="pt-8 border-t border-white/5">
-                <p className="eyebrow mb-4">Certifications</p>
+                <p className="eyebrow mb-4">{t("certifications")}</p>
                 <div className="flex flex-wrap gap-2">
                   <Badge tone="signal">ISO 9001:2015</Badge>
                   <Badge tone="signal">DNV GL type-approved</Badge>
@@ -194,7 +195,7 @@ export function ContactView() {
           </Reveal>
           <Reveal variant="up" delay={120}>
             <h2 className="font-display text-display-sm text-fog mb-12 max-w-2xl">
-              Speak directly to someone in Horten.
+              {t("teamHeading")}
             </h2>
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -202,7 +203,7 @@ export function ContactView() {
               <Reveal key={m.name} variant="up" delay={i * 80}>
                 <div className="p-6 rounded-xl border border-white/8 bg-deep/40 transition-all duration-500 hover:border-signal/30 hover:bg-deep/60 hover:-translate-y-1">
                   <p className="font-display text-lg text-fog">{m.name}</p>
-                  <p className="text-xs text-mist mb-4">{m.title}</p>
+                  <p className="text-xs text-mist mb-4">{titles(m.titleKey)}</p>
                   <div className="space-y-1.5">
                     <a href={`mailto:${m.email}`} className="block text-sm text-mist hover:text-signal transition-colors">{m.email}</a>
                     {m.phone && (

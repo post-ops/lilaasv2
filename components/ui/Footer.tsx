@@ -31,7 +31,7 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="eyebrow mb-4">Products</p>
+          <p className="eyebrow mb-4">{t("products")}</p>
           <ul className="space-y-3 text-sm text-mist">
             <li><Link href="/control-levers" className="hover:text-fog">{nav("controlLevers")}</Link></li>
             <li><Link href="/precision-mechanics" className="hover:text-fog">{nav("precision")}</Link></li>
@@ -40,7 +40,7 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="eyebrow mb-4">Company</p>
+          <p className="eyebrow mb-4">{t("company")}</p>
           <ul className="space-y-3 text-sm text-mist">
             <li><Link href="/about" className="hover:text-fog">{nav("about")}</Link></li>
             <li><Link href="/case-studies" className="hover:text-fog">{nav("caseStudies")}</Link></li>
@@ -51,7 +51,7 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="eyebrow mb-4">Contact</p>
+          <p className="eyebrow mb-4">{t("contact")}</p>
           <ul className="space-y-3 text-sm text-mist">
             <li>Kongeveien 75<br />3188 Horten, Norway</li>
             <li><a href="tel:+4741633000" className="hover:text-fog">+47 416 33 000</a></li>

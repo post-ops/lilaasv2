@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Badge } from "@/components/ui/Badge";
 import { SplitReveal } from "@/components/ui/SplitReveal";
@@ -13,6 +14,7 @@ import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 const CERN_HERO = "/images/hero/industrial.webp";
 
 export function CernStory() {
+  const t = useTranslations("cases.cern");
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -37,6 +39,13 @@ export function CernStory() {
     return () => ctx.revert();
   }, []);
 
+  const sideStats = [
+    { label: t("stats.tolerance"), value: t("stats.toleranceValue") },
+    { label: t("stats.location"), value: t("stats.locationValue") },
+    { label: t("stats.materials"), value: t("stats.materialsValue") },
+    { label: t("stats.delivery"), value: t("stats.deliveryValue") },
+  ];
+
   return (
     <>
       <section ref={heroRef} className="relative h-[85svh] min-h-[560px] overflow-hidden">
@@ -57,18 +66,18 @@ export function CernStory() {
               href="/case-studies"
               className="inline-flex items-center gap-2 text-mist hover:text-fog font-mono text-xs uppercase tracking-widest mb-10"
             >
-              <ArrowLeft size={14} /> All case studies
+              <ArrowLeft size={14} /> {t("back")}
             </Link>
           </Reveal>
           <Reveal variant="up">
             <div className="flex gap-2 mb-8">
-              <Badge tone="chart">Physics</Badge>
-              <Badge>Switzerland</Badge>
-              <Badge tone="signal">Precision mechanics</Badge>
+              <Badge tone="chart">{t("badges.physics")}</Badge>
+              <Badge>{t("badges.switzerland")}</Badge>
+              <Badge tone="signal">{t("badges.precision")}</Badge>
             </div>
           </Reveal>
           <SplitReveal
-            text="We machined components for the Large Hadron Collider at CERN."
+            text={t("title")}
             as="h1"
             className="font-display text-display-xl text-fog max-w-5xl text-balance"
             stagger={0.01}
@@ -79,12 +88,7 @@ export function CernStory() {
       <section className="py-16">
         <div className="container-x grid lg:grid-cols-[1fr_2fr] gap-14">
           <div className="lg:sticky lg:top-28 self-start space-y-10">
-            {[
-              { label: "Required tolerance", value: "0.01 mm" },
-              { label: "Location", value: "100 m below Geneva" },
-              { label: "Materials", value: "Stainless steel, copper, Inconel" },
-              { label: "Delivery", value: "Qualified & documented" },
-            ].map((s, i) => (
+            {sideStats.map((s, i) => (
               <Reveal key={s.label} variant="left" delay={i * 120}>
                 <div>
                   <p className="eyebrow mb-2">{s.label}</p>
@@ -97,54 +101,50 @@ export function CernStory() {
           <article className="prose-lilaas max-w-2xl">
             <Reveal variant="up">
               <p className="text-xl text-fog leading-relaxed mb-8 text-balance">
-                The Large Hadron Collider is one of the most demanding engineering projects humanity has undertaken. Twenty-seven kilometres of ring, 100 metres below ground, running at fractions of a degree above absolute zero.
+                {t("lead")}
               </p>
             </Reveal>
             <Reveal variant="up" delay={100}>
               <p className="text-mist leading-relaxed mb-6">
-                When CERN's procurement office needed sub-millimetre precision components for the collider's instrumentation, they short-listed vendors who could combine documented process control with the ability to machine exotic alloys to tolerances most shops can't reliably hit.
+                {t("p1")}
               </p>
             </Reveal>
             <Reveal variant="up" delay={180}>
               <p className="text-mist leading-relaxed mb-6">
-                Lilaas was one of them.
+                {t("p2")}
               </p>
             </Reveal>
 
             <Reveal variant="scale" delay={220}>
               <blockquote className="my-12 pl-6 border-l-2 border-signal">
                 <p className="font-display text-2xl text-fog leading-tight text-balance">
-                  "That project required accuracy down to hundredths of a millimetre. We measure every production batch against the original drawing on a CMM before release."
+                  &ldquo;{t("quote")}&rdquo;
                 </p>
-                <p className="eyebrow mt-4">— Espen Bergsted Hoff, CEO</p>
+                <p className="eyebrow mt-4">{t("quoteAttrib")}</p>
               </blockquote>
             </Reveal>
 
             <Reveal variant="up">
-              <h2 className="font-display text-2xl text-fog mt-14 mb-5">Why Horten</h2>
+              <h2 className="font-display text-2xl text-fog mt-14 mb-5">{t("whyHortenTitle")}</h2>
             </Reveal>
             <Reveal variant="up" delay={80}>
-              <p className="text-mist leading-relaxed mb-6">
-                Full-stack, in-house production means fewer hand-offs, shorter iteration loops, and complete traceability. Mechanics, electronics and software are designed, built and tested under one roof in Horten — which is why customers like CERN, Kongsberg Maritime and Wärtsilä can treat us like an extension of their own engineering teams.
-              </p>
+              <p className="text-mist leading-relaxed mb-6">{t("whyHorten")}</p>
             </Reveal>
 
             <Reveal variant="up">
-              <h2 className="font-display text-2xl text-fog mt-14 mb-5">Beyond the LHC</h2>
+              <h2 className="font-display text-2xl text-fog mt-14 mb-5">{t("beyondTitle")}</h2>
             </Reveal>
             <Reveal variant="up" delay={80}>
-              <p className="text-mist leading-relaxed mb-10">
-                Space, defence, medical, offshore — any industry where tolerance failure means catastrophic cost — ends up on our production floor. We're proud of where our parts end up.
-              </p>
+              <p className="text-mist leading-relaxed mb-10">{t("beyond")}</p>
             </Reveal>
 
             <Reveal variant="up" delay={200}>
               <div className="flex flex-wrap gap-3 mt-12 pt-10 border-t border-white/10">
                 <Link href="/contact">
-                  <Button variant="primary" arrow>Talk to engineering</Button>
+                  <Button variant="primary" arrow>{t("ctaPrimary")}</Button>
                 </Link>
                 <Link href="/precision-mechanics">
-                  <Button variant="outline" arrow>See precision mechanics</Button>
+                  <Button variant="outline" arrow>{t("ctaSecondary")}</Button>
                 </Link>
               </div>
             </Reveal>

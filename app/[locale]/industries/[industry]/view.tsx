@@ -16,72 +16,54 @@ const AmbientScene = dynamic(
   { ssr: false, loading: () => null }
 );
 
-const DATA = {
+type Tone = "signal" | "fog" | "chart" | "copper";
+
+const META: Record<string, { icon: typeof Anchor; tone: Tone; accent: string; heroImage: string }> = {
   maritime: {
     icon: Anchor,
-    tone: "signal" as const,
+    tone: "signal",
     accent: "#FF6B35",
     heroImage: "/images/industries/maritime.webp",
-    applications: [
-      "Supply vessels",
-      "Ferries",
-      "Tankers",
-      "Cruise ships",
-      "Yachts",
-      "Offshore platforms",
-    ],
-    products: ["L01", "LF180", "LF120", "LF90"],
-    certifications: ["DNV GL type-approved", "EMC (marine)", "Vibration tested", "IP65 rated"],
   },
   defence: {
     icon: Shield,
-    tone: "fog" as const,
+    tone: "fog",
     accent: "#C9D1DE",
     heroImage: "/images/industries/defence.webp",
-    applications: [
-      "Vehicle control systems",
-      "Naval auxiliaries",
-      "Ground station consoles",
-      "Type-approved subassemblies",
-    ],
-    products: ["LE90 (OEM)", "LF120 (custom)"],
-    certifications: ["Type-tested", "Environmental sealing", "EMI / EMC approved"],
   },
   medical: {
     icon: Activity,
-    tone: "chart" as const,
+    tone: "chart",
     accent: "#2BD4B4",
     heroImage: "/images/industries/medical.webp",
-    applications: [
-      "Surgical instrumentation housings",
-      "Diagnostic equipment parts",
-      "Precision sub-millimetre components",
-    ],
-    products: ["Precision mechanics"],
-    certifications: ["NS-EN ISO 9001:2015", "Traceability by batch"],
   },
   space: {
     icon: Rocket,
-    tone: "copper" as const,
+    tone: "copper",
     accent: "#C97E4F",
     heroImage: "/images/industries/space.webp",
-    applications: [
-      "Large Hadron Collider components (CERN)",
-      "Satellite hardware",
-      "Test and measurement rigs",
-    ],
-    products: ["Precision mechanics"],
-    certifications: ["Tolerance to 0.01 mm", "Documented process control"],
   },
 };
 
-export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
+const PRODUCTS_PER_INDUSTRY: Record<string, string[]> = {
+  maritime: ["L01", "LF180", "LF120", "LF90"],
+  defence: ["LE90 (OEM)", "LF120"],
+  medical: ["Precision mechanics"],
+  space: ["Precision mechanics"],
+};
+
+export function IndustryView({ industry }: { industry: string }) {
   const t = useTranslations(`industries.${industry}`);
   const industries = useTranslations("industries");
-  const data = DATA[industry];
+  const page = useTranslations("industries.page");
+  const data = META[industry];
   const Icon = data.icon;
 
-  const otherIndustries = (Object.keys(DATA) as (keyof typeof DATA)[]).filter((k) => k !== industry);
+  const applications = t("applications").split("|").map((s) => s.trim());
+  const certifications = t("certifications").split("|").map((s) => s.trim());
+  const productList = PRODUCTS_PER_INDUSTRY[industry] ?? [];
+
+  const otherIndustries = Object.keys(META).filter((k) => k !== industry);
 
   return (
     <>
@@ -116,7 +98,7 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
               >
                 <Icon size={18} strokeWidth={1.5} />
               </div>
-              <p className="eyebrow">Application · {t("name")}</p>
+              <p className="eyebrow">{page("application")} · {t("name")}</p>
             </div>
           </Reveal>
 
@@ -140,7 +122,7 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
             <div className="relative aspect-[16/7] rounded-2xl overflow-hidden border border-white/8 group">
               <Image
                 src={data.heroImage}
-                alt={`${t("name")} context`}
+                alt={`${t("name")} ${page("contextAlt")}`}
                 fill
                 sizes="100vw"
                 className="object-cover object-center transition-transform duration-[1.8s] ease-out-expo group-hover:scale-105"
@@ -153,9 +135,9 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
       <section className="py-20 lg:py-28">
         <div className="container-x grid lg:grid-cols-3 gap-10">
           <Reveal variant="up">
-            <p className="eyebrow mb-6">Applications</p>
+            <p className="eyebrow mb-6">{page("applications")}</p>
             <ul className="space-y-3">
-              {data.applications.map((a, i) => (
+              {applications.map((a, i) => (
                 <li
                   key={a}
                   className="flex items-center gap-3 text-fog transition-all duration-300 hover:gap-4 hover:text-signal"
@@ -167,17 +149,17 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
             </ul>
           </Reveal>
           <Reveal variant="up" delay={120}>
-            <p className="eyebrow mb-6">Products we supply</p>
+            <p className="eyebrow mb-6">{page("productsWeSupply")}</p>
             <ul className="space-y-3">
-              {data.products.map((p) => (
+              {productList.map((p) => (
                 <li key={p} className="font-mono text-sm text-fog">{p}</li>
               ))}
             </ul>
           </Reveal>
           <Reveal variant="up" delay={240}>
-            <p className="eyebrow mb-6">Certifications</p>
+            <p className="eyebrow mb-6">{page("certifications")}</p>
             <div className="flex flex-wrap gap-2">
-              {data.certifications.map((c) => (
+              {certifications.map((c) => (
                 <Badge key={c}>{c}</Badge>
               ))}
             </div>
@@ -188,11 +170,11 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
       <section className="py-24 border-t border-white/5">
         <div className="container-x">
           <Reveal variant="fade">
-            <p className="eyebrow mb-6">Other industries we serve</p>
+            <p className="eyebrow mb-6">{page("otherIndustries")}</p>
           </Reveal>
           <div className="grid sm:grid-cols-3 gap-5">
             {otherIndustries.map((slug, i) => {
-              const I = DATA[slug].icon;
+              const I = META[slug].icon;
               return (
                 <Reveal key={slug} variant="up" delay={i * 90}>
                   <Link href={`/industries/${slug}`} className="group block">
@@ -219,16 +201,16 @@ export function IndustryView({ industry }: { industry: keyof typeof DATA }) {
       <section className="py-24">
         <div className="container-x text-center">
           <Reveal variant="fade">
-            <p className="eyebrow mb-6">Let's build it together</p>
+            <p className="eyebrow mb-6">{page("ctaEyebrow")}</p>
           </Reveal>
           <Reveal variant="up" delay={120}>
             <h2 className="font-display text-display-md text-fog max-w-3xl mx-auto text-balance mb-10">
-              Our engineers are ready to spec your next project.
+              {page("ctaTitle")}
             </h2>
           </Reveal>
           <Reveal variant="scale" delay={240}>
             <Link href="/contact">
-              <Button variant="primary" size="lg" arrow>Talk to engineering</Button>
+              <Button variant="primary" size="lg" arrow>{page("ctaButton")}</Button>
             </Link>
           </Reveal>
         </div>

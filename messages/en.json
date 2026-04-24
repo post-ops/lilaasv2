@@ -45,12 +45,25 @@
     },
     "clientsEyebrow": "Trusted by",
     "clientsLine": "Kongsberg Maritime · Wärtsilä · Siemens · General Electric · CERN",
+    "clientsMeta": {
+      "bridges": "Bridges",
+      "bridgesValue": "thousands",
+      "continents": "Continents",
+      "continentsValue": "4",
+      "since": "Since",
+      "sinceValue": "1961",
+      "certified": "Certified",
+      "certifiedValue": "DNV GL"
+    },
     "industriesEyebrow": "Application areas",
     "industriesTitle": "Built for the most demanding environments on — and off — earth.",
     "industriesSub": "From ship bridges crossing the North Sea to the Large Hadron Collider, our components hold tolerances measured in thousandths of a millimetre.",
     "caseEyebrow": "Featured work",
     "caseTitle": "The Large Hadron Collider needed accuracy down to hundredths of a millimetre. We delivered.",
     "caseCta": "Read the CERN story",
+    "caseClient": "Client",
+    "caseTolerance": "Tolerance",
+    "caseLocation": "Location",
     "ctaEyebrow": "Let's talk specs",
     "ctaTitle": "We design, engineer and produce in-house. Tell us what you need and we'll engineer it with you.",
     "ctaSub": "Weekdays 08–16 CET · Kongeveien 75, Horten, Norway",
@@ -60,22 +73,41 @@
     "maritime": {
       "name": "Maritime",
       "tag": "Our largest segment — bridges worldwide run on Lilaas levers.",
-      "body": "Supply vessels, ferries, tankers, cruise ships, yachts. Synchronised electric motors let captains move between stations seamlessly. DNV GL type-approved."
+      "body": "Supply vessels, ferries, tankers, cruise ships, yachts. Synchronised electric motors let captains move between stations seamlessly. DNV GL type-approved.",
+      "applications": "Supply vessels | Ferries | Tankers | Cruise ships | Yachts | Offshore platforms",
+      "certifications": "DNV GL type-approved | EMC (marine) | Vibration tested | IP65 rated"
     },
     "defence": {
       "name": "Defence",
       "tag": "Components that pass vibration, humidity and EMI type-testing.",
-      "body": "Mission-critical subcomponents for demanding defence integrators, machined from stainless steel, titanium, Inconel and Hastelloy."
+      "body": "Mission-critical subcomponents for demanding defence integrators, machined from stainless steel, titanium, Inconel and Hastelloy.",
+      "applications": "Vehicle control systems | Naval auxiliaries | Ground station consoles | Type-approved subassemblies",
+      "certifications": "Type-tested | Environmental sealing | EMI / EMC approved"
     },
     "medical": {
       "name": "Medical",
       "tag": "Sub-millimetre machining for life-critical hardware.",
-      "body": "Precision components from under 1 mm up to 200 mm in diameter, tolerances down to a few thousandths of a millimetre."
+      "body": "Precision components from under 1 mm up to 200 mm in diameter, tolerances down to a few thousandths of a millimetre.",
+      "applications": "Surgical instrumentation housings | Diagnostic equipment parts | Precision sub-millimetre components",
+      "certifications": "NS-EN ISO 9001:2015 | Traceability by batch"
     },
     "space": {
       "name": "Space",
       "tag": "From the Large Hadron Collider to satellite hardware.",
-      "body": "When projects require accuracy measured in hundredths of a millimetre, we're on the shortlist."
+      "body": "When projects require accuracy measured in hundredths of a millimetre, we're on the shortlist.",
+      "applications": "Large Hadron Collider components (CERN) | Satellite hardware | Test and measurement rigs",
+      "certifications": "Tolerance to 0.01 mm | Documented process control"
+    },
+    "page": {
+      "application": "Application",
+      "applications": "Applications",
+      "productsWeSupply": "Products we supply",
+      "certifications": "Certifications",
+      "contextAlt": "context",
+      "otherIndustries": "Other industries we serve",
+      "ctaEyebrow": "Let's build it together",
+      "ctaTitle": "Our engineers are ready to spec your next project.",
+      "ctaButton": "Talk to engineering"
     }
   },
   "controlLevers": {
@@ -84,7 +116,54 @@
     "sub": "Synchronised across bridges. Engineered to be felt.",
     "lineup": "The Lilaas lineup",
     "requestDatasheet": "Request datasheet",
-    "viewProduct": "View product"
+    "viewProduct": "View product",
+    "flagship": "Flagship",
+    "model": "Model",
+    "lineupMeta": "models · DNV GL approved",
+    "series": "Series",
+    "approved": "DNV GL approved",
+    "detailEyebrow": "Control lever",
+    "applicationsLabel": "Applications",
+    "specsTitle": "Technical specifications",
+    "findDistributor": "Find a distributor",
+    "detailAlt": "detail view"
+  },
+  "products": {
+    "l01": {
+      "tagline": "The flagship. A control lever with an integrated TFT display and synchronised electric feedback.",
+      "description": "The L01 brings an integrated TFT LCD directly into the lever body — readouts sit in the operator's line of sight, not tucked into a side panel. Synchronised electric motors across bridge stations ensure the captain can hand off or resume control without surprise. Type-approved for maritime installation.",
+      "highlight": "Integrated TFT display · Synchronised across bridges · DNV GL type-approved",
+      "applications": "Supply vessels | Cruise ships | Ferries | Tankers | Yachts | Naval auxiliaries",
+      "specs": "Display ¦ Integrated TFT LCD | Feedback ¦ Electric haptic, synchronised | Travel ¦ ±45° (configurable) | Detent options ¦ 0 / 1 / 3 / variable | Protection rating ¦ IP65 (front panel) | Supply voltage ¦ 24 VDC | Interface ¦ CAN, Modbus, NMEA 2000 | Temp. range ¦ −25 °C to +70 °C | Certification ¦ DNV GL type-approved"
+    },
+    "lf180": {
+      "tagline": "Azimuth and thruster control for dynamic positioning.",
+      "description": "A purpose-built lever for azimuth thrusters and dynamic positioning. Compact, responsive, highly repeatable — the lever of choice across DP-class supply vessels and tugs.",
+      "highlight": "Azimuth · Thruster · DP class",
+      "applications": "Offshore support | DP-class vessels | Tugs",
+      "specs": "Travel ¦ ±45° | Detent options ¦ 0 / 1 / configurable | Protection rating ¦ IP65 | Supply voltage ¦ 24 VDC | Interface ¦ CAN, Modbus | Certification ¦ DNV GL type-approved"
+    },
+    "lf120": {
+      "tagline": "Mid-class lever for ferries, yachts and commercial vessels.",
+      "description": "The workhorse. Proven across thousands of installations — supply vessels, ferries, cruise tenders. Pistol, T-handle or knob grip options.",
+      "highlight": "Proven · Flexible · Easy to integrate",
+      "applications": "Ferries | Commercial yachts | Fishing vessels",
+      "specs": "Travel ¦ ±45° | Grip options ¦ Pistol, T-handle, knob | Supply voltage ¦ 24 VDC | Interface ¦ Analogue / CAN | Certification ¦ DNV GL type-approved"
+    },
+    "lf90": {
+      "tagline": "Compact lever for tight bridges and workboats.",
+      "description": "All the feel of the LF line in a smaller footprint. Ideal where bridge space is at a premium — pilot boats, small ferries, workboats.",
+      "highlight": "Compact footprint · Standard interfaces",
+      "applications": "Workboats | Pilot boats | Small ferries",
+      "specs": "Travel ¦ ±45° | Supply voltage ¦ 24 VDC | Interface ¦ Analogue / CAN | Protection rating ¦ IP65"
+    },
+    "le90": {
+      "tagline": "Electric lever engineered for system integrators.",
+      "description": "Designed for OEMs building their own control systems on top of our motion hardware. Full CAN/Modbus interface, configurable detents and travel.",
+      "highlight": "OEM-friendly · Fully electric · Configurable",
+      "applications": "Integrators | OEM bridge suppliers",
+      "specs": "Travel ¦ Configurable | Detents ¦ Software-defined | Interface ¦ CAN, Modbus, analogue | Supply voltage ¦ 24 VDC"
+    }
   },
   "precision": {
     "eyebrow": "Precision Mechanics",
@@ -92,7 +171,30 @@
     "sub": "15+ CNC machines, 3- and 5-axis, automated lathes, in-house electronics and software.",
     "capabilities": "Capabilities",
     "materials": "Materials we work with",
-    "materialsList": "Stainless steel · Titanium · Inconel · Covar · Hastelloy · Copper & brass · Aluminium · Engineering plastics"
+    "materialsList": "Stainless steel · Titanium · Inconel · Covar · Hastelloy · Copper & brass · Aluminium · Engineering plastics",
+    "stats": {
+      "machines": "CNC machines",
+      "tolerance": "Min tolerance",
+      "partSize": "Part size range"
+    },
+    "productionFloor": "CNC production floor",
+    "locationBadge": "Horten, Norway",
+    "capabilitiesList": {
+      "cnc": { "title": "3- and 5-axis CNC", "body": "15+ machines covering short-run prototypes to high-volume production." },
+      "lathes": { "title": "Automated lathes", "body": "Unmanned 'lights-out' production — how we stay competitive in Norway." },
+      "electronics": { "title": "In-house electronics", "body": "PCB design, firmware, and system integration under one roof." },
+      "quality": { "title": "Quality control", "body": "CMM metrology; every product tested before leaving the factory." },
+      "assembly": { "title": "Assembly lines", "body": "Mechanics, electronics and software assembled and calibrated on-site." },
+      "test": { "title": "Type-test fixtures", "body": "Vibration, humidity, EMI rigs for defence and marine approvals." }
+    },
+    "fullstackMeta": "full-stack manufacturing",
+    "materialsHeading": "From stainless steel and titanium to Inconel and engineering plastics.",
+    "cern": {
+      "badge": "Featured case · CERN",
+      "title": "Accuracy to hundredths of a millimetre — underground, at Geneva.",
+      "body": "The Large Hadron Collider required components machined to tolerances most facilities can't reliably hit. We were on the shortlist — and we delivered.",
+      "cta": "Read the CERN story"
+    }
   },
   "about": {
     "eyebrow": "About Lilaas",
@@ -102,7 +204,36 @@
     "ceoName": "Espen Bergsted Hoff",
     "ceoTitle": "CEO, Lilaas AS",
     "certs": "Certifications",
-    "certsList": "NS-EN ISO 9001:2015 · DNV GL type-approved"
+    "certsList": "NS-EN ISO 9001:2015 · DNV GL type-approved",
+    "stats": {
+      "founded": "Founded",
+      "years": "Years of expertise",
+      "employees": "Employees",
+      "continents": "Continents"
+    },
+    "timeline": {
+      "label": "Timeline",
+      "items": [
+        { "year": "1961", "title": "Founded", "body": "Jan Lilaas establishes Lilaas Finmekaniske AS in Horten." },
+        { "year": "1980s", "title": "Marine specialisation", "body": "First generation of marine control levers reach shipyards across Norway." },
+        { "year": "2000s", "title": "Electric feedback", "body": "Introduction of synchronised electric haptic feedback — a category-defining shift." },
+        { "year": "2011", "title": "Re-registered", "body": "Restructured as Lilaas AS. Share capital NOK 5,000,000." },
+        { "year": "2020s", "title": "Scaling & automation", "body": "Unmanned 'lights-out' CNC production. 55+ employees, NOK 116M projected (2024)." },
+        { "year": "Today", "title": "Global distribution", "body": "Products on 4 continents. ~50% exported directly." }
+      ]
+    },
+    "leadership": {
+      "label": "Leadership",
+      "heading": "Engineers, machinists and commercial operators — with direct lines to every customer.",
+      "titles": {
+        "ceo": "CEO · Managing director",
+        "director": "Director, Sales & Marketing",
+        "businessDev": "Business Development",
+        "keyAccount": "Key Account Manager",
+        "kamPrecision": "KAM · Precision Mechanics",
+        "kamControl": "KAM · Control Levers"
+      }
+    }
   },
   "contact": {
     "eyebrow": "Contact",
@@ -142,7 +273,20 @@
       "general": "lilaas@lilaas.no",
       "sales": "sales@lilaas.no"
     },
-    "teamTitle": "Sales & business development"
+    "email": "Email",
+    "hours": "Hours",
+    "hoursValue": "Mon–Fri 08:00 – 16:00 CET",
+    "certifications": "Certifications",
+    "teamTitle": "Sales & business development",
+    "teamHeading": "Speak directly to someone in Horten.",
+    "teamTitles": {
+      "director": "Director, Sales & Marketing",
+      "businessDev": "Business Development",
+      "salesCoord": "Sales & Marketing Coordinator",
+      "kamControl": "KAM · Control Levers",
+      "kamPrecision": "KAM · Precision Mechanics",
+      "keyAccount": "Key Account Manager"
+    }
   },
   "footer": {
     "tagline": "Experts on joysticks, control levers and precision mechanics.",
@@ -151,7 +295,10 @@
     "terms": "Terms & Conditions",
     "transparency": "Åpenhetsloven",
     "privacy": "Privacy",
-    "built": "Concept site — not yet an official Lilaas property."
+    "built": "Concept site — not yet an official Lilaas property.",
+    "products": "Products",
+    "company": "Company",
+    "contact": "Contact"
   },
   "common": {
     "learnMore": "Learn more",
@@ -163,7 +310,8 @@
   },
   "homeExtra": {
     "hero": {
-      "live": "Horten, Norway · Since 1961"
+      "live": "Horten, Norway · Since 1961",
+      "tagline": "Precision engineering · Since 1961"
     },
     "marquee": {
       "w1": "PRECISION",
@@ -243,23 +391,103 @@
     "eyebrow": "Support",
     "title": "Datasheets, distributors, and dedicated engineers.",
     "sub": "Pick your region below. For direct technical support, email support@lilaas.no.",
-    "distributorsTitle": "Global distributor network"
+    "distributorsTitle": "Global distributor network",
+    "types": {
+      "distributor": "Distributor",
+      "service": "Service partner"
+    },
+    "direct": {
+      "title": "Direct factory support",
+      "body": "For technical questions that can't wait, contact our engineering team in Horten directly. Service partners handle installations and on-site work across regions.",
+      "contact": "support@lilaas.no · +47 416 33 000 (weekdays 08–16 CET)"
+    },
+    "datasheets": {
+      "label": "Datasheets",
+      "body": "Product datasheets are provided on request per project, to ensure you receive the latest revision with configuration specifics for your vessel class.",
+      "emailPrefix": "Use the contact form or email",
+      "emailSuffix": "."
+    }
   },
   "cases": {
     "eyebrow": "Case Studies",
     "title": "Where our parts end up.",
-    "sub": "From bridges on the North Sea to particle detectors 100 metres underground."
+    "sub": "From bridges on the North Sea to particle detectors 100 metres underground.",
+    "cern": {
+      "back": "All case studies",
+      "badges": {
+        "physics": "Physics",
+        "switzerland": "Switzerland",
+        "precision": "Precision mechanics"
+      },
+      "title": "We machined components for the Large Hadron Collider at CERN.",
+      "stats": {
+        "tolerance": "Required tolerance",
+        "toleranceValue": "0.01 mm",
+        "location": "Location",
+        "locationValue": "100 m below Geneva",
+        "materials": "Materials",
+        "materialsValue": "Stainless steel, copper, Inconel",
+        "delivery": "Delivery",
+        "deliveryValue": "Qualified & documented"
+      },
+      "lead": "The Large Hadron Collider is one of the most demanding engineering projects humanity has undertaken. Twenty-seven kilometres of ring, 100 metres below ground, running at fractions of a degree above absolute zero.",
+      "p1": "When CERN's procurement office needed sub-millimetre precision components for the collider's instrumentation, they short-listed vendors who could combine documented process control with the ability to machine exotic alloys to tolerances most shops can't reliably hit.",
+      "p2": "Lilaas was one of them.",
+      "quote": "That project required accuracy down to hundredths of a millimetre. We measure every production batch against the original drawing on a CMM before release.",
+      "quoteAttrib": "— Espen Bergsted Hoff, CEO",
+      "whyHortenTitle": "Why Horten",
+      "whyHorten": "Full-stack, in-house production means fewer hand-offs, shorter iteration loops, and complete traceability. Mechanics, electronics and software are designed, built and tested under one roof in Horten — which is why customers like CERN, Kongsberg Maritime and Wärtsilä can treat us like an extension of their own engineering teams.",
+      "beyondTitle": "Beyond the LHC",
+      "beyond": "Space, defence, medical, offshore — any industry where tolerance failure means catastrophic cost — ends up on our production floor. We're proud of where our parts end up.",
+      "ctaPrimary": "Talk to engineering",
+      "ctaSecondary": "See precision mechanics"
+    }
   },
   "news": {
     "eyebrow": "News",
     "title": "What's happening at Lilaas.",
-    "sub": "Product launches, facility news, and the occasional milestone."
+    "sub": "Product launches, facility news, and the occasional milestone.",
+    "posts": [
+      {
+        "date": "2025-09",
+        "tag": "Operations",
+        "title": "Lead times reduced: increased staffing and optimised internal processes.",
+        "body": "An update on throughput after a year of new hires and process automation on the CNC floor."
+      },
+      {
+        "date": "2025-02",
+        "tag": "Feature",
+        "title": "Full speed ahead with ship handles and precision machining at Lilaas in Horten.",
+        "body": "Background feature on the growth in recent years and the road ahead for Norwegian precision mechanics."
+      },
+      {
+        "date": "2024-11",
+        "tag": "Product",
+        "title": "L01 control lever — next revision in testing.",
+        "body": "Refinements to the integrated TFT display stack and synchronisation firmware enter field testing with two OEM partners."
+      },
+      {
+        "date": "2024-06",
+        "tag": "Automation",
+        "title": "Lilaas secures jobs through unmanned production.",
+        "body": "How lights-out CNC keeps high-cost Norwegian manufacturing competitive on global contracts."
+      }
+    ]
   },
   "careers": {
     "eyebrow": "Careers",
     "title": "Build the sharpest tooling in Norway.",
     "sub": "We're growing. If you love tight tolerances and big customers, we should talk.",
-    "cta": "Open applications — send CV to hr@lilaas.no"
+    "cta": "Open applications — send CV to hr@lilaas.no",
+    "openRoles": "Open roles",
+    "dontSeeRole": "Don't see your role?",
+    "apply": "Apply",
+    "roles": [
+      { "title": "CNC Operator", "discipline": "Production", "type": "Full-time" },
+      { "title": "Mechanical Engineer — Control Levers", "discipline": "R&D", "type": "Full-time" },
+      { "title": "Firmware Engineer", "discipline": "Electronics", "type": "Full-time" },
+      { "title": "Quality Engineer", "discipline": "Operations", "type": "Full-time" }
+    ]
   },
   "legal": {
     "terms": {

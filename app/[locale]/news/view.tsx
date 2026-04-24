@@ -6,35 +6,12 @@ import { SplitReveal } from "@/components/ui/SplitReveal";
 import { Reveal } from "@/components/ui/Reveal";
 import { ArrowUpRight } from "lucide-react";
 
-const POSTS = [
-  {
-    date: "2025-09",
-    tag: "Operations",
-    title: "Lead times reduced: increased staffing and optimised internal processes.",
-    body: "An update on throughput after a year of new hires and process automation on the CNC floor.",
-  },
-  {
-    date: "2025-02",
-    tag: "Feature",
-    title: "Full gass med skipshendler og presisjonsmaskinering hos Lilaas i Horten.",
-    body: "Bakgrunnsartikkel om veksten de siste årene og veien videre for norsk finmekanikk.",
-  },
-  {
-    date: "2024-11",
-    tag: "Product",
-    title: "L01 control lever — next revision in testing.",
-    body: "Refinements to the integrated TFT display stack and synchronisation firmware enter field testing with two OEM partners.",
-  },
-  {
-    date: "2024-06",
-    tag: "Automation",
-    title: "Lilaas secures jobs through unmanned production.",
-    body: "How lights-out CNC keeps high-cost Norwegian manufacturing competitive on global contracts.",
-  },
-];
+type Post = { date: string; tag: string; title: string; body: string };
 
 export function NewsView() {
   const t = useTranslations("news");
+  const posts = t.raw("posts") as Post[];
+
   return (
     <>
       <section className="pt-40 lg:pt-52 pb-20">
@@ -57,7 +34,7 @@ export function NewsView() {
       <section className="py-12">
         <div className="container-x">
           <div className="divide-y divide-white/5 border-y border-white/5">
-            {POSTS.map((p, i) => (
+            {posts.map((p, i) => (
               <Reveal key={i} variant="up" delay={i * 90}>
                 <article className="py-10 grid md:grid-cols-[130px_1fr_120px] gap-6 items-start group cursor-pointer hover:bg-deep/20 px-4 -mx-4 rounded-xl transition-colors duration-300">
                   <p className="font-mono text-xs text-mist uppercase tracking-widest pt-1">{p.date}</p>

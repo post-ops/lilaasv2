@@ -11,6 +11,8 @@ import { useGsap, prefersReducedMotion } from "@/lib/gsap";
 
 export function ProductRail() {
   const t = useTranslations("homeExtra.productRail");
+  const p = useTranslations("products");
+  const lever = useTranslations("controlLevers");
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -104,16 +106,16 @@ export function ProductRail() {
         className="flex gap-5 px-[clamp(1.25rem,4vw,3rem)] will-change-transform"
         style={{ width: "max-content" }}
       >
-        {PRODUCTS.map((p, i) => (
+        {PRODUCTS.map((product, i) => (
           <Link
-            key={p.slug}
-            href={`/control-levers/${p.slug}`}
+            key={product.slug}
+            href={`/control-levers/${product.slug}`}
             data-product-card
             className="group relative block flex-shrink-0 w-[min(86vw,420px)] aspect-[3/4] rounded-2xl overflow-hidden border border-white/8 bg-deep/60"
           >
             <Image
-              src={p.image}
-              alt={`${p.model} control lever`}
+              src={product.image}
+              alt={`${product.model} control lever`}
               fill
               sizes="(max-width: 768px) 86vw, 420px"
               className="object-contain object-center p-10 transition-transform duration-700 ease-out-expo group-hover:scale-110 group-hover:rotate-[-3deg]"
@@ -122,14 +124,14 @@ export function ProductRail() {
               aria-hidden
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               style={{
-                background: `radial-gradient(ellipse at 50% 30%, ${p.accent}26, transparent 60%)`,
+                background: `radial-gradient(ellipse at 50% 30%, ${product.accent}26, transparent 60%)`,
               }}
             />
             <div
               aria-hidden
               className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700"
               style={{
-                background: `linear-gradient(135deg, transparent 30%, ${p.accent}18 50%, transparent 70%)`,
+                background: `linear-gradient(135deg, transparent 30%, ${product.accent}18 50%, transparent 70%)`,
                 backgroundSize: "200% 200%",
                 animation: "shimmer 2.4s linear infinite",
               }}
@@ -137,9 +139,9 @@ export function ProductRail() {
             <div className="absolute inset-0 flex flex-col justify-between p-6">
               <div className="flex items-start justify-between">
                 <Badge
-                  tone={p.family === "L" ? "signal" : p.family === "LE" ? "chart" : "copper"}
+                  tone={product.family === "L" ? "signal" : product.family === "LE" ? "chart" : "copper"}
                 >
-                  Series {p.family}
+                  {lever("series")} {product.family}
                 </Badge>
                 <span className="font-mono text-[10px] uppercase tracking-widest text-mist/60">
                   {String(i + 1).padStart(2, "0")} / {String(PRODUCTS.length).padStart(2, "0")}
@@ -147,9 +149,9 @@ export function ProductRail() {
               </div>
               <div className="flex items-end justify-between">
                 <div>
-                  <p className="font-display text-5xl text-fog tracking-tight mb-2">{p.model}</p>
+                  <p className="font-display text-5xl text-fog tracking-tight mb-2">{product.model}</p>
                   <p className="font-mono text-[10px] uppercase tracking-widest text-mist">
-                    {p.highlight}
+                    {p(`${product.slug}.highlight`)}
                   </p>
                 </div>
                 <ArrowUpRight

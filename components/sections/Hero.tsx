@@ -163,7 +163,7 @@ export function Hero() {
               laas
             </span>
           </p>
-          <p className="eyebrow mt-4 text-mist/80">Precision engineering · Since 1961</p>
+          <p className="eyebrow mt-4 text-mist/80">{tExtra("tagline")}</p>
         </div>
 
         <div className="max-w-5xl mx-auto">

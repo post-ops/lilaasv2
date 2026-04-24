@@ -13,6 +13,15 @@ const CLIENTS = [
 
 export function ClientsBand() {
   const t = useTranslations("home");
+  const meta = useTranslations("home.clientsMeta");
+
+  const items = [
+    { k: meta("bridges"), v: meta("bridgesValue") },
+    { k: meta("continents"), v: meta("continentsValue") },
+    { k: meta("since"), v: meta("sinceValue") },
+    { k: meta("certified"), v: meta("certifiedValue") },
+  ];
+
   return (
     <section className="relative py-20 lg:py-28 border-y border-white/5 bg-deep/30 overflow-hidden">
       <div className="container-x">
@@ -39,16 +48,11 @@ export function ClientsBand() {
 
       <div className="container-x mt-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-10 border-t border-white/8 pt-10 font-mono text-[11px] uppercase tracking-widest">
-          {[
-            ["Bridges", "thousands"],
-            ["Continents", "4"],
-            ["Since", "1961"],
-            ["Certified", "DNV GL"],
-          ].map(([k, v], i) => (
-            <Reveal key={k} variant="up" delay={i * 80}>
+          {items.map((it, i) => (
+            <Reveal key={i} variant="up" delay={i * 80}>
               <div>
-                <p className="text-mist/60 mb-2">{k}</p>
-                <p className="font-display text-xl tracking-tight normal-case text-fog">{v}</p>
+                <p className="text-mist/60 mb-2">{it.k}</p>
+                <p className="font-display text-xl tracking-tight normal-case text-fog">{it.v}</p>
               </div>
             </Reveal>
           ))}

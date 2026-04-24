@@ -45,12 +45,25 @@
     },
     "clientsEyebrow": "Valgt av",
     "clientsLine": "Kongsberg Maritime · Wärtsilä · Siemens · General Electric · CERN",
+    "clientsMeta": {
+      "bridges": "Broer",
+      "bridgesValue": "tusenvis",
+      "continents": "Kontinenter",
+      "continentsValue": "4",
+      "since": "Siden",
+      "sinceValue": "1961",
+      "certified": "Sertifisert",
+      "certifiedValue": "DNV GL"
+    },
     "industriesEyebrow": "Bruksområder",
     "industriesTitle": "Bygget for de mest krevende miljøene — på og utenfor jorden.",
     "industriesSub": "Fra skipsbruer på tvers av Nordsjøen til Large Hadron Collider — komponentene våre holder toleranser målt i tusendels millimeter.",
     "caseEyebrow": "Utvalgt prosjekt",
     "caseTitle": "Large Hadron Collider trengte nøyaktighet ned til hundredels millimeter. Vi leverte.",
     "caseCta": "Les CERN-historien",
+    "caseClient": "Kunde",
+    "caseTolerance": "Toleranse",
+    "caseLocation": "Sted",
     "ctaEyebrow": "La oss snakke spesifikasjoner",
     "ctaTitle": "Vi designer, konstruerer og produserer internt. Fortell oss hva du trenger, så konstruerer vi det med deg.",
     "ctaSub": "Hverdager 08–16 · Kongeveien 75, Horten",
@@ -60,22 +73,41 @@
     "maritime": {
       "name": "Maritim",
       "tag": "Vårt største segment — broer verden over kjører på Lilaas-spaker.",
-      "body": "Forsyningsfartøy, ferger, tankskip, cruiseskip, yachter. Synkroniserte elektriske motorer lar kapteiner flytte seg mellom stasjoner uten å miste kontroll. DNV GL-typegodkjent."
+      "body": "Forsyningsfartøy, ferger, tankskip, cruiseskip, yachter. Synkroniserte elektriske motorer lar kapteiner flytte seg mellom stasjoner uten å miste kontroll. DNV GL-typegodkjent.",
+      "applications": "Forsyningsfartøy | Ferger | Tankskip | Cruiseskip | Yachter | Offshore-plattformer",
+      "certifications": "DNV GL-typegodkjent | EMC (marin) | Vibrasjonstestet | IP65-sertifisert"
     },
     "defence": {
       "name": "Forsvar",
       "tag": "Komponenter som består vibrasjons-, fuktighets- og EMI-typetester.",
-      "body": "Oppdragskritiske delkomponenter for krevende forsvarsintegratorer, maskinert i rustfritt stål, titan, Inconel og Hastelloy."
+      "body": "Oppdragskritiske delkomponenter for krevende forsvarsintegratorer, maskinert i rustfritt stål, titan, Inconel og Hastelloy.",
+      "applications": "Kjøretøysstyringssystemer | Marinestøttefartøy | Bakkestasjonskonsoller | Typegodkjente delmontasjer",
+      "certifications": "Typetestet | Miljøforsegling | EMI / EMC-godkjent"
     },
     "medical": {
       "name": "Medisin",
       "tag": "Maskinering under millimeteren for livsviktig utstyr.",
-      "body": "Presisjonskomponenter fra under 1 mm til 200 mm i diameter, med toleranser ned til noen få tusendels millimeter."
+      "body": "Presisjonskomponenter fra under 1 mm til 200 mm i diameter, med toleranser ned til noen få tusendels millimeter.",
+      "applications": "Kirurgiske instrumenthus | Deler til diagnoseutstyr | Presisjonskomponenter under millimeter",
+      "certifications": "NS-EN ISO 9001:2015 | Sporbarhet per batch"
     },
     "space": {
       "name": "Rom",
       "tag": "Fra Large Hadron Collider til satellittutstyr.",
-      "body": "Når prosjekter krever nøyaktighet målt i hundredels millimeter, står vi på kortlisten."
+      "body": "Når prosjekter krever nøyaktighet målt i hundredels millimeter, står vi på kortlisten.",
+      "applications": "Komponenter til Large Hadron Collider (CERN) | Satellittutstyr | Test- og måleoppsett",
+      "certifications": "Toleranse ned til 0,01 mm | Dokumentert prosesskontroll"
+    },
+    "page": {
+      "application": "Bruksområde",
+      "applications": "Bruksområder",
+      "productsWeSupply": "Produkter vi leverer",
+      "certifications": "Sertifiseringer",
+      "contextAlt": "kontekst",
+      "otherIndustries": "Andre bransjer vi leverer til",
+      "ctaEyebrow": "La oss bygge det sammen",
+      "ctaTitle": "Ingeniørene våre er klare til å spesifisere ditt neste prosjekt.",
+      "ctaButton": "Snakk med ingeniørene"
     }
   },
   "controlLevers": {
@@ -84,7 +116,54 @@
     "sub": "Synkronisert mellom broer. Konstruert for å kjennes.",
     "lineup": "Lilaas-serien",
     "requestDatasheet": "Be om datablad",
-    "viewProduct": "Se produkt"
+    "viewProduct": "Se produkt",
+    "flagship": "Flaggskip",
+    "model": "Modell",
+    "lineupMeta": "modeller · DNV GL-godkjent",
+    "series": "Serie",
+    "approved": "DNV GL-godkjent",
+    "detailEyebrow": "Manøverspak",
+    "applicationsLabel": "Bruksområder",
+    "specsTitle": "Tekniske spesifikasjoner",
+    "findDistributor": "Finn en distributør",
+    "detailAlt": "detaljvisning"
+  },
+  "products": {
+    "l01": {
+      "tagline": "Flaggskipet. En manøverspak med integrert TFT-skjerm og synkronisert elektrisk tilbakekobling.",
+      "description": "L01 har integrert TFT LCD-skjerm rett i spakhuset — avlesningene sitter i operatørens synsfelt, ikke gjemt i et sidepanel. Synkroniserte elektriske motorer på tvers av brostasjoner sikrer at kapteinen kan overta eller gi fra seg kontroll uten overraskelser. Typegodkjent for maritim installasjon.",
+      "highlight": "Integrert TFT-skjerm · Synkronisert mellom broer · DNV GL-typegodkjent",
+      "applications": "Forsyningsfartøy | Cruiseskip | Ferger | Tankskip | Yachter | Marinestøttefartøy",
+      "specs": "Skjerm ¦ Integrert TFT LCD | Tilbakekobling ¦ Elektrisk haptisk, synkronisert | Utslag ¦ ±45° (konfigurerbar) | Detent-alternativer ¦ 0 / 1 / 3 / variabel | Beskyttelsesgrad ¦ IP65 (front) | Forsyningsspenning ¦ 24 VDC | Grensesnitt ¦ CAN, Modbus, NMEA 2000 | Temp.-område ¦ −25 °C til +70 °C | Sertifisering ¦ DNV GL-typegodkjent"
+    },
+    "lf180": {
+      "tagline": "Azimut- og thrusterkontroll for dynamisk posisjonering.",
+      "description": "En spak spesialbygd for azimut-thrustere og dynamisk posisjonering. Kompakt, responsiv, svært repeterbar — førstevalget på DP-klasse forsyningsfartøy og taubåter.",
+      "highlight": "Azimut · Thruster · DP-klasse",
+      "applications": "Offshore-støtte | DP-klasse fartøy | Taubåter",
+      "specs": "Utslag ¦ ±45° | Detent-alternativer ¦ 0 / 1 / konfigurerbar | Beskyttelsesgrad ¦ IP65 | Forsyningsspenning ¦ 24 VDC | Grensesnitt ¦ CAN, Modbus | Sertifisering ¦ DNV GL-typegodkjent"
+    },
+    "lf120": {
+      "tagline": "Mellomklasse-spak for ferger, yachter og kommersielle fartøy.",
+      "description": "Arbeidshesten. Bevist i tusenvis av installasjoner — forsyningsfartøy, ferger, cruiseskip. Valg mellom pistol-, T-håndtak eller knottgrep.",
+      "highlight": "Utprøvd · Fleksibel · Enkel å integrere",
+      "applications": "Ferger | Kommersielle yachter | Fiskefartøy",
+      "specs": "Utslag ¦ ±45° | Grepvarianter ¦ Pistol, T-håndtak, knott | Forsyningsspenning ¦ 24 VDC | Grensesnitt ¦ Analog / CAN | Sertifisering ¦ DNV GL-typegodkjent"
+    },
+    "lf90": {
+      "tagline": "Kompakt spak for trange broer og arbeidsbåter.",
+      "description": "All følelsen fra LF-serien i et mindre format. Ideell der broplass er dyr — pilotbåter, små ferger, arbeidsbåter.",
+      "highlight": "Kompakt fotavtrykk · Standard grensesnitt",
+      "applications": "Arbeidsbåter | Pilotbåter | Små ferger",
+      "specs": "Utslag ¦ ±45° | Forsyningsspenning ¦ 24 VDC | Grensesnitt ¦ Analog / CAN | Beskyttelsesgrad ¦ IP65"
+    },
+    "le90": {
+      "tagline": "Elektrisk spak designet for systemintegratorer.",
+      "description": "Designet for OEM-er som bygger sine egne styringssystemer på toppen av vår bevegelsesmaskinvare. Fullt CAN/Modbus-grensesnitt, konfigurerbare detenter og utslag.",
+      "highlight": "OEM-vennlig · Fullt elektrisk · Konfigurerbar",
+      "applications": "Integratorer | OEM bro-leverandører",
+      "specs": "Utslag ¦ Konfigurerbart | Detenter ¦ Programvaredefinert | Grensesnitt ¦ CAN, Modbus, analog | Forsyningsspenning ¦ 24 VDC"
+    }
   },
   "precision": {
     "eyebrow": "Presisjonsmekanikk",
@@ -92,7 +171,30 @@
     "sub": "15+ CNC-maskiner, 3- og 5-akset, automatiserte dreiebenker, egen elektronikk og programvare.",
     "capabilities": "Kapasiteter",
     "materials": "Materialer vi jobber med",
-    "materialsList": "Rustfritt stål · Titan · Inconel · Covar · Hastelloy · Kobber & messing · Aluminium · Tekniske plastmaterialer"
+    "materialsList": "Rustfritt stål · Titan · Inconel · Covar · Hastelloy · Kobber & messing · Aluminium · Tekniske plastmaterialer",
+    "stats": {
+      "machines": "CNC-maskiner",
+      "tolerance": "Min. toleranse",
+      "partSize": "Delstørrelse"
+    },
+    "productionFloor": "CNC-produksjonshall",
+    "locationBadge": "Horten, Norge",
+    "capabilitiesList": {
+      "cnc": { "title": "3- og 5-akset CNC", "body": "15+ maskiner dekker alt fra små prototypeserier til høyvolums produksjon." },
+      "lathes": { "title": "Automatiske dreiebenker", "body": "Ubemannet 'lights-out'-produksjon — slik forblir vi konkurransedyktige i Norge." },
+      "electronics": { "title": "Egen elektronikk", "body": "PCB-design, firmware og systemintegrasjon under samme tak." },
+      "quality": { "title": "Kvalitetskontroll", "body": "CMM-metrologi; hvert produkt testes før det forlater fabrikken." },
+      "assembly": { "title": "Monteringslinjer", "body": "Mekanikk, elektronikk og programvare monteres og kalibreres på stedet." },
+      "test": { "title": "Typetest-rigger", "body": "Vibrasjon, fuktighet, EMI-rigger for forsvar og maritime godkjenninger." }
+    },
+    "fullstackMeta": "full-stack produksjon",
+    "materialsHeading": "Fra rustfritt stål og titan til Inconel og tekniske plastmaterialer.",
+    "cern": {
+      "badge": "Utvalgt case · CERN",
+      "title": "Nøyaktighet til hundredels millimeter — under bakken i Genève.",
+      "body": "Large Hadron Collider krevde komponenter maskinert til toleranser de fleste verksteder ikke kan treffe pålitelig. Vi sto på kortlisten — og vi leverte.",
+      "cta": "Les CERN-historien"
+    }
   },
   "about": {
     "eyebrow": "Om Lilaas",
@@ -102,7 +204,36 @@
     "ceoName": "Espen Bergsted Hoff",
     "ceoTitle": "Daglig leder, Lilaas AS",
     "certs": "Sertifiseringer",
-    "certsList": "NS-EN ISO 9001:2015 · DNV GL-typegodkjent"
+    "certsList": "NS-EN ISO 9001:2015 · DNV GL-typegodkjent",
+    "stats": {
+      "founded": "Grunnlagt",
+      "years": "Års erfaring",
+      "employees": "Ansatte",
+      "continents": "Kontinenter"
+    },
+    "timeline": {
+      "label": "Tidslinje",
+      "items": [
+        { "year": "1961", "title": "Grunnlagt", "body": "Jan Lilaas etablerer Lilaas Finmekaniske AS i Horten." },
+        { "year": "1980-t", "title": "Marin spesialisering", "body": "Første generasjon marine manøverspaker når skipsverft i hele Norge." },
+        { "year": "2000-t", "title": "Elektrisk tilbakekobling", "body": "Introduksjon av synkronisert elektrisk haptisk tilbakekobling — et kategoridefinerende skifte." },
+        { "year": "2011", "title": "Omregistrert", "body": "Omstrukturert som Lilaas AS. Aksjekapital NOK 5 000 000." },
+        { "year": "2020-t", "title": "Skalering & automatisering", "body": "Ubemannet 'lights-out' CNC-produksjon. 55+ ansatte, NOK 116M budsjettert (2024)." },
+        { "year": "I dag", "title": "Global distribusjon", "body": "Produkter på 4 kontinenter. ~50 % direkte eksport." }
+      ]
+    },
+    "leadership": {
+      "label": "Ledelse",
+      "heading": "Ingeniører, maskinoperatører og kommersielle — med direkte linjer til hver kunde.",
+      "titles": {
+        "ceo": "Daglig leder",
+        "director": "Direktør, Salg & Marked",
+        "businessDev": "Forretningsutvikling",
+        "keyAccount": "Key Account Manager",
+        "kamPrecision": "KAM · Presisjonsmekanikk",
+        "kamControl": "KAM · Manøverspaker"
+      }
+    }
   },
   "contact": {
     "eyebrow": "Kontakt",
@@ -142,7 +273,20 @@
       "general": "lilaas@lilaas.no",
       "sales": "sales@lilaas.no"
     },
-    "teamTitle": "Salg & forretningsutvikling"
+    "email": "E-post",
+    "hours": "Åpningstider",
+    "hoursValue": "Man–Fre 08:00 – 16:00",
+    "certifications": "Sertifiseringer",
+    "teamTitle": "Salg & forretningsutvikling",
+    "teamHeading": "Snakk direkte med noen i Horten.",
+    "teamTitles": {
+      "director": "Direktør, Salg & Marked",
+      "businessDev": "Forretningsutvikling",
+      "salesCoord": "Salg & Marked-koordinator",
+      "kamControl": "KAM · Manøverspaker",
+      "kamPrecision": "KAM · Presisjonsmekanikk",
+      "keyAccount": "Key Account Manager"
+    }
   },
   "footer": {
     "tagline": "Eksperter på joysticker, manøverspaker og presisjonsmekanikk.",
@@ -151,7 +295,10 @@
     "terms": "Vilkår",
     "transparency": "Åpenhetsloven",
     "privacy": "Personvern",
-    "built": "Konseptside — foreløpig ikke en offisiell Lilaas-eiendom."
+    "built": "Konseptside — foreløpig ikke en offisiell Lilaas-eiendom.",
+    "products": "Produkter",
+    "company": "Selskap",
+    "contact": "Kontakt"
   },
   "common": {
     "learnMore": "Les mer",
@@ -163,7 +310,8 @@
   },
   "homeExtra": {
     "hero": {
-      "live": "Horten, Norge · Siden 1961"
+      "live": "Horten, Norge · Siden 1961",
+      "tagline": "Presisjonsmekanikk · Siden 1961"
     },
     "marquee": {
       "w1": "PRESISJON",
@@ -243,23 +391,103 @@
     "eyebrow": "Support",
     "title": "Datablad, distributører og dedikerte ingeniører.",
     "sub": "Velg region under. For direkte teknisk support, send til support@lilaas.no.",
-    "distributorsTitle": "Globalt distributørnettverk"
+    "distributorsTitle": "Globalt distributørnettverk",
+    "types": {
+      "distributor": "Distributør",
+      "service": "Servicepartner"
+    },
+    "direct": {
+      "title": "Direkte fabrikksupport",
+      "body": "For tekniske spørsmål som ikke kan vente, kontakt ingeniørteamet i Horten direkte. Servicepartnere håndterer installasjoner og arbeid på stedet i ulike regioner.",
+      "contact": "support@lilaas.no · +47 416 33 000 (hverdager 08–16)"
+    },
+    "datasheets": {
+      "label": "Datablad",
+      "body": "Produktdatablad leveres på forespørsel per prosjekt, slik at du får siste revisjon med konfigurasjonsspesifikasjoner for din fartøysklasse.",
+      "emailPrefix": "Bruk kontaktskjemaet eller send til",
+      "emailSuffix": "."
+    }
   },
   "cases": {
     "eyebrow": "Referanser",
     "title": "Der delene våre havner.",
-    "sub": "Fra broer i Nordsjøen til partikkeldetektorer 100 meter under bakken."
+    "sub": "Fra broer i Nordsjøen til partikkeldetektorer 100 meter under bakken.",
+    "cern": {
+      "back": "Alle referansecaser",
+      "badges": {
+        "physics": "Fysikk",
+        "switzerland": "Sveits",
+        "precision": "Presisjonsmekanikk"
+      },
+      "title": "Vi maskinerte komponenter til Large Hadron Collider ved CERN.",
+      "stats": {
+        "tolerance": "Påkrevd toleranse",
+        "toleranceValue": "0,01 mm",
+        "location": "Sted",
+        "locationValue": "100 m under Genève",
+        "materials": "Materialer",
+        "materialsValue": "Rustfritt stål, kobber, Inconel",
+        "delivery": "Leveranse",
+        "deliveryValue": "Kvalifisert & dokumentert"
+      },
+      "lead": "Large Hadron Collider er et av de mest krevende ingeniørprosjektene menneskeheten har gjennomført. Tjuesju kilometer med ring, 100 meter under bakken, som kjører ved brøkdeler av en grad over det absolutte nullpunktet.",
+      "p1": "Da CERNs innkjøpskontor trengte presisjonskomponenter under millimeter til kolliderens instrumentering, kortlistet de leverandører som kunne kombinere dokumentert prosesskontroll med evnen til å maskinere eksotiske legeringer til toleranser de fleste verksteder ikke treffer pålitelig.",
+      "p2": "Lilaas var én av dem.",
+      "quote": "Det prosjektet krevde nøyaktighet ned til hundredels millimeter. Vi måler hver produksjonsbatch mot originaltegningen på CMM før utgivelse.",
+      "quoteAttrib": "— Espen Bergsted Hoff, daglig leder",
+      "whyHortenTitle": "Hvorfor Horten",
+      "whyHorten": "Full-stack, intern produksjon betyr færre overleveringer, kortere iterasjonssløyfer og full sporbarhet. Mekanikk, elektronikk og programvare designes, bygges og testes under samme tak i Horten — det er derfor kunder som CERN, Kongsberg Maritime og Wärtsilä kan behandle oss som en forlengelse av sine egne ingeniørteam.",
+      "beyondTitle": "Utover LHC",
+      "beyond": "Rom, forsvar, medisin, offshore — enhver bransje der toleransefeil betyr katastrofal kostnad — havner på produksjonsgulvet vårt. Vi er stolte av hvor delene våre ender opp.",
+      "ctaPrimary": "Snakk med ingeniørene",
+      "ctaSecondary": "Se presisjonsmekanikk"
+    }
   },
   "news": {
     "eyebrow": "Nyheter",
     "title": "Det som skjer hos Lilaas.",
-    "sub": "Produktlanseringer, nyheter fra fabrikken og et par milepæler."
+    "sub": "Produktlanseringer, nyheter fra fabrikken og et par milepæler.",
+    "posts": [
+      {
+        "date": "2025-09",
+        "tag": "Drift",
+        "title": "Leveringstider redusert: økt bemanning og optimerte interne prosesser.",
+        "body": "En oppdatering om gjennomstrømning etter et år med nyansettelser og prosessautomatisering på CNC-gulvet."
+      },
+      {
+        "date": "2025-02",
+        "tag": "Reportasje",
+        "title": "Full gass med skipshendler og presisjonsmaskinering hos Lilaas i Horten.",
+        "body": "Bakgrunnsartikkel om veksten de siste årene og veien videre for norsk finmekanikk."
+      },
+      {
+        "date": "2024-11",
+        "tag": "Produkt",
+        "title": "L01 manøverspak — neste revisjon under testing.",
+        "body": "Forbedringer av integrert TFT-skjermstabel og synkroniseringsfirmware går i felttesting med to OEM-partnere."
+      },
+      {
+        "date": "2024-06",
+        "tag": "Automatisering",
+        "title": "Lilaas sikrer jobber gjennom ubemannet produksjon.",
+        "body": "Hvordan lights-out CNC holder høykost-norsk produksjon konkurransedyktig på globale kontrakter."
+      }
+    ]
   },
   "careers": {
     "eyebrow": "Karriere",
     "title": "Bygg det skarpeste verktøyet i Norge.",
     "sub": "Vi vokser. Hvis du elsker trange toleranser og store kunder, burde vi snakke.",
-    "cta": "Åpen søknad — send CV til hr@lilaas.no"
+    "cta": "Åpen søknad — send CV til hr@lilaas.no",
+    "openRoles": "Ledige stillinger",
+    "dontSeeRole": "Finner du ikke din rolle?",
+    "apply": "Søk",
+    "roles": [
+      { "title": "CNC-operatør", "discipline": "Produksjon", "type": "Fulltid" },
+      { "title": "Maskiningeniør — Manøverspaker", "discipline": "FoU", "type": "Fulltid" },
+      { "title": "Firmwareingeniør", "discipline": "Elektronikk", "type": "Fulltid" },
+      { "title": "Kvalitetsingeniør", "discipline": "Drift", "type": "Fulltid" }
+    ]
   },
   "legal": {
     "terms": {

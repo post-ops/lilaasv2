@@ -17,13 +17,13 @@ const AmbientScene = dynamic(
   { ssr: false, loading: () => null }
 );
 
-const CAPABILITIES = [
-  { icon: Cog, title: "3- and 5-axis CNC", body: "15+ machines covering short-run prototypes to high-volume production." },
-  { icon: Wrench, title: "Automated lathes", body: "Unmanned 'lights-out' production — how we stay competitive in Norway." },
-  { icon: Cpu, title: "In-house electronics", body: "PCB design, firmware, and system integration under one roof." },
-  { icon: Microscope, title: "Quality control", body: "CMM metrology; every product tested before leaving the factory." },
-  { icon: Factory, title: "Assembly lines", body: "Mechanics, electronics and software assembled and calibrated on-site." },
-  { icon: TestTube, title: "Type-test fixtures", body: "Vibration, humidity, EMI rigs for defence and marine approvals." },
+const CAPABILITY_KEYS = [
+  { icon: Cog, key: "cnc" },
+  { icon: Wrench, key: "lathes" },
+  { icon: Cpu, key: "electronics" },
+  { icon: Microscope, key: "quality" },
+  { icon: Factory, key: "assembly" },
+  { icon: TestTube, key: "test" },
 ];
 
 const CNC_IMAGE = "/images/factory/cnc.webp";
@@ -31,6 +31,9 @@ const MACHINING_IMAGE = "/images/factory/machining.webp";
 
 export function PrecisionView() {
   const t = useTranslations("precision");
+  const cap = useTranslations("precision.capabilitiesList");
+  const stats = useTranslations("precision.stats");
+  const cern = useTranslations("precision.cern");
 
   return (
     <>
@@ -52,19 +55,19 @@ export function PrecisionView() {
 
           <div className="grid sm:grid-cols-3 gap-8 lg:gap-10 mt-20 border-t border-white/8 pt-10 max-w-3xl">
             <Reveal variant="up" delay={100}>
-              <p className="eyebrow mb-4">CNC machines</p>
+              <p className="eyebrow mb-4">{stats("machines")}</p>
               <div className="font-display text-4xl lg:text-5xl text-fog">
                 <NumberCounter value={15} suffix="+" />
               </div>
             </Reveal>
             <Reveal variant="up" delay={200}>
-              <p className="eyebrow mb-4">Min tolerance</p>
+              <p className="eyebrow mb-4">{stats("tolerance")}</p>
               <div className="font-display text-4xl lg:text-5xl text-fog">
                 0.01 <span className="text-signal text-2xl">mm</span>
               </div>
             </Reveal>
             <Reveal variant="up" delay={300}>
-              <p className="eyebrow mb-4">Part size range</p>
+              <p className="eyebrow mb-4">{stats("partSize")}</p>
               <div className="font-display text-4xl lg:text-5xl text-fog">
                 &lt;1 – 200 <span className="text-mist text-2xl">mm</span>
               </div>
@@ -79,14 +82,14 @@ export function PrecisionView() {
             <div className="relative aspect-[16/8] rounded-2xl overflow-hidden border border-white/8 group">
               <Image
                 src={CNC_IMAGE}
-                alt="CNC production floor"
+                alt={t("productionFloor")}
                 fill
                 sizes="100vw"
                 className="object-cover object-center transition-transform duration-[1.8s] ease-out-expo group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
               <div className="absolute bottom-8 left-8">
-                <Badge tone="chart">Horten, Norway</Badge>
+                <Badge tone="chart">{t("locationBadge")}</Badge>
               </div>
             </div>
           </Reveal>
@@ -98,12 +101,12 @@ export function PrecisionView() {
           <Reveal variant="up">
             <div className="flex items-end justify-between mb-14">
               <h2 className="font-display text-display-md text-fog">{t("capabilities")}</h2>
-              <p className="eyebrow hidden md:block">full-stack manufacturing</p>
+              <p className="eyebrow hidden md:block">{t("fullstackMeta")}</p>
             </div>
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {CAPABILITIES.map(({ icon: Icon, title, body }, i) => (
-              <Reveal key={title} variant="up" delay={i * 90}>
+            {CAPABILITY_KEYS.map(({ icon: Icon, key }, i) => (
+              <Reveal key={key} variant="up" delay={i * 90}>
                 <Card className="p-8 min-h-[220px] h-full flex flex-col">
                   <div className="flex items-start justify-between mb-8">
                     <div className="w-11 h-11 rounded-lg border border-white/10 flex items-center justify-center text-signal bg-signal/5">
@@ -111,8 +114,8 @@ export function PrecisionView() {
                     </div>
                     <p className="eyebrow">0{i + 1}</p>
                   </div>
-                  <h3 className="font-display text-xl text-fog mb-2">{title}</h3>
-                  <p className="text-sm text-mist leading-relaxed">{body}</p>
+                  <h3 className="font-display text-xl text-fog mb-2">{cap(`${key}.title`)}</h3>
+                  <p className="text-sm text-mist leading-relaxed">{cap(`${key}.body`)}</p>
                 </Card>
               </Reveal>
             ))}
@@ -135,7 +138,7 @@ export function PrecisionView() {
           <Reveal variant="left">
             <p className="eyebrow mb-4">{t("materials")}</p>
             <h2 className="font-display text-display-sm text-fog text-balance mb-6">
-              From stainless steel and titanium to Inconel and engineering plastics.
+              {t("materialsHeading")}
             </h2>
           </Reveal>
           <div className="flex flex-wrap gap-3 self-center">
@@ -153,17 +156,17 @@ export function PrecisionView() {
           <div className="grid lg:grid-cols-[1fr_1.3fr] gap-14 items-center">
             <div>
               <Reveal variant="fade">
-                <Badge tone="signal" className="mb-6">Featured case · CERN</Badge>
+                <Badge tone="signal" className="mb-6">{cern("badge")}</Badge>
               </Reveal>
               <SplitReveal
-                text="Accuracy to hundredths of a millimetre — underground, at Geneva."
+                text={cern("title")}
                 as="h2"
                 className="font-display text-display-md text-fog text-balance mb-6"
                 stagger={0.014}
               />
               <Reveal variant="up" delay={250}>
                 <p className="text-mist leading-relaxed mb-8 max-w-lg">
-                  The Large Hadron Collider required components machined to tolerances most facilities can't reliably hit. We were on the shortlist — and we delivered.
+                  {cern("body")}
                 </p>
               </Reveal>
               <Reveal variant="up" delay={350}>
@@ -172,7 +175,7 @@ export function PrecisionView() {
                   className="inline-flex items-center gap-2 text-signal hover:text-white transition-colors font-mono text-sm uppercase tracking-widest"
                   data-magnetic
                 >
-                  Read the CERN story
+                  {cern("cta")}
                   <ArrowUpRight size={16} />
                 </Link>
               </Reveal>
