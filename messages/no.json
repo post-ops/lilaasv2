@@ -354,15 +354,19 @@
       }
     },
     "radar": {
-      "indexLabel": "04 · På sjøen, akkurat nå",
-      "title": "Broer verden over går på Lilaas-spaker.",
-      "body": "Hvert oransje blip under er et fartøy med vår styringshardware på broen — fra forsyningstokter i Nordsjøen til fergedrift i Asia-Pacific.",
-      "live": "LIVE · BRO-NETTVERK · UTC",
+      "indexLabel": "04 · Distributørnettverk",
+      "title": "Ni partnere, i bane rundt Horten.",
+      "body": "Hvert oransje blip er en faktisk Lilaas-distributør eller servicepartner — plassert på omtrentlig kompassretning fra verkstedet i Kongeveien 75.",
+      "live": "LIVE · DISTRIBUTØRNETTVERK · UTC",
       "range": "Rekkevidde",
       "pulse": "Puls",
       "vessels": "Fartøy",
       "bearing": "Kurs",
+      "reach": "Kontinenter",
+      "partners": "Partnere",
+      "since": "Siden",
       "activeContact": "Aktivt kontakt",
+      "inRange": "I rekkevidde",
       "sweeping": "skanner…",
       "waiting": "venter på retur"
     },

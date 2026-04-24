@@ -5,21 +5,26 @@ import { useTranslations } from "next-intl";
 import { SplitReveal } from "@/components/ui/SplitReveal";
 import { Reveal } from "@/components/ui/Reveal";
 
+// Real Lilaas distributors (from /support) placed on the radar at their
+// approximate compass bearing from Horten (59°25′N 10°29′E). Radius is a
+// rough stand-in for distance, normalised to fit the radar face.
 type Blip = {
-  angle: number; // degrees from 12 o'clock, clockwise
+  angle: number; // degrees, 0 = north, clockwise
   radius: number; // 0..1 of radar radius
-  label: string;
-  coords: string;
+  name: string;
+  region: string;
 };
 
 const BLIPS: Blip[] = [
-  { angle: 22, radius: 0.48, label: "MV OSLOFJORD", coords: "59°12′N 10°42′E" },
-  { angle: 78, radius: 0.68, label: "NORTHERN LIGHT", coords: "58°58′N 11°08′E" },
-  { angle: 134, radius: 0.34, label: "BERGEN EXPRESS", coords: "60°11′N 05°18′E" },
-  { angle: 186, radius: 0.72, label: "TROMSØ STAR", coords: "69°38′N 18°57′E" },
-  { angle: 242, radius: 0.52, label: "NORDIC DAWN", coords: "58°44′N 09°21′E" },
-  { angle: 298, radius: 0.42, label: "HORTEN PILOT", coords: "59°25′N 10°29′E" },
-  { angle: 340, radius: 0.6, label: "ESBJERG IV", coords: "55°28′N 08°27′E" },
+  { angle: 215, radius: 0.28, name: "Elma BV", region: "Netherlands · Belgium" },
+  { angle: 198, radius: 0.5, name: "Kinextec", region: "Spain" },
+  { angle: 172, radius: 0.4, name: "Kiepe Electric", region: "Italy" },
+  { angle: 150, radius: 0.58, name: "Amaltheia Marine", region: "Greece · Turkey · Egypt" },
+  { angle: 115, radius: 0.72, name: "Tritek Power & Automation", region: "Middle East" },
+  { angle: 78, radius: 0.88, name: "Shanghai EJH Group", region: "China · HK · Taiwan" },
+  { angle: 92, radius: 0.82, name: "Goodwill Technical Services", region: "Asia-Pacific" },
+  { angle: 102, radius: 0.94, name: "Z-Power Automation", region: "Singapore" },
+  { angle: 280, radius: 0.9, name: "IMTRA", region: "USA · Canada" },
 ];
 
 const SWEEP_DURATION_S = 6;
@@ -41,9 +46,6 @@ export function RadarDisplay() {
   }, []);
 
   useEffect(() => {
-    // JS-driven rotation: one source of truth. Set the sweep arm's SVG
-    // transform attribute each frame to rotate(angle, cx, cy) — works in
-    // every browser, no CSS transform-origin / transform-box edge cases.
     let raf = 0;
     const start = performance.now();
     function frame(tNow: number) {
@@ -51,13 +53,9 @@ export function RadarDisplay() {
       const sweepAngle = (elapsed / SWEEP_DURATION_S) * 360;
 
       if (sweepRef.current) {
-        sweepRef.current.setAttribute(
-          "transform",
-          `rotate(${sweepAngle} ${CX} ${CY})`
-        );
+        sweepRef.current.setAttribute("transform", `rotate(${sweepAngle} ${CX} ${CY})`);
       }
 
-      // Active blip: whichever the arm has just crossed
       let best: number | null = null;
       for (let i = 0; i < BLIPS.length; i++) {
         const b = BLIPS[i];
@@ -128,19 +126,17 @@ export function RadarDisplay() {
 
             <div className="grid grid-cols-2 gap-6 font-mono text-sm">
               {[
-                [t("range"), "250 NM"],
+                [t("reach"), "4"],
                 [t("pulse"), `${SWEEP_DURATION_S} s`],
-                [t("vessels"), String(BLIPS.length)],
-                [t("bearing"), "036°"],
+                [t("partners"), String(BLIPS.length)],
+                [t("since"), "1961"],
               ].map(([k, v], i) => (
                 <Reveal key={k} variant="right" delay={80 + i * 80}>
                   <div className="border-l border-signal/40 pl-4">
                     <p className="text-mist/70 uppercase tracking-widest text-[10px] mb-1">
                       {k}
                     </p>
-                    <p className="text-fog font-display text-2xl tracking-tight">
-                      {v}
-                    </p>
+                    <p className="text-fog font-display text-2xl tracking-tight">{v}</p>
                   </div>
                 </Reveal>
               ))}
@@ -148,14 +144,14 @@ export function RadarDisplay() {
 
             <Reveal variant="right" delay={320}>
               <div className="border border-white/8 rounded-2xl p-5 bg-deep/40 backdrop-blur-sm">
-                <p className="eyebrow mb-3 text-signal">{t("activeContact")}</p>
+                <p className="eyebrow mb-3 text-signal">{t("inRange")}</p>
                 {activeBlip !== null ? (
                   <>
                     <p className="font-display text-xl text-fog tracking-tight">
-                      {BLIPS[activeBlip].label}
+                      {BLIPS[activeBlip].name}
                     </p>
-                    <p className="font-mono text-xs text-mist mt-1.5 tabular-nums">
-                      {BLIPS[activeBlip].coords}
+                    <p className="font-mono text-xs text-mist mt-1.5">
+                      {BLIPS[activeBlip].region}
                     </p>
                   </>
                 ) : (
@@ -163,9 +159,7 @@ export function RadarDisplay() {
                     <p className="font-display text-xl text-fog/50 tracking-tight">
                       {t("sweeping")}
                     </p>
-                    <p className="font-mono text-xs text-mist/40 mt-1.5">
-                      {t("waiting")}
-                    </p>
+                    <p className="font-mono text-xs text-mist/40 mt-1.5">{t("waiting")}</p>
                   </>
                 )}
               </div>
@@ -240,10 +234,10 @@ function Radar({
       })}
 
       {[
-        { label: "N", x: CX, y: CY - R + 22, anchor: "middle" as const },
-        { label: "E", x: CX + R - 22, y: CY + 6, anchor: "middle" as const },
-        { label: "S", x: CX, y: CY + R - 10, anchor: "middle" as const },
-        { label: "W", x: CX - R + 22, y: CY + 6, anchor: "middle" as const },
+        { label: "N", x: CX, y: CY - R + 28, anchor: "middle" as const },
+        { label: "E", x: CX + R - 24, y: CY + 6, anchor: "middle" as const },
+        { label: "S", x: CX, y: CY + R - 14, anchor: "middle" as const },
+        { label: "W", x: CX - R + 24, y: CY + 6, anchor: "middle" as const },
       ].map((c) => (
         <text
           key={c.label}
@@ -259,7 +253,6 @@ function Radar({
         </text>
       ))}
 
-      {/* sweep arm — rotation driven by JS via setAttribute on this group */}
       <g ref={sweepRef} transform={`rotate(0 ${CX} ${CY})`}>
         <path
           d={`M ${CX} ${CY} L ${CX + R} ${CY} A ${R} ${R} 0 0 0 ${CX + R * Math.cos(-Math.PI / 3)} ${CY + R * Math.sin(-Math.PI / 3)} Z`}

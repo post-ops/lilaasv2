@@ -354,15 +354,19 @@
       }
     },
     "radar": {
-      "indexLabel": "04 · At sea, right now",
-      "title": "Bridges worldwide run on Lilaas levers.",
-      "body": "Every orange blip below is a vessel with our control hardware on the bridge — from supply runs in the North Sea to Asia-Pacific ferry operations.",
-      "live": "LIVE · BRIDGE NETWORK · UTC",
+      "indexLabel": "04 · Distributor network",
+      "title": "Nine partners, orbiting Horten.",
+      "body": "Every orange blip is an actual Lilaas distributor or service partner — plotted on the approximate compass bearing from our workshop on Kongeveien 75.",
+      "live": "LIVE · DISTRIBUTOR NETWORK · UTC",
       "range": "Range",
       "pulse": "Pulse",
       "vessels": "Vessels",
       "bearing": "Bearing",
+      "reach": "Continents",
+      "partners": "Partners",
+      "since": "Since",
       "activeContact": "Active contact",
+      "inRange": "In range",
       "sweeping": "sweeping…",
       "waiting": "waiting for return"
     },
