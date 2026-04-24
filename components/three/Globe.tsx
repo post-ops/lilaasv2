@@ -1,9 +1,11 @@
 "use client";
 
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
-import { Suspense, useMemo, useRef } from "react";
-import * as THREE from "three";
+import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import type { GlobeMethods } from "react-globe.gl";
+
+// react-globe.gl can't render server-side (uses WebGL + window).
+const ReactGlobe = dynamic(() => import("react-globe.gl"), { ssr: false });
 
 export type GlobePoint = {
   name: string;
@@ -13,324 +15,6 @@ export type GlobePoint = {
   home?: boolean;
 };
 
-const R = 1.8;
-
-function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
-  const phi = ((90 - lat) * Math.PI) / 180;
-  const theta = ((90 - lng) * Math.PI) / 180;
-  return new THREE.Vector3(
-    r * Math.sin(phi) * Math.cos(theta),
-    r * Math.cos(phi),
-    r * Math.sin(phi) * Math.sin(theta)
-  );
-}
-
-function Starfield() {
-  const count = 1000;
-  const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      const r = 18 + Math.random() * 12;
-      const phi = Math.acos(2 * Math.random() - 1);
-      const theta = 2 * Math.PI * Math.random();
-      arr[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      arr[i * 3 + 1] = r * Math.cos(phi);
-      arr[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
-    }
-    return arr;
-  }, []);
-  return (
-    <points>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.045}
-        color="#C9D1DE"
-        transparent
-        opacity={0.45}
-        sizeAttenuation
-        depthWrite={false}
-      />
-    </points>
-  );
-}
-
-function Earth() {
-  const texture = useLoader(THREE.TextureLoader, "/images/earth/earth-blue-marble.jpg");
-  useMemo(() => {
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = 16;
-  }, [texture]);
-  return (
-    <mesh>
-      <sphereGeometry args={[R, 128, 80]} />
-      <meshStandardMaterial
-        map={texture}
-        roughness={0.85}
-        metalness={0.05}
-        emissive="#1a2a3e"
-        emissiveIntensity={0.25}
-      />
-    </mesh>
-  );
-}
-
-function Atmosphere() {
-  return (
-    <>
-      <mesh>
-        <sphereGeometry args={[R * 1.05, 64, 48]} />
-        <meshBasicMaterial
-          color="#FF6B35"
-          transparent
-          opacity={0.09}
-          side={THREE.BackSide}
-          toneMapped={false}
-          depthWrite={false}
-        />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[R * 1.015, 64, 48]} />
-        <meshBasicMaterial
-          color="#7fb4ff"
-          transparent
-          opacity={0.06}
-          side={THREE.BackSide}
-          toneMapped={false}
-          depthWrite={false}
-        />
-      </mesh>
-    </>
-  );
-}
-
-const PIN_LIFT = 0.05; // small radial offset so pin sits just above surface
-
-function Arcs({ points }: { points: GlobePoint[] }) {
-  const { tubes, particleCurves } = useMemo(() => {
-    const home = points.find((p) => p.home);
-    if (!home) return { tubes: [], particleCurves: [] };
-    const homePos = latLngToVec3(home.lat, home.lng, R + PIN_LIFT);
-
-    const ts: { geom: THREE.TubeGeometry; mat: THREE.MeshBasicMaterial }[] = [];
-    const curves: THREE.QuadraticBezierCurve3[] = [];
-
-    points.forEach((p) => {
-      if (p.home) return;
-      const end = latLngToVec3(p.lat, p.lng, R + PIN_LIFT);
-      const angle = homePos.angleTo(end);
-      // Keep arcs low so the full flight fits inside the viewport.
-      const arcHeight = R + 0.12 + angle * 0.22;
-      const mid = homePos
-        .clone()
-        .add(end)
-        .normalize()
-        .multiplyScalar(arcHeight);
-      const curve = new THREE.QuadraticBezierCurve3(homePos, mid, end);
-      const tube = new THREE.TubeGeometry(curve, 96, 0.009, 8, false);
-      const mat = new THREE.MeshBasicMaterial({
-        color: "#FF6B35",
-        transparent: true,
-        opacity: 0.55,
-        toneMapped: false,
-        depthWrite: false,
-      });
-      ts.push({ geom: tube, mat });
-      curves.push(curve);
-    });
-
-    return { tubes: ts, particleCurves: curves };
-  }, [points]);
-
-  const particleRefs = useRef<(THREE.Mesh | null)[]>([]);
-
-  useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    particleCurves.forEach((curve, i) => {
-      const mesh = particleRefs.current[i];
-      if (!mesh) return;
-      const cycle = 2.4;
-      const phase = ((t + i * 0.25) % cycle) / cycle;
-      const pos = curve.getPointAt(phase);
-      mesh.position.copy(pos);
-      const mat = mesh.material as THREE.MeshBasicMaterial;
-      mat.opacity = Math.sin(phase * Math.PI);
-      mesh.scale.setScalar(0.024 + Math.sin(phase * Math.PI) * 0.018);
-    });
-  });
-
-  return (
-    <>
-      {tubes.map((t, i) => (
-        <mesh key={`t${i}`} geometry={t.geom} material={t.mat} />
-      ))}
-      {particleCurves.map((_, i) => (
-        <mesh
-          key={`p${i}`}
-          ref={(el) => {
-            particleRefs.current[i] = el;
-          }}
-        >
-          <sphereGeometry args={[1, 10, 10]} />
-          <meshBasicMaterial
-            color="#FFD0B5"
-            transparent
-            opacity={0}
-            toneMapped={false}
-          />
-        </mesh>
-      ))}
-    </>
-  );
-}
-
-function Pins({
-  points,
-  activeRef,
-}: {
-  points: GlobePoint[];
-  activeRef: React.MutableRefObject<number | null>;
-}) {
-  const haloRefs = useRef<(THREE.Mesh | null)[]>([]);
-  const coreRefs = useRef<(THREE.Mesh | null)[]>([]);
-
-  useFrame((state) => {
-    const active = activeRef.current;
-    const t = state.clock.elapsedTime;
-
-    haloRefs.current.forEach((mesh, i) => {
-      if (!mesh) return;
-      const isActive = i === active;
-      const target = isActive ? 0.16 : 0.075 + Math.sin(t * 2 + i) * 0.012;
-      mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.15);
-      const mat = mesh.material as THREE.MeshBasicMaterial;
-      const tOp = isActive ? 0.75 : 0.35;
-      mat.opacity += (tOp - mat.opacity) * 0.14;
-    });
-    coreRefs.current.forEach((mesh, i) => {
-      if (!mesh) return;
-      const isActive = i === active;
-      const target = isActive ? 0.08 : 0.05;
-      mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.14);
-    });
-  });
-
-  return (
-    <>
-      {points.map((p, i) => {
-        const pos = latLngToVec3(p.lat, p.lng, R + PIN_LIFT);
-        return (
-          <group key={i} position={pos}>
-            <mesh
-              ref={(el) => {
-                haloRefs.current[i] = el;
-              }}
-            >
-              <sphereGeometry args={[1, 16, 16]} />
-              <meshBasicMaterial
-                color={p.home ? "#FFD0B5" : "#FF6B35"}
-                transparent
-                opacity={0.35}
-                toneMapped={false}
-              />
-            </mesh>
-            <mesh
-              ref={(el) => {
-                coreRefs.current[i] = el;
-              }}
-            >
-              <sphereGeometry args={[1, 16, 16]} />
-              <meshBasicMaterial
-                color={p.home ? "#FFFFFF" : "#FFE0C8"}
-                toneMapped={false}
-              />
-            </mesh>
-            {p.home && (
-              <Html
-                center
-                distanceFactor={10}
-                position={[0, 0.18, 0]}
-                style={{ pointerEvents: "none" }}
-                occlude="blending"
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono), ui-monospace, monospace",
-                    fontSize: "10px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.9)",
-                    whiteSpace: "nowrap",
-                    padding: "2px 6px",
-                    background: "rgba(5,7,13,0.6)",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    borderRadius: "2px",
-                    backdropFilter: "blur(4px)",
-                  }}
-                >
-                  HORTEN · HQ
-                </span>
-              </Html>
-            )}
-          </group>
-        );
-      })}
-    </>
-  );
-}
-
-function Scene({
-  points,
-  onActiveChange,
-}: {
-  points: GlobePoint[];
-  onActiveChange: (i: number | null) => void;
-}) {
-  const group = useRef<THREE.Group>(null);
-  const activeRef = useRef<number | null>(null);
-  const lastReportedRef = useRef<number | null>(null);
-
-  useFrame(() => {
-    if (!group.current) return;
-    group.current.rotation.y += 0.0028;
-
-    const q = group.current.quaternion;
-    let best: number | null = null;
-    let bestZ = -Infinity;
-    for (let i = 0; i < points.length; i++) {
-      const p = points[i];
-      if (p.home) continue;
-      const local = latLngToVec3(p.lat, p.lng, R);
-      const v = local.clone().applyQuaternion(q);
-      if (v.z > bestZ) {
-        bestZ = v.z;
-        best = i;
-      }
-    }
-    activeRef.current = best;
-    if (lastReportedRef.current !== best) {
-      lastReportedRef.current = best;
-      onActiveChange(best);
-    }
-  });
-
-  return (
-    <>
-      <ambientLight intensity={0.75} />
-      <directionalLight position={[4, 2, 5]} intensity={1.2} color="#fff4e0" />
-      <directionalLight position={[-5, -2, -3]} intensity={0.5} color="#6a8fc0" />
-      <Starfield />
-      <group ref={group}>
-        <Earth />
-        <Arcs points={points} />
-        <Pins points={points} activeRef={activeRef} />
-      </group>
-      <Atmosphere />
-    </>
-  );
-}
-
 export function Globe({
   points,
   onActiveChange,
@@ -338,16 +22,145 @@ export function Globe({
   points: GlobePoint[];
   onActiveChange: (i: number | null) => void;
 }) {
+  const ref = useRef<GlobeMethods | undefined>(undefined);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ w: 440, h: 440 });
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      const rect = el.getBoundingClientRect();
+      setSize({ w: rect.width, h: rect.height });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const home = points.find((p) => p.home);
+  const partners = points.filter((p) => !p.home);
+
+  // Arcs from Horten to every partner
+  const arcs = useMemo(
+    () =>
+      home
+        ? partners.map((p) => ({
+            startLat: home.lat,
+            startLng: home.lng,
+            endLat: p.lat,
+            endLng: p.lng,
+          }))
+        : [],
+    [home, partners]
+  );
+
+  const globePoints = useMemo(
+    () =>
+      points.map((p) => ({
+        lat: p.lat,
+        lng: p.lng,
+        name: p.name,
+        region: p.region,
+        home: !!p.home,
+      })),
+    [points]
+  );
+
+  // Auto-rotate, pick the partner closest to the camera as "active"
+  useEffect(() => {
+    const g = ref.current;
+    if (!g) return;
+    const controls = g.controls() as any;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.5;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+
+    let raf = 0;
+    let lastReported: number | null = null;
+    function loop() {
+      if (g) {
+        const camPos = (g as any).camera().position as {
+          x: number;
+          y: number;
+          z: number;
+        };
+        // Find partner whose latitude/longitude projects closest to the
+        // camera-facing direction. We use the globe's own coords2ScreenCoords
+        // helper to get on-screen positions and pick the centre-most one.
+        let bestIndex: number | null = null;
+        let bestDistSq = Infinity;
+        partners.forEach((p, i) => {
+          const screen = (g as any).getCoords(p.lat, p.lng, 0) as {
+            x: number;
+            y: number;
+            z: number;
+          };
+          // approximate camera-forward dot: a point "in front" of the globe
+          // has a positive z component in camera-space; we cheat with world z.
+          const camZ = camPos.z;
+          if (screen.z * Math.sign(camZ) < 0) return;
+          const dx = screen.x;
+          const dy = screen.y;
+          const d = dx * dx + dy * dy;
+          if (d < bestDistSq) {
+            bestDistSq = d;
+            bestIndex = i;
+          }
+        });
+        if (bestIndex !== lastReported) {
+          lastReported = bestIndex;
+          onActiveChange(bestIndex);
+        }
+      }
+      raf = requestAnimationFrame(loop);
+    }
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [partners, onActiveChange]);
+
   return (
-    <Canvas
-      dpr={[1, 1.75]}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 0.15, 7.5], fov: 32 }}
-      className="!absolute inset-0 !h-full !w-full"
-    >
-      <Suspense fallback={null}>
-        <Scene points={points} onActiveChange={onActiveChange} />
-      </Suspense>
-    </Canvas>
+    <div ref={containerRef} className="absolute inset-0">
+      <ReactGlobe
+        ref={ref}
+        width={size.w}
+        height={size.h}
+        backgroundColor="rgba(0,0,0,0)"
+        globeImageUrl="/images/earth/earth-blue-marble.jpg"
+        bumpImageUrl="/images/earth/earth-topology.png"
+        showAtmosphere
+        atmosphereColor="#FF6B35"
+        atmosphereAltitude={0.16}
+        pointsData={globePoints}
+        pointLat="lat"
+        pointLng="lng"
+        pointColor={(d: any) => (d.home ? "#FFFFFF" : "#FF6B35")}
+        pointAltitude={0.015}
+        pointRadius={(d: any) => (d.home ? 0.55 : 0.45)}
+        pointsMerge={false}
+        pointLabel={(d: any) =>
+          `<div style="font-family:var(--font-mono),monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#fff;background:rgba(5,7,13,0.88);border:1px solid rgba(255,107,53,0.4);padding:6px 10px;border-radius:4px;backdrop-filter:blur(8px);white-space:nowrap;">
+            <div style="color:#FF6B35">${d.name}</div>
+            <div style="color:rgba(201,209,222,0.8);font-size:10px;margin-top:4px">${d.region}</div>
+          </div>`
+        }
+        arcsData={arcs}
+        arcColor={() => "#FF6B35"}
+        arcAltitude={(d: any) => {
+          const lat1 = (d.startLat * Math.PI) / 180;
+          const lat2 = (d.endLat * Math.PI) / 180;
+          const dLng = ((d.endLng - d.startLng) * Math.PI) / 180;
+          const cos = Math.sin(lat1) * Math.sin(lat2) +
+            Math.cos(lat1) * Math.cos(lat2) * Math.cos(dLng);
+          const angle = Math.acos(Math.max(-1, Math.min(1, cos)));
+          return 0.04 + angle * 0.08;
+        }}
+        arcStroke={0.35}
+        arcDashLength={0.4}
+        arcDashGap={0.25}
+        arcDashAnimateTime={2200}
+        arcsTransitionDuration={0}
+      />
+    </div>
   );
 }
