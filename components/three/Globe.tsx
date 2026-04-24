@@ -25,21 +25,21 @@ function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
 }
 
 function Earth() {
-  const texture = useLoader(THREE.TextureLoader, "/images/earth/earth-night.jpg");
+  const texture = useLoader(THREE.TextureLoader, "/images/earth/earth-blue-marble.jpg");
   useMemo(() => {
     texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = 8;
+    texture.anisotropy = 16;
   }, [texture]);
 
   return (
     <mesh>
-      <sphereGeometry args={[R, 96, 64]} />
+      <sphereGeometry args={[R, 128, 80]} />
       <meshStandardMaterial
         map={texture}
-        roughness={1}
-        metalness={0}
-        emissive="#0c1828"
-        emissiveIntensity={0.55}
+        roughness={0.85}
+        metalness={0.05}
+        emissive="#1a2a3e"
+        emissiveIntensity={0.25}
       />
     </mesh>
   );
@@ -48,25 +48,23 @@ function Earth() {
 function Atmosphere() {
   return (
     <>
-      {/* Outer atmosphere shell — warm signal glow */}
       <mesh>
-        <sphereGeometry args={[R * 1.05, 64, 48]} />
+        <sphereGeometry args={[R * 1.055, 64, 48]} />
         <meshBasicMaterial
           color="#FF6B35"
           transparent
-          opacity={0.07}
+          opacity={0.1}
           side={THREE.BackSide}
           toneMapped={false}
           depthWrite={false}
         />
       </mesh>
-      {/* Inner rim light */}
       <mesh>
-        <sphereGeometry args={[R * 1.015, 64, 48]} />
+        <sphereGeometry args={[R * 1.02, 64, 48]} />
         <meshBasicMaterial
-          color="#C9D1DE"
+          color="#7fb4ff"
           transparent
-          opacity={0.04}
+          opacity={0.06}
           side={THREE.BackSide}
           toneMapped={false}
           depthWrite={false}
@@ -78,38 +76,36 @@ function Atmosphere() {
 
 function Arcs({ points }: { points: GlobePoint[] }) {
   const home = points.find((p) => p.home);
-  const { geometries, dashMats } = useMemo(() => {
-    if (!home) return { geometries: [], dashMats: [] };
+  const meshes = useMemo(() => {
+    if (!home) return [];
     const homeVec = latLngToVec3(home.lat, home.lng, R);
-    const gs: THREE.BufferGeometry[] = [];
-    const mats: THREE.LineBasicMaterial[] = [];
-
-    points.forEach((p) => {
-      if (p.home) return;
-      const end = latLngToVec3(p.lat, p.lng, R);
-      const angle = homeVec.angleTo(end);
-      const arcHeight = R + angle * 0.45;
-      const mid = homeVec.clone().add(end).normalize().multiplyScalar(arcHeight);
-      const curve = new THREE.QuadraticBezierCurve3(homeVec, mid, end);
-      const pts = curve.getPoints(80);
-      const g = new THREE.BufferGeometry().setFromPoints(pts);
-      gs.push(g);
-      mats.push(
-        new THREE.LineBasicMaterial({
+    return points
+      .filter((p) => !p.home)
+      .map((p) => {
+        const end = latLngToVec3(p.lat, p.lng, R);
+        const angle = homeVec.angleTo(end);
+        const arcHeight = R + angle * 0.5;
+        const mid = homeVec
+          .clone()
+          .add(end)
+          .normalize()
+          .multiplyScalar(arcHeight);
+        const curve = new THREE.QuadraticBezierCurve3(homeVec, mid, end);
+        const tube = new THREE.TubeGeometry(curve, 80, 0.012, 8, false);
+        const mat = new THREE.MeshBasicMaterial({
           color: "#FF6B35",
           transparent: true,
-          opacity: 0.35,
+          opacity: 0.75,
           toneMapped: false,
-        })
-      );
-    });
-    return { geometries: gs, dashMats: mats };
+        });
+        return { tube, mat };
+      });
   }, [points, home]);
 
   return (
     <>
-      {geometries.map((g, i) => (
-        <primitive key={i} object={new THREE.Line(g, dashMats[i])} />
+      {meshes.map((m, i) => (
+        <mesh key={i} geometry={m.tube} material={m.mat} />
       ))}
     </>
   );
@@ -133,36 +129,34 @@ function DistributorDots({
     haloRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      const target = isActive ? 0.11 : 0.045;
+      const target = isActive ? 0.14 : 0.06;
       mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.14);
       const mat = mesh.material as THREE.MeshBasicMaterial;
-      const tOp = isActive ? 0.55 : 0.18;
+      const tOp = isActive ? 0.7 : 0.35;
       mat.opacity += (tOp - mat.opacity) * 0.14;
     });
     coreRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
       const isActive = i === active;
-      const target = isActive ? 0.055 : 0.03;
+      const target = isActive ? 0.075 : 0.045;
       mesh.scale.setScalar(mesh.scale.x + (target - mesh.scale.x) * 0.14);
     });
     pulseRefs.current.forEach((mesh, i) => {
       if (!mesh) return;
-      // each pulse staggered by index
       const phase = ((t + i * 0.5) % 3) / 3;
-      const scale = 0.045 + phase * 0.18;
+      const scale = 0.06 + phase * 0.22;
       mesh.scale.setScalar(scale);
       const mat = mesh.material as THREE.MeshBasicMaterial;
-      mat.opacity = Math.max(0, 0.5 - phase * 0.5);
+      mat.opacity = Math.max(0, 0.6 - phase * 0.6);
     });
   });
 
   return (
     <>
       {points.map((p, i) => {
-        const pos = latLngToVec3(p.lat, p.lng, R * 1.008);
+        const pos = latLngToVec3(p.lat, p.lng, R * 1.01);
         return (
           <group key={i} position={pos}>
-            {/* pulse ring */}
             {!p.home && (
               <mesh
                 ref={(el) => {
@@ -188,7 +182,7 @@ function DistributorDots({
               <meshBasicMaterial
                 color={p.home ? "#FFD0B5" : "#FF6B35"}
                 transparent
-                opacity={0.2}
+                opacity={0.35}
                 toneMapped={false}
                 depthTest={false}
               />
@@ -199,9 +193,9 @@ function DistributorDots({
               }}
               renderOrder={2}
             >
-              <sphereGeometry args={[1, 12, 12]} />
+              <sphereGeometry args={[1, 16, 16]} />
               <meshBasicMaterial
-                color={p.home ? "#FFFFFF" : "#FFD0B5"}
+                color={p.home ? "#FFFFFF" : "#FFE0C8"}
                 toneMapped={false}
                 depthTest={false}
               />
@@ -250,9 +244,9 @@ function Scene({
 
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[4, 2, 5]} intensity={0.8} color="#fff2d4" />
-      <directionalLight position={[-5, -2, -3]} intensity={0.35} color="#5a7aa8" />
+      <ambientLight intensity={0.75} />
+      <directionalLight position={[4, 2, 5]} intensity={1.2} color="#fff4e0" />
+      <directionalLight position={[-5, -2, -3]} intensity={0.5} color="#6a8fc0" />
       <group ref={group}>
         <Earth />
         <Arcs points={points} />
@@ -272,9 +266,9 @@ export function Globe({
 }) {
   return (
     <Canvas
-      dpr={[1, 1.6]}
+      dpr={[1, 1.75]}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 0.25, 5.8], fov: 34 }}
+      camera={{ position: [0, 0.25, 5.6], fov: 36 }}
       className="!absolute inset-0 !h-full !w-full"
     >
       <Suspense fallback={null}>
