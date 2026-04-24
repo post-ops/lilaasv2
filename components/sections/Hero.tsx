@@ -153,10 +153,10 @@ export function Hero() {
                 <span
                   className="absolute left-1/2 -translate-x-1/2 rounded-full bg-signal"
                   style={{
-                    width: "0.2em",
-                    height: "0.2em",
-                    top: "-0.08em",
-                    boxShadow: "0 0 0.35em rgba(255,107,53,0.7)",
+                    width: "0.18em",
+                    height: "0.18em",
+                    top: "-0.05em",
+                    boxShadow: "0 0 0.4em rgba(255,107,53,0.75)",
                   }}
                 />
               </span>

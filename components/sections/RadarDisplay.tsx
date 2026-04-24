@@ -23,11 +23,16 @@ const BLIPS: Blip[] = [
 ];
 
 const SWEEP_DURATION_S = 6;
+const SIZE = 1000;
+const CX = SIZE / 2;
+const CY = SIZE / 2;
+const R = SIZE / 2 - 12;
 
 export function RadarDisplay() {
   const t = useTranslations("homeExtra.radar");
   const [activeBlip, setActiveBlip] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const sweepRef = useRef<SVGGElement>(null);
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
@@ -36,25 +41,34 @@ export function RadarDisplay() {
   }, []);
 
   useEffect(() => {
-    // Mirror the sweep angle in JS so we can flash individual blips as the
-    // arm crosses them. We don't use RAF on the blip itself — CSS does the
-    // visual pulse — we just pick the currently-active blip.
+    // JS-driven rotation: one source of truth. Set the sweep arm's SVG
+    // transform attribute each frame to rotate(angle, cx, cy) — works in
+    // every browser, no CSS transform-origin / transform-box edge cases.
     let raf = 0;
     const start = performance.now();
-    function frame(t: number) {
-      const elapsed = ((t - start) / 1000) % SWEEP_DURATION_S;
-      const sweepAngle = (elapsed / SWEEP_DURATION_S) * 360; // 0..360
-      // find blip whose angle is within 10° behind the sweep
+    function frame(tNow: number) {
+      const elapsed = ((tNow - start) / 1000) % SWEEP_DURATION_S;
+      const sweepAngle = (elapsed / SWEEP_DURATION_S) * 360;
+
+      if (sweepRef.current) {
+        sweepRef.current.setAttribute(
+          "transform",
+          `rotate(${sweepAngle} ${CX} ${CY})`
+        );
+      }
+
+      // Active blip: whichever the arm has just crossed
       let best: number | null = null;
       for (let i = 0; i < BLIPS.length; i++) {
         const b = BLIPS[i];
-        let delta = (sweepAngle - b.angle + 360) % 360;
-        if (delta < 8) {
+        const delta = (sweepAngle - b.angle + 360) % 360;
+        if (delta < 10) {
           best = i;
           break;
         }
       }
       setActiveBlip((prev) => (prev === best ? prev : best));
+
       raf = requestAnimationFrame(frame);
     }
     raf = requestAnimationFrame(frame);
@@ -98,7 +112,7 @@ export function RadarDisplay() {
         <div className="grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-center">
           <Reveal variant="scale">
             <div className="relative aspect-square max-w-[640px] mx-auto">
-              <Radar activeBlip={activeBlip} />
+              <Radar sweepRef={sweepRef} activeBlip={activeBlip} />
             </div>
           </Reveal>
 
@@ -163,18 +177,15 @@ export function RadarDisplay() {
   );
 }
 
-function Radar({ activeBlip }: { activeBlip: number | null }) {
-  const size = 1000;
-  const cx = size / 2;
-  const cy = size / 2;
-  const r = size / 2 - 12;
-
+function Radar({
+  sweepRef,
+  activeBlip,
+}: {
+  sweepRef: React.RefObject<SVGGElement | null>;
+  activeBlip: number | null;
+}) {
   return (
-    <svg
-      viewBox={`0 0 ${size} ${size}`}
-      className="w-full h-full"
-      aria-hidden
-    >
+    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full h-full" aria-hidden>
       <defs>
         <radialGradient id="radarBg" cx="50%" cy="50%">
           <stop offset="0%" stopColor="#0F1B2E" stopOpacity="1" />
@@ -192,15 +203,14 @@ function Radar({ activeBlip }: { activeBlip: number | null }) {
         </filter>
       </defs>
 
-      <circle cx={cx} cy={cy} r={r} fill="url(#radarBg)" />
+      <circle cx={CX} cy={CY} r={R} fill="url(#radarBg)" />
 
-      {/* concentric rings */}
       {[0.25, 0.5, 0.75, 1].map((s, i) => (
         <circle
           key={i}
-          cx={cx}
-          cy={cy}
-          r={r * s}
+          cx={CX}
+          cy={CY}
+          r={R * s}
           fill="none"
           stroke="#C9D1DE"
           strokeOpacity={0.12 + s * 0.06}
@@ -208,22 +218,20 @@ function Radar({ activeBlip }: { activeBlip: number | null }) {
         />
       ))}
 
-      {/* crosshairs */}
-      <line x1={cx} y1={cy - r} x2={cx} y2={cy + r} stroke="#C9D1DE" strokeOpacity={0.14} />
-      <line x1={cx - r} y1={cy} x2={cx + r} y2={cy} stroke="#C9D1DE" strokeOpacity={0.14} />
+      <line x1={CX} y1={CY - R} x2={CX} y2={CY + R} stroke="#C9D1DE" strokeOpacity={0.14} />
+      <line x1={CX - R} y1={CY} x2={CX + R} y2={CY} stroke="#C9D1DE" strokeOpacity={0.14} />
 
-      {/* radial ticks every 30° */}
       {Array.from({ length: 12 }).map((_, i) => {
         const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
-        const r1 = r * 0.96;
-        const r2 = r;
+        const r1 = R * 0.96;
+        const r2 = R;
         return (
           <line
             key={i}
-            x1={cx + Math.cos(a) * r1}
-            y1={cy + Math.sin(a) * r1}
-            x2={cx + Math.cos(a) * r2}
-            y2={cy + Math.sin(a) * r2}
+            x1={CX + Math.cos(a) * r1}
+            y1={CY + Math.sin(a) * r1}
+            x2={CX + Math.cos(a) * r2}
+            y2={CY + Math.sin(a) * r2}
             stroke="#C9D1DE"
             strokeOpacity={0.4}
             strokeWidth={1.5}
@@ -231,12 +239,11 @@ function Radar({ activeBlip }: { activeBlip: number | null }) {
         );
       })}
 
-      {/* cardinal letters */}
       {[
-        { label: "N", x: cx, y: cy - r - -22, anchor: "middle" as const },
-        { label: "E", x: cx + r + 22, y: cy + 4, anchor: "middle" as const },
-        { label: "S", x: cx, y: cy + r + 28, anchor: "middle" as const },
-        { label: "W", x: cx - r - 22, y: cy + 4, anchor: "middle" as const },
+        { label: "N", x: CX, y: CY - R + 22, anchor: "middle" as const },
+        { label: "E", x: CX + R - 22, y: CY + 6, anchor: "middle" as const },
+        { label: "S", x: CX, y: CY + R - 10, anchor: "middle" as const },
+        { label: "W", x: CX - R + 22, y: CY + 6, anchor: "middle" as const },
       ].map((c) => (
         <text
           key={c.label}
@@ -245,42 +252,35 @@ function Radar({ activeBlip }: { activeBlip: number | null }) {
           textAnchor={c.anchor}
           fill="#8A96A8"
           fontFamily="JetBrains Mono, ui-monospace, monospace"
-          fontSize={20}
+          fontSize={18}
           letterSpacing="0.18em"
         >
           {c.label}
         </text>
       ))}
 
-      {/* sweep arm */}
-      <g
-        style={{
-          transformOrigin: `${cx}px ${cy}px`,
-          transformBox: "fill-box",
-          animation: `radarSpin ${SWEEP_DURATION_S}s linear infinite`,
-        }}
-      >
+      {/* sweep arm — rotation driven by JS via setAttribute on this group */}
+      <g ref={sweepRef} transform={`rotate(0 ${CX} ${CY})`}>
         <path
-          d={`M ${cx} ${cy} L ${cx + r} ${cy} A ${r} ${r} 0 0 0 ${cx + r * Math.cos(-Math.PI / 3)} ${cy + r * Math.sin(-Math.PI / 3)} Z`}
+          d={`M ${CX} ${CY} L ${CX + R} ${CY} A ${R} ${R} 0 0 0 ${CX + R * Math.cos(-Math.PI / 3)} ${CY + R * Math.sin(-Math.PI / 3)} Z`}
           fill="url(#sweepGrad)"
           opacity={0.9}
         />
         <line
-          x1={cx}
-          y1={cy}
-          x2={cx + r}
-          y2={cy}
+          x1={CX}
+          y1={CY}
+          x2={CX + R}
+          y2={CY}
           stroke="#FFD0B5"
           strokeOpacity={0.9}
           strokeWidth={1.5}
         />
       </g>
 
-      {/* blips */}
       {BLIPS.map((b, i) => {
         const a = ((b.angle - 90) * Math.PI) / 180;
-        const bx = cx + Math.cos(a) * r * b.radius;
-        const by = cy + Math.sin(a) * r * b.radius;
+        const bx = CX + Math.cos(a) * R * b.radius;
+        const by = CY + Math.sin(a) * R * b.radius;
         const active = activeBlip === i;
         return (
           <g key={i}>
@@ -290,7 +290,7 @@ function Radar({ activeBlip }: { activeBlip: number | null }) {
               r={active ? 18 : 6}
               fill="#FF6B35"
               opacity={active ? 0.22 : 0}
-              style={{ transition: "all 220ms cubic-bezier(0.22,1,0.36,1)" }}
+              style={{ transition: "all 260ms cubic-bezier(0.22,1,0.36,1)" }}
               filter="url(#soft)"
             />
             <circle
@@ -298,16 +298,15 @@ function Radar({ activeBlip }: { activeBlip: number | null }) {
               cy={by}
               r={active ? 4.5 : 3}
               fill="#FF6B35"
-              opacity={active ? 1 : 0.35}
-              style={{ transition: "all 220ms cubic-bezier(0.22,1,0.36,1)" }}
+              opacity={active ? 1 : 0.4}
+              style={{ transition: "all 260ms cubic-bezier(0.22,1,0.36,1)" }}
             />
           </g>
         );
       })}
 
-      {/* center dot */}
-      <circle cx={cx} cy={cy} r={6} fill="#FF6B35" />
-      <circle cx={cx} cy={cy} r={14} fill="none" stroke="#FF6B35" strokeOpacity={0.5} strokeWidth={1} />
+      <circle cx={CX} cy={CY} r={6} fill="#FF6B35" />
+      <circle cx={CX} cy={CY} r={14} fill="none" stroke="#FF6B35" strokeOpacity={0.5} strokeWidth={1} />
     </svg>
   );
 }
